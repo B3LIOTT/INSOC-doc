@@ -8,7 +8,7 @@ Vous trouverez [ici text](https://github.com/B3LIOTT/wazuh-active-response) le r
 
 Voici les étapes de configuration:
 **Wazuh Server:**
-- modification de ``/var/ossec/etc/ossec.conf`:
+- modification de `/var/ossec/etc/ossec.conf`:
   ajoute de la commande personnalisée:
   ```conf
   <command>
