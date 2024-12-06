@@ -1,22 +1,21 @@
 # Documentation de l'agent Wazuh
 
 ## Installation
+### Windows
+Documentation d'installation [Windows](https://documentation.wazuh.com/current/installation-guide/wazuh-agent/wazuh-agent-package-windows.html)
 
-### Configuration des active responses
-Les active response sont des scripts qui, lorsqu'une certaine règle d'un sensemble (ou d'un certain niveau d'alerte) provoque une alerte, executent des actions sur l'endpoint concerné et/ou le serveur.
-Vous trouverez [ici](https://github.com/B3LIOTT/wazuh-active-response) le répo Github des scripts d'active response.
+### Linux
+Documentation d'installation [Linux](https://documentation.wazuh.com/current/installation-guide/wazuh-agent/wazuh-agent-package-linux.html)
 
-Voici les étapes de configuration:
-**Wazuh Server:**
-- modification de `/var/ossec/etc/ossec.conf`:
-  ajoute de la commande personnalisée:
-  ```conf
-  <command>
-    ...
-  </command>
-  ```
-  a finir
+## Active Response
+### Windows
+Sur l'endpoint, déposer les script dans `C:\Program Files (x86)\ossec-agent\active-response\bin`
 
-- dépot du script dans `C:/...` sur l'endpoint
+### Linux
+Dans `/var/ossec/active-response/bin`, déposer les scripts puis:
+```bash
+sudo chmod 750 /var/ossec/active-response/bin/<CUSTOM_SCRIPT>
+sudo chown root:wazuh /var/ossec/active-response/bin/<CUSTOM_SCRIPT>
+```
 
-## Host Linux
+Pour plus d'info, voir la doc [Active Response](https://documentation.wazuh.com/current/user-manual/capabilities/active-response/index.html).
