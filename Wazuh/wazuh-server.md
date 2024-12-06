@@ -10,6 +10,7 @@ Vous trouverez [ici](https://github.com/B3LIOTT/wazuh-active-response) le répo 
 
 La configuration s'effectue via la modification de `/var/ossec/etc/ossec.conf`:
 - ajout de la commande personnalisée pour chaque script
+
   Exemple:
   ```conf
   <command>
@@ -20,6 +21,7 @@ La configuration s'effectue via la modification de `/var/ossec/etc/ossec.conf`:
   ```
 
 - ajout du block d'active response pour chaque active response
+
   Exemple:
     ```conf
    <active-response>
