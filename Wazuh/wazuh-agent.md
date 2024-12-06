@@ -1,11 +1,8 @@
 # Documentation de l'agent Wazuh
 
 ## Installation
-### Windows
-Documentation d'installation [Windows](https://documentation.wazuh.com/current/installation-guide/wazuh-agent/wazuh-agent-package-windows.html)
-
-### Linux
-Documentation d'installation [Linux](https://documentation.wazuh.com/current/installation-guide/wazuh-agent/wazuh-agent-package-linux.html)
+- Documentation d'installation [Windows](https://documentation.wazuh.com/current/installation-guide/wazuh-agent/wazuh-agent-package-windows.html)
+- Documentation d'installation [Linux](https://documentation.wazuh.com/current/installation-guide/wazuh-agent/wazuh-agent-package-linux.html)
 
 ## Active Response
 ### Windows
