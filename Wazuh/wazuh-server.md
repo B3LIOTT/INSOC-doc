@@ -6,7 +6,7 @@ Documentation d'[Installation](https://documentation.wazuh.com/current/installat
 
 ### Active Response
 Les active response sont des scripts qui, lorsqu'une certaine règle d'un sensemble (ou d'un certain niveau d'alerte) provoque une alerte, executent des actions sur l'endpoint concerné et/ou le serveur.
-Vous trouverez [ici](https://github.com/B3LIOTT/wazuh-active-response) le répo Github des scripts d'active response.
+Vous trouverez sur le répo Github d'@B3LIOTT les [scripts d'active response](https://github.com/B3LIOTT/wazuh-active-response).
 
 La configuration s'effectue via la modification de `/var/ossec/etc/ossec.conf`:
 - ajout de la commande personnalisée pour chaque script
