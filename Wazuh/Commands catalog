@@ -6,9 +6,9 @@ rm /test/holle.txt
 Règle détectée :  554(adding file), 553 (deleting file), 550 (modifying file or changing permissions)
 in /var/ossec/etc/ossec.conf, ligne file integrity monitoring, disabled no, définir directories to check, 
 
-Commande : 
+Commande : sudo hydra -t 4 -V -f -l RedBeardDan -P /usr/share/wordlists/rockyou.txt 192.168.2.207 ssh
+Règle détectée : 5710 (ssh : atempt to login using a non existing user) et 5712 (brute force)
 
-Règle détectée :    in 
 
 Commande : 
 
