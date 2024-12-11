@@ -7,7 +7,8 @@ Règle détectée :  554(adding file), 553 (deleting file), 550 (modifying file 
 in /var/ossec/etc/ossec.conf, ligne file integrity monitoring, disabled no, définir directories to check, 
 
 Commande : sudo hydra -t 4 -V -f -l RedBeardDan -P /usr/share/wordlists/rockyou.txt 192.168.2.207 ssh
-Règle détectée : 5710 (ssh : atempt to login using a non existing user) et 5712 (brute force)
+Commande : sudo ssh debian@10.1.10.14
+Règle détectée : 5710 (ssh : atempt to login using a non existing user) et 5712 (brute force) et 5758 (maximum authentication attempts exceeded) et 2502 (user missed the password more than one time) et 5503 ( user login failed)
 
 
 Commande : 
