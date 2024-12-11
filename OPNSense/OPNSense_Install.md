@@ -2,6 +2,15 @@
 
 Ce document est relatif à l'installation d'OPNsense 24.7.10 sur un rack de serveur HP Proliant DL380G5 contenant 6Go de RAM, un Intel Xeon 5150 @ 2.66GHz à 4 coeurs et 2 interfaces réseau pour les réseaux WAN et LAN.
 
+- [Installation de l'OS OPNsense](#installation-de-los-opnsense)
+- [Configuration des interfaces réseau](#configuration-des-interfaces-réseau)
+- [Accès à l'interface de gestion web](#accès-à-linterface-de-gestion-web)
+- [Assistant de configuration](#assistant-de-configuration)
+- [Sécurisation summplémentaire de l'interface web](#sécurisation-summplémentaire-de-linterface-web)
+- [Mise en place de règles de pare-feu](#mise-en-place-de-règles-de-pare-feu)
+- [Sources :](#sources-)
+
+
 ## Installation de l'OS OPNsense
 
 Pour l'installation, nous avons suivi les étapes suivantes :
@@ -79,3 +88,26 @@ Afin de s'assurer que les adresses IP attribuées par le serveur DHCP d'OPNsense
 ![checkDHCPLAN](images/checkDHCPLAN.png)
 
 Il y est même possible de définir la plage d'adresses IP attribuées.
+
+## Sécurisation summplémentaire de l'interface web
+
+Afin de sécuriser d'avantage l'accès à l'interface web, nous avons modifié le port d'accès par défaut (443) pour un port différent (763) en allant dans **System > Settings > Administration** :
+
+# TODO: Ajouter image modif PORT GUI
+
+## Accès SSH à la console OPNsense
+
+Pour des questions d'accès simplifié à la console OPNsense, il est possible d'activer l'accès SSH en allant dans **System > Settings > Administration** et en cochant l'option **Enable Secure Shell**.
+Pour des raisons de sécurité, nous avons modifié le port SSH par défaut (22) pour un port différent (762).
+Nous avons également, pour des questions de simplicité, permis l'accès à l'utilisateur **root** en SSH en cochant l'option **Permit root user login**. Attention cependant a bien désactiver cette option une fois la configuration terminée et à créer un utilisateur dédié pour l'accès SSH.
+
+# TODO: Ajouter image modif PORT SSH
+
+
+
+## Mise en place de règles de pare-feu
+
+
+
+## Sources :
+- [Introduction à OPNSense : Comment installer ce firewall ? - IT-Connect](https://www.it-connect.fr/tuto-installer-et-configurer-opnsense/)
