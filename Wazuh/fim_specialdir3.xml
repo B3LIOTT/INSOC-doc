@@ -1,0 +1,12 @@
+<group name="syscheck">
+  <rule id="100005" level="8">
+    <if_sid>550</if_sid>
+    <field name="file">.sh$</field>
+    <field name="changed_fields">^permission$</field>
+    <field name="perm" type="pcre2">\w\wx</field>
+    <description>Execute permission added to shell script.</description>
+    <mitre>
+      <id>T1222.002</id>
+    </mitre>
+  </rule>
+</group>
