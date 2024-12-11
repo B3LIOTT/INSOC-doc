@@ -1,19 +1,10 @@
 Commandes avec règles détectées
 
-Commande :
-touch /specialdir3/fim.sh
-chmod +x /specialdir3/fim.sh
-Règle détectée : 100005 in /fim_specialdir3.xml
-
-Commande : 
-mkdir -p ~/test
-nano ~/test/hello.txt
-rm ~/test/hello.txt
-Règle détectée : 100006 in fim_win_test.xml
-
-Commande : 
-
-Règle détectée :    in 
+Commande : File integrity monitoring 
+touch /test/hello.txt
+rm /test/holle.txt
+Règle détectée :  554(adding file), 553 (deleting file), 550 (modifying file or changing permissions)
+in /var/ossec/etc/ossec.conf, ligne file integrity monitoring, disabled no, définir directories to check, 
 
 Commande : 
 
