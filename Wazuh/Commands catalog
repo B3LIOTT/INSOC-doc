@@ -10,13 +10,14 @@ Commande : sudo hydra -t 4 -V -f -l RedBeardDan -P /usr/share/wordlists/rockyou.
 Commande : sudo ssh debian@10.1.10.14
 Règle détectée : 5710 (ssh : atempt to login using a non existing user) et 5712 (brute force) et 5758 (maximum authentication attempts exceeded) et 2502 (user missed the password more than one time) et 5503 ( user login failed)
 
-
 Commande : ftp avec PAM 
 Règle détectée : 2501 (syslog: user authentication failure)
 et PAM : user login faled (details : ftp) 5503
 
-Commande : telnet (à revoir )
+Commande : vsftpd (pour linux) avec le fichier wazuh 0185-vsftd_rules.xml
+Règles détéctées : 11401 (vsftpd : ftp session opened) et 11402 (ftp authentication success) et 11403 (login failed accessing the FTP server) et 11400 (grouping for the vsftpd rules (detects downloading a file : get mdp.txt)
 
+Commande : telnet (à revoir )
 Règle détectée :    in 
 
 Commande : ping (à revoir avec wazuh, par contre il est détecté avec suricata sur l'interface d'opnsense sous la catégorie notice)
@@ -31,7 +32,8 @@ et : Suricata a temporairement activé un mode d'urgence (FLOW_EMERGENCY), proba
 Cela confirme que le SYN flood a provoqué une surcharge des flux gérés par Suricata.
 sous la catégorie notice)
 
-Règle détectée :    in 
+Règle détectée : id 510  in wazuh 
+trojand version of file detected
 
 Commande : 
 
