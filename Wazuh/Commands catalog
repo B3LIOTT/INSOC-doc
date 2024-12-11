@@ -19,11 +19,11 @@ Commande : telnet (à revoir)
 
 Règle détectée :    in 
 
-Commande : 
+Commande : ping (à revoir)
 
 Règle détectée :    in 
 
-Commande : 
+Commande : syn flood hping3 -S --flood @IP (à revoir)
 
 Règle détectée :    in 
 
