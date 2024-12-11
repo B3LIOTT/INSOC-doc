@@ -23,7 +23,13 @@ Commande : ping (à revoir avec wazuh, par contre il est détecté avec suricata
 
 Règle détectée :    in 
 
-Commande : syn flood hping3 -S --flood @IP (à revoir avec wazuh, par contre il est détecté avec suricata sur l'interface d'opnsense sous la catégorie notice)
+Commande : syn flood hping3 -S --flood @IP (à revoir avec wazuh, par contre il est détecté avec suricata sur l'interface d'opnsense sous la catégorie notice et les paquets sont bloqués)
+et hping3 -S --flood 10.1.10.14 --rand-source 
+( Sur opnsense, 
+ça déclenche : Suricata a identifié un trafic associé à un scan réseau ou une activité suspecte souvent attribuée à des outils tels que Metasploit. 
+et : Suricata a temporairement activé un mode d'urgence (FLOW_EMERGENCY), probablement en raison d'une saturation ou d'un volume anormalement élevé de flux détectés. 
+Cela confirme que le SYN flood a provoqué une surcharge des flux gérés par Suricata.
+sous la catégorie notice)
 
 Règle détectée :    in 
 
