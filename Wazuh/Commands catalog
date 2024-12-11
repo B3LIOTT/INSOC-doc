@@ -11,10 +11,11 @@ Commande : sudo ssh debian@10.1.10.14
 Règle détectée : 5710 (ssh : atempt to login using a non existing user) et 5712 (brute force) et 5758 (maximum authentication attempts exceeded) et 2502 (user missed the password more than one time) et 5503 ( user login failed)
 
 
-Commande : ftp
+Commande : ftp avec PAM 
 Règle détectée : 2501 (syslog: user authentication failure)
+et PAM : user login faled (details : ftp) 5503
 
-Commande : 
+Commande : telnet (à revoir)
 
 Règle détectée :    in 
 
