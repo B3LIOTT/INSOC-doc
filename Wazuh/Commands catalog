@@ -15,19 +15,15 @@ Commande : ftp avec PAM
 Règle détectée : 2501 (syslog: user authentication failure)
 et PAM : user login faled (details : ftp) 5503
 
-Commande : telnet (à revoir)
+Commande : telnet (à revoir )
 
 Règle détectée :    in 
 
-Commande : ping (à revoir)
+Commande : ping (à revoir avec wazuh, par contre il est détecté avec suricata sur l'interface d'opnsense sous la catégorie notice)
 
 Règle détectée :    in 
 
-Commande : syn flood hping3 -S --flood @IP (à revoir)
-
-Règle détectée :    in 
-
-Commande : 
+Commande : syn flood hping3 -S --flood @IP (à revoir avec wazuh, par contre il est détecté avec suricata sur l'interface d'opnsense sous la catégorie notice)
 
 Règle détectée :    in 
 
@@ -151,6 +147,37 @@ Commande :
 
 Règle détectée :    in 
 
+Commande : 
+
+Règle détectée :    in 
+
+Commande : 
+
+Règle détectée :    in 
+
+Commande : 
+
+Règle détectée :    in 
+
+Commande : 
+
+Règle détectée :    in 
+
+Commande : 
+
+Règle détectée :    in 
+
+Commande : 
+
+Règle détectée :    in 
+
+Commande : 
+
+Règle détectée :    in 
+
+Commande : 
+
+Règle détectée :    in 
 
 
 
