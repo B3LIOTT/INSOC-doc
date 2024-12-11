@@ -2,13 +2,13 @@
 
 Ce document est relatif à l'installation d'OPNsense 24.7.10 sur un rack de serveur HP Proliant DL380G5 contenant 6Go de RAM, un Intel Xeon 5150 @ 2.66GHz à 4 coeurs et 2 interfaces réseau pour les réseaux WAN et LAN.
 
-- [Installation de l'OS OPNsense](#installation-de-los-opnsense)
-- [Configuration des interfaces réseau](#configuration-des-interfaces-réseau)
-- [Accès à l'interface de gestion web](#accès-à-linterface-de-gestion-web)
-- [Assistant de configuration](#assistant-de-configuration)
-- [Sécurisation summplémentaire de l'interface web](#sécurisation-summplémentaire-de-linterface-web)
-- [Mise en place de règles de pare-feu](#mise-en-place-de-règles-de-pare-feu)
-- [Sources :](#sources-)
+- [TODO: Ajouter image modif PORT GUI](#todo-ajouter-image-modif-port-gui)
+  - [Accès SSH à la console OPNsense](#accès-ssh-à-la-console-opnsense)
+- [TODO: Ajouter image modif PORT SSH](#todo-ajouter-image-modif-port-ssh)
+  - [Mise en place de règles de pare-feu](#mise-en-place-de-règles-de-pare-feu)
+- [TODO: Ajouter image regles pare-feu](#todo-ajouter-image-regles-pare-feu)
+  - [Mise en place du proxy Squid pour les communications HTTP](#mise-en-place-du-proxy-squid-pour-les-communications-http)
+  - [Sources :](#sources-)
 
 
 ## Installation de l'OS OPNsense
@@ -107,6 +107,26 @@ Nous avons également, pour des questions de simplicité, permis l'accès à l'u
 
 ## Mise en place de règles de pare-feu
 
+Afin de sécuriser notre réseau, nous avons mis en place des règles de pare-feu pour autoriser ou bloquer le trafic entrant et sortant.
+
+Ces règles sont les suivantes et permettent uniquement le trafic HTTPS, DNS et les pings provenant de l'interface LAN :
+
+# TODO: Ajouter image regles pare-feu
+
+Il est important de noter que des règles pour le trafic HTTP ne sont pas affichées pour une raison simple : nous utilisons le proxy **Squid** afin de filtrer le trafic HTTP
+
+## Mise en place du proxy Squid pour les communications HTTP
+
+Comme expliquer, ce proxy permet de filtrer le trafic HTTP entrant et sortant de notre réseau. Il permet également de bloquer des sites web indésriables par le biais d'ACLs.
+
+Pour installer ce proxy, il suffit d'aller dans **System > Firmware > Plugins** et de chercher le plugin **os-squid**.
+
+Une fois installé, il est possible de le configurer en allant dans **Services > Proxy Server**.
+
+Nous avons configuré notre proxy de la manière suivante : 
+- Nous avons activé le proxy en cochant l'option **Enable Proxy Server**.
+- Nous avons laissé le port par défaut (3128) pour l'accès au proxy et la redirection du trafic HTTP.
+- Nous avons laissé les options par défaut pour les autres paramètres.
 
 
 ## Sources :
