@@ -44,8 +44,7 @@ Commande : nmap --script ftp-anon,ftp-brute -p 21 10.1.10.14
 Règle détectée :    5551  PAM: Multiple failed logins in a small period of time. 
 Rule.level = 10
 
-Commande : 
-
+Commande : hydra -l username -P /usr/share/wordlists/rockyou.txt ftp://10.1.10.14
 Règle détectée :  11451  in vsftpd: FTP brute force (multiple failed logins).
 
 Commande : 
