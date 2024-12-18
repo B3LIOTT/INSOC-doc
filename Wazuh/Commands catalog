@@ -39,9 +39,11 @@ Commande : Meta
 
 Règle détectée :    in 
 
-Commande : 
+Commande : nmap --script ftp-anon,ftp-brute -p 21 10.1.10.14
 
-Règle détectée :    in 
+Règle détectée :    5551
+PAM: Multiple failed logins in a small period of time. 
+Rule.level = 10
 
 Commande : 
 
