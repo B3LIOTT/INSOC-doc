@@ -177,3 +177,5 @@ Nous obtenons ainsi une adresse IP attribuée par le serveur DHCP configuré sur
 Pour tester la communication entre les machines, on peut exécuter la commande `ping` entre les machines.
 On va ainsi pouvoir tester un ping entre la machine Proxmox (VLAN 10) et une machine du VLAN 20 :
 ![testPing](<pictures/testPing.png>)
+
+modif test
