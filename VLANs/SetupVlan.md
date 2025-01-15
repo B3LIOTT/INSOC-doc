@@ -159,3 +159,21 @@ Par la suite, on configure le serveur DHCP de la façon suivante. Dans le cas r�
 ## Configuration de la machine Proxmox
 On attribue à cette machine une adresse IP statique dans le VLAN Outils.
 Dans notre cas, son IP est 10.0.1.2 et sa passerelle est 10.0.1.1
+
+## Configuration de la machine d'administration dans le VLAN 10
+On attribue à cette machine une adresse IP statique dans le VLAN Outils.
+Dans notre cas, son IP est 10.0.1.3 et sa passerelle est 10.0.1.1
+
+## Configuration des machines dans le VLAN 20
+Les machines situées dans le VLAN 20 obtiennent une adresse IP via le serveur DHCP configuré sur le FOG.
+
+## Test de la configuration
+Pour tester la configuration, on peut vérifier que les machines dans le VLAN 20 obtiennent bien une adresse IP via le serveur DHCP configuré sur le FOG.
+Pour cela, on peut exécuter la commande `ipconfig /renew` sur les machines du VLAN 20.
+Nous obtenons ainsi une adresse IP attribuée par le serveur DHCP configuré sur le FOG :
+![recupIP](<pictures/recupIP.png>)
+
+## Test de la communication entre les machines
+Pour tester la communication entre les machines, on peut exécuter la commande `ping` entre les machines.
+On va ainsi pouvoir tester un ping entre la machine Proxmox (VLAN 10) et une machine du VLAN 20 :
+![testPing](<pictures/testPing.png>)
