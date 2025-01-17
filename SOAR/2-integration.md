@@ -15,3 +15,4 @@ Idem pour cette partie, cette [doc](https://kifarunix.com/easy-way-to-integrate-
 
 # Intégration MISP à The Hive
 
+Voir la documentation [ici](https://kifarunix.com/how-to-integrate-thehive-with-misp/).
