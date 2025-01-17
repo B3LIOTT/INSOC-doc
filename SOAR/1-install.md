@@ -85,3 +85,6 @@ je me suis arrêté à 'Configure Hive metastore', c'est mega chiant.
 # Installation de MISP
 
 Nous avons utilisé une ubuntu-20.04 car l'installateur à été dévloppé en partie pour cette version. 
+
+La documentation [ici](https://kifarunix.com/install-misp-on-ubuntu/) donne les indications d'installation. Nous avons utilisé le script d'installation proposé: [INSTALL.sh](https://github.com/MISP/MISP/blob/2.4/INSTALL/INSTALL.sh).
+
