@@ -51,35 +51,9 @@ La suite de la configuration via l'interface peut être faite en suivant la fin 
 Voir la fin de cette [doc](https://kifarunix.com/install-cortex-on-ubuntu/).
 
 
-# AUTRE SOLUTION - Installation de TheHive / Cortex version 3
+# AUTRE SOLUTION - Installation de TheHive / Cortex version 4
 
-La version 3 ne nécéssite pas de license. Le `tar` est disponnible [ici](`https://archive.apache.org/dist/hive/hive-3.1.2/`).
-```bash
-wget https://archive.apache.org/dist/hive/hive-3.1.2/apache-hive-3.1.2-bin.tar.gz
-```
-
-Avant d'installer the Hive 3, il faut installer Hadoop. Le `tar` se réupère aini:
-```bash
-wget https://dlcdn.apache.org/hadoop/common/hadoop-3.4.1/hadoop-3.4.1-src.tar.gz
-```
-
-Ensuite, l'installation et la configuration s'effectue à l'aide de cette [documentation](https://kontext.tech/article/448/install-hadoop-330-on-linux).
-
-Rappels Hadoop:
-```bash
-sbin/start-dfs.sh   # run DFS
-sbin/start-yarn.sh  # run YARN
-sbin/stop-yarn.sh   # stop YARN
-sbin/stop-dfs.sh    # stop DFS
-```
-
-Une fois hadoop bien installé, l'installation de TheHive 3 peut se faire en suivant cette [documentation](https://kontext.tech/article/561/apache-hive-312-installation-on-linux-guide).
-
-Rappels TheHive:
-```bash
-
-```
-je me suis arrêté à 'Configure Hive metastore', c'est mega chiant.
+[ici](https://www.ctechmat.fr/thehive4-installation-et-configuration/)
 
 
 # Installation de MISP
