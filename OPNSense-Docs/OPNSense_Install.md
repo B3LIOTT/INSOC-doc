@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 
-Ce document est relatif à l'installation d'OPNsense 24.7.10 sur un rack de serveur HP Proliant DL380G5 contenant 6Go de RAM, un Intel Xeon 5150 @ 2.66GHz à 4 coeurs et 2 interfaces réseau pour les réseaux WAN et LAN.
+Ce document est relatif à l'installation d'OPNsense 24.7 et d'outils supplémentaires sur un rack de serveur HP Proliant DL380G5 contenant 8Go de RAM DDR2, un Intel Xeon 5150 @ 2.66GHz à 4 coeurs et 2 interfaces réseau pour les réseaux WAN et LAN.
 
 - [Installation de l'OS OPNsense](#installation-de-los-opnsense)
 - [Configuration des interfaces réseau](#configuration-des-interfaces-réseau)
@@ -42,7 +42,9 @@ Pour cela, nous pouvons utiliser l'interface web d'OPNsense en accédant à l'ad
 
 Dans notre cas, suite à des problèmes de liaisons avec les serveurs de production devant nous assurer un accès à Internet, nous nous sommes rabattus sur la configuration suivante :
 - Interface WAN reliée à un téléphone par câble USB pour avoir une connexion Internet.
-- Interface LAN reliée à un switch pour avoir un accès au réseau local.
+- Interface LAN reliée à un switch pour avoir un accès au réseau local
+
+(<span style="font-size: 3em;">**/!\\**</span> Dans notre cas, c'est l'interface 2 du firewall qui gérera la communication du LAN).
 
 La configuration se fait comme suit :
 - Utilisation de l'option 1 sur la console.
@@ -55,12 +57,17 @@ Si la configuration est correcte, la console affichera une adresse IP pour l'int
 ## Accès à l'interface de gestion web
 
 Il est conseillé d'accèder à cette interface depuis l'interface LAN.
-Cependant, s'l est nécessaire d'accéder à l'interface de gestion depuis l'interface WAN, il est possible de le faire en utilisant l'option 8 sur la console et en rentrant la commande suivante qui désactivve la fonction firewall :
+Cependant, s'l est nécessaire d'accéder à l'interface de gestion depuis l'interface WAN, il est possible de le faire en utilisant l'option 8 sur la console et en rentrant la commande suivante qui désactive la fonction firewall d'OPNSense, réduisant ainsi de manière extrême la sécurité du réseau :
 ```shell
 pfctl -d
 ```
 
-Nous pouvons désormais accéder à l'interface de gestion web d'OPNsense en utilisant l'une des 2 adresses IP.
+<span style="font-size: 3em;">**/!\\**</span> Veillez à bien réactiver la fonction firewall en exécutant la commande suivante si vous avez utilisé la commande précédente :
+```shell
+pfctl -e
+```
+
+Nous pouvons désormais accéder à l'interface de gestion web d'OPNsense.
 
 ## Assistant de configuration
 
@@ -104,9 +111,37 @@ Pour des questions d'accès simplifié à la console OPNsense, il est possible d
 
 Afin de sécuriser au mieux cette connexion, nous avons modifié le port SSH par défaut (22) pour un port différent (762).
 
-Nous avons également permis l'accès à l'utilisateur **root** en SSH en cochant l'option **Permit root user login**. Attention cependant a bien désactiver cette option une fois la configuration terminée et à créer un utilisateur dédié pour l'accès SSH.
+Dans la grosse majorité des cas, il est fortement déconseillé de se connecter en SSH avec le compte root. C'est pourquoi nous allons créer un utilisateur pour l'accès SSH root.
+
+Il est nécessaire de cocher l'option **Permit root user login** pour autoriser la connexion en tant que root le temps de configurer un utilisateur pour l'accès SSH.
 
 ![SSH_config](images/SSH_config.png)
+
+Par la suite, nous créons l'utilisateur en allant dans **System > Access > Users** et en cliquant sur **Add**.
+
+Nous lui renseignons un nom d'utilisateur, un mot de passe et lui attribuons le rôle **admins** dans la section **Group Memberships** avec un accès à **/bin/sh** configuré dans la section **Login shell**.
+
+Nous nous connectons par la suite en SSH avec le compte root pour ajouter le nouvel utilisateur au groupe **wheel** en utilisant la commande suivante :
+```shell
+pw groupmod wheel -m <nom_utilisateur>
+```
+
+Une fois cela fait, nous modifions le fichier sudoers pour autoriser l'utilisateur à utiliser la commande sudo en utilisant la commande suivante :
+```shell
+visudo
+```
+et nous renseignons les lignes suivantes à la fin du fichier :
+```shell
+<nom_utilisateur> ALL=(ALL) /usr/bin/su, /usr/bin/sh
+
+Defaults rootpw
+```
+Ces lignes permettent d'autoriser l'utilisateur à n'utiliser que les commandes **su** et **sh** avec la commande sudo, et de demander le mot de passe root pour les commandes sudo.
+
+Finalement, nous désactivons l'accès en tant que root en SSH en décochant l'option **Permit root user login**.
+
+Désormais, pour nous connecter en SSH et effectuer des modifications dans les fichiers, il faudra passer par le compte intermédiaire créé précédemment et utiliser la commande **su** pour passer en root en renseignant le mot de passe root.
+
 
 ## Mise en place de règles de pare-feu
 
@@ -182,6 +217,12 @@ Une fois cela fait, en redémarrant le service Squid, un message d'erreur appara
 
 En naviguant dans le fichier */usr/local/etc/squid/acl/UT1.Blacklist*, on peut trouver la source du conflit et la retirer.
 Cependant, après avoir rechargé le service, bien que l'erreur auparavant affichée disparaisse, il nous est impossible de sélectionner les catégories de blocage que nous souhaitons mettre en place et, de ce fait, de bloquer les sites web indésirables...
+
+**<span style="font-size: 3em;">/!\\</span>Point important à évoquer**
+
+Attention, la mise en place d'un proxy Squid transparent pose problème avec la mise à jour des paquets Linux provenant de sources HTTP. 
+Comme évoqué avec le tuteur du projet, il est recommandé de passer par un serveur DRBL et d'utiliser les sources HTTPS de serveurs certifiés pour les mises à jour des paquets Linux.\
+Aucun problème n'est rencontré avec les mises à jour Windows.
 
 ## Sources :
 - [Introduction à OPNSense : Comment installer ce firewall ? - IT-Connect](https://www.it-connect.fr/tuto-installer-et-configurer-opnsense/)
