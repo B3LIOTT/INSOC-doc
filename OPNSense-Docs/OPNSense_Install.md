@@ -7,9 +7,11 @@ Ce document est relatif à l'installation d'OPNsense 24.7 et d'outils supplémen
 - [Accès à l'interface de gestion web](#accès-à-linterface-de-gestion-web)
 - [Assistant de configuration](#assistant-de-configuration)
 - [Sécurisation supplémentaire de l'interface web](#sécurisation-supplémentaire-de-linterface-web)
-- [Accès SSH à la console OPNsense](#accès-ssh-à-la-console-opnsense)
+- [Accès SSH sécurisé à la console root d'OPNsense](#accès-ssh-sécurisé-à-la-console-root-dopnsense)
 - [Mise en place de règles de pare-feu](#mise-en-place-de-règles-de-pare-feu)
 - [Mise en place du proxy Squid pour la journalisation des communications HTTP](#mise-en-place-du-proxy-squid-pour-la-journalisation-des-communications-http)
+- [Configuration de l'IDS/IPS Suricata](#configuration-de-lidsips-suricata)
+- [Installation de l'agent Wazuh pour récupérer les logs d'OPNSense et des outils dans le SIEM](#installation-de-lagent-wazuh-pour-récupérer-les-logs-dopnsense-et-des-outils-dans-le-siem)
 - [Sources :](#sources-)
 
 
@@ -105,7 +107,7 @@ Afin de sécuriser d'avantage l'accès à l'interface web, nous avons modifié l
 
 ![modif_port_GUI](images/HTTPSPort.png)
 
-## Accès SSH à la console OPNsense
+## Accès SSH sécurisé à la console root d'OPNsense
 
 Pour des questions d'accès simplifié à la console OPNsense, il est possible d'activer l'accès SSH en allant dans **System > Settings > Administration** et en cochant l'option **Enable Secure Shell**.
 
@@ -224,8 +226,53 @@ Attention, la mise en place d'un proxy Squid transparent pose problème avec la 
 Comme évoqué avec le tuteur du projet, il est recommandé de passer par un serveur DRBL et d'utiliser les sources HTTPS de serveurs certifiés pour les mises à jour des paquets Linux.\
 Aucun problème n'est rencontré avec les mises à jour Windows.
 
+## Configuration de l'IDS/IPS Suricata
+
+Cette section se concentre sur la configuration de Suricata, un IDS/IPS open-source, sur OPNsense.
+Ce dernier est présent nativement dans OPNsense et peut être configuré en allant dans **Services > Intrusion Detection > Administration**.
+
+Nous avons configuré Suricata comme suit :
+![suricata_conf](images/Suricata_conf.png)
+
+Un détail important est la sélection des 2 interfaces réseau (WAN et LAN) pour Suricata. Cela permet à Suricata de surveiller à la fois le trafic entrant et sortant.
+
+Dans l'onglet **Download**, il est possible de télécharger des règles de détection pour Suricata certifiées par l'équipe de développement. Nous avons téléchargé toutes les règles disponibles pour une meilleure détection des attaques.
+
+Dans l'onglet **Rules**, nous pouvons observer l'intégralité des règles de détection téléchargées et les activer ou les désactiver selon nos besoins.
+Par défaut, certaines règles sont déjà activées et nous avons décidé de les laisser activées.
+
+Il est possible de créer ses propres règles ou d'importer des règles communautaires dans un fichier nommé local.rules, situé dans le répertoire **/usr/local/etc/suricata/rules**.
+Une fois les règles ajoutées, il est recommmandé de copier ce fichier dans le répertoire **/usr/local/etc/suricata/opnsense.rules/** et de redémarrer le service Suricata pour que les règles soient prises en compte.
+Ces nouvelles règles seront dès lors disponibles dans l'onglet **Rules** de l'interface de gestion de Suricata. Il suffira de chercher le nom du fichier de règles ajouté pour les activer.
+
+Dans notre cas, nous avons récupéré un fichier de règles communautaires sur Github se basant sur la détection de scans Nmap en tout genre, et nous avons ajouté quelques règles supplémentaires pour détecter les tentatives d'exploitation de failles XSS basées sur des injections de scripts JavaScript ou la balise **_<script_>** dans les requêtes HTTP.
+
+![suri_rules](images/Suri_rules.png)
+
+![suri_rules_GUI](images/Suri_rules_GUI.png)
+
+Nous pouvons dès lors effectuer des tests pour vérifier que Suricata détecte bien les attaques que nous avons configurées.
+Pour cela, nous pouvons lancer la requête suivante depuis une machine dans le LAN pour trigger une alerte de potentielle faille XSS exploitée :
+```shell
+curl "http://example.com/?param=<script>alert(1)</script>"
+```
+## Installation de l'agent Wazuh pour récupérer les logs d'OPNSense et des outils dans le SIEM
+
+Cette section se concentre sur l'installation de l'agent Wazuh sur OPNsense pour récupérer les logs des différents outils intégrés à OPNSense et les envoyer au SIEM.
+
+Pour cela, il suffit de télécharger le plugin **os-wazuh-agent** dans la section **System > Firmware > Plugins**.
+
+En rechargeant la page, une nouvelle section **Wazuh Agent** apparaît dans la section **Services**.
+
+![Wazuh_agent_config](images/Wazuh_Agent_Config.png)
+
+Nous configurons l'adresse IP du serveur Wazuh pour rediriger les logs. Dans notre cas, le port est le port par défaut (1514) et nous avons configuré Wazuh pour qu'il puisse renvoyer les logs des applications autorisées par défaut, en ajoutant les logs de Squid et Suricata (Nous pourrions également redirigé les logs du firewall mais cela pourrait entraîner un flood de logs).
+
+Le reste des paramètres est laissé par défaut, à savoir que tous les paramètres sont activés.
+
 ## Sources :
 - [Introduction à OPNSense : Comment installer ce firewall ? - IT-Connect](https://www.it-connect.fr/tuto-installer-et-configurer-opnsense/)
 - [Settings - OPNsense Documentation](https://docs.opnsense.org/manual/settingsmenu.html)
 - [Caching Proxy - OPNsense Documentation](https://docs.opnsense.org/manual/proxy.html)
 - [How to Set Up Caching Proxy on OPNSense? - Zenarmor](https://www.zenarmor.com/docs/network-security-tutorials/how-to-set-up-caching-proxy-in-opnsense)
+- [Suricata Rules for Nmap - Github](https://github.com/aleksibovellan/opnsense-suricata-nmaps)
