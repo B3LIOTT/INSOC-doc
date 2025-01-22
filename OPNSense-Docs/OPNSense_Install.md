@@ -9,7 +9,7 @@ Ce document est relatif à l'installation d'OPNsense 24.7.10 sur un rack de serv
 - [Sécurisation supplémentaire de l'interface web](#sécurisation-supplémentaire-de-linterface-web)
 - [Accès SSH à la console OPNsense](#accès-ssh-à-la-console-opnsense)
 - [Mise en place de règles de pare-feu](#mise-en-place-de-règles-de-pare-feu)
-- [Mise en place du proxy Squid pour les communications HTTP](#mise-en-place-du-proxy-squid-pour-les-communications-http)
+- [Mise en place du proxy Squid pour la journalisation des communications HTTP](#mise-en-place-du-proxy-squid-pour-la-journalisation-des-communications-http)
 - [Sources :](#sources-)
 
 
@@ -128,7 +128,7 @@ La 7è règle permet les pings depuis nos machines locales vers le serveur OPNse
 
 La dernière règle permet de bloquer tout le reste du trafic.
 
-## Mise en place du proxy Squid pour les communications HTTP
+## Mise en place du proxy Squid pour la journalisation des communications HTTP
 
 Notre table de filtrage ne contient aucune règles concernant l'HTTP. Ceci s'explique par le fait que nous ayons un proxy Squid nous permettant de filtrer ce trafic. Il permet également de bloquer des sites web indésirables par le biais d'ACLs et nous permet de loguer les accès des machines à ces sites.
 
