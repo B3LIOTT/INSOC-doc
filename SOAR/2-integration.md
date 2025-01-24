@@ -22,12 +22,12 @@ Voir la documentation [ici](https://kifarunix.com/how-to-integrate-thehive-with-
 
 n8n joue le rôle de chef d'orchestre, il organise toute la pipeline de gestion d'alertes et de cases dans TheHive. Son intégration entre Wazuh et TheHive se fait via des appels API vers le webhook ded TheHive. Pour le configurer, il faut éditer `/var/ossec/etc/ossec.conf` en y ajoutant une intégration:
 ```conf
- <integration>
-      <name>custom-n8n</name>
-      <level>3</level>
-      <hook_url>http://<IP SERVEUR>:5678/api/hook...</hook_url>
-      <format>json</format>
-  </integration>
+<integration>
+  <name>custom-n8n</name>
+  <level>3</level>
+  <hook_url>http://<IP SERVEUR>:5678/api/hook...</hook_url>
+  <format>json</format>
+</integration>
 ```
 
 Suite à cela, Wazuh cherchera le fichier portant le même nom que l'intégration (ici custom-n8n). Il faut donc ajouter dans `/vat/ossec/integrations/` les fichiers `custom-n8n`:
