@@ -81,4 +81,4 @@ Puis, pour télécharger l'image (si ça n'a pas encore été fait) et lancer le
 docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n --env-file docker-env docker.n8n.io/n8nio/n8n
 ```
 
-En revanche, dans un environnement de développement il sera nécessaire d'utiliser `N8N_PROTOCOL=https` et `N8N_SECURE_COOKIE=true`.
+En revanche, dans un environnement de production il sera nécessaire d'utiliser `N8N_PROTOCOL=https` et `N8N_SECURE_COOKIE=true`.
