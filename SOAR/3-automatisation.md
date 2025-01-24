@@ -24,3 +24,90 @@ Par:
 from vt import error
 from vt.client import Client
 ```
+
+
+# Création du workflow n8n
+
+Le workflow n8n à pour but d'automatiser certaines tâches de récupération de logs et de traitement. Cela représente généralement des tâches d'analyste N1. Le workflow créé vise à envoyer les alertes de niveau MEDIUM minium dans TheHive avec création ou merge dans un CASE adapté. Des observables sont également définies afin de lancer des analyzers tels que AbuseIPDB.
+
+Le workflow réalisé est donné [ici](./INSOC.json). Ce workflow utilise des node de code personnalisés dont voici les explications:
+
+Le noeud uuid permet de génerer un uuid pour chaque alerte afin de lui donner un identifiant unique, sans quoi TheHive refusera la création de l'alerte.
+```python
+# creates a uuid for each alert
+import uuid
+
+data = _input.first().json.body
+data.sourceRef = str(uuid.uuid4())
+return data
+```
+
+Le noeud utilisé après la création de CASE ou merge de l'alerte dans un CASE permet de passer aux noeud suivants l'id du CASE créé ainsi que la date.
+```python
+return {
+  'id': _input.first().json.id,
+  'date': _input.first().json.createdAt
+}
+```
+
+En parallèle, un noeud est éxecuté pour tenter de détecter les potentielles données qui pourraient être une justification d'acte malvaillant (nommées artéfacts ou observables). Il cherches les adresses IP qui ne correspondent pas à des adresses du LAN, les noms de domaines et les urls.
+```javascript
+// Check if it's an external IP
+function isExternalIP(ip) {
+    const privateRanges = [
+        /^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/,        // 10.0.0.0 - 10.255.255.255
+        /^172\.(1[6-9]|2[0-9]|3[0-1])\.\d{1,3}\.\d{1,3}$/, // 172.16.0.0 - 172.31.255.255
+        /^192\.168\.\d{1,3}\.\d{1,3}$/,           // 192.168.0.0 - 192.168.255.255
+        /^127\.\d{1,3}\.\d{1,3}\.\d{1,3}$/,       // 127.0.0.0 - 127.255.255.255 (loopback)
+        /^169\.254\.\d{1,3}\.\d{1,3}$/,           // 169.254.0.0 - 169.254.255.255 (link-local)
+        /^0\.\d{1,3}\.\d{1,3}\.\d{1,3}$/,         // 0.0.0.0/8 (reserved)
+        /^255\.255\.255\.255$/                    // Broadcast address
+    ];
+
+    return !privateRanges.some(range => range.test(ip));
+}
+
+function extractArtifacts() {
+    const ipRegex = /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g;
+    const urlRegex = /https?:\/\/(?:[-\w@:%._\+~#=]{1,256}\.[\w()]{1,6}\b(?:[-\w()@:%_\+.~#?&\/=]*))/g
+
+    // Get the items array from n8n input
+    const inputArray = $input.first().json.body;
+    let artifactsDict = {};
+    artifactsDict.artifacts = {}
+
+    // Convert item to string if it's not already
+    const formatAlt = JSON.stringify(inputArray, null, 2);
+
+    const allIps = formatAlt.match(ipRegex) || [];
+    artifactsDict.artifacts.ips = allIps.filter(isExternalIP); // Get only external IPs
+    artifactsDict.artifacts.urls = formatAlt.match(urlRegex) || [];
+
+    // Extract domains from URLs using simple string manipulation
+    artifactsDict.artifacts.domains = artifactsDict.artifacts.urls.map(url => {
+    // Remove protocol (http:// or https://)
+    let domain = url.split('//')[1];
+    // Get the domain part (everything before the first slash)
+    domain = domain.split('/')[0];
+    // Remove port if present
+    domain = domain.split(':')[0];
+    return domain;
+    });
+
+    return artifactsDict;
+}
+
+
+// Input data
+const data = $input.first().json;
+
+// Ajouter le dictionnaire des artefacts aux données
+const dict = extractArtifacts();
+data.body = dict;
+data.body.counter_ips = dict.artifacts.ips.length;
+data.body.counter_urls = dict.artifacts.urls.length;
+data.body.counter_domains = dict.artifacts.domains.length;
+
+// Retourner les données modifiées
+return { json: data.body };
+```

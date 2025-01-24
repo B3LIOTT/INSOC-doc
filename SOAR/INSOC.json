@@ -1,0 +1,1431 @@
+{
+  "name": "SOC",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "7ceae612-e110-4adf-8191-95557ec9b251",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -620,
+        -140
+      ],
+      "id": "f4fc619e-692a-458a-8998-4d7dd16c9887",
+      "name": "Webhook",
+      "webhookId": "7ceae612-e110-4adf-8191-95557ec9b251"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bead66af-9be4-4285-8dd0-fb9cdad3743c",
+              "leftValue": "={{ $json.body.rule.level }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -360,
+        -140
+      ],
+      "id": "749a120d-c1fa-4176-a5ad-30e585ae0ec9",
+      "name": ">=MEDIUM alerts filter"
+    },
+    {
+      "parameters": {
+        "resource": "case",
+        "operation": "create",
+        "title": "=CASE - {{ $('ALERT').item.json.tags.join(',') }}",
+        "description": "=Groups alerts with same tags: {{ $('ALERT').item.json.tags.join(',') }}",
+        "severity": "={{ $('ALERT').item.json.severity }}",
+        "startDate": "={{ $('ALERT').item.json.createdAt }}",
+        "owner": "user@wazuh.fr",
+        "tlp": "={{ 2 }}",
+        "tags": "={{ $('ALERT').item.json.tags.join(',') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        640,
+        -240
+      ],
+      "id": "a4370d8a-294d-4e21-847b-1b89a65fed97",
+      "name": "CREATE CASE",
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "merge",
+        "id": "={{ $('ALERT').item.json.id }}",
+        "caseId": "={{ $json._id }}"
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        780,
+        -20
+      ],
+      "id": "2e176d29-c44e-4285-a4b1-b1a40000e72d",
+      "name": "MERGE TO CASE",
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "case",
+        "operation": "count",
+        "filters": {
+          "severity": "={{ $json.severity }}",
+          "tags": "={{ $json.tags.join(',') }}"
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        280,
+        -140
+      ],
+      "id": "879ce3c1-3687-47c5-b569-9b08b37ee8b7",
+      "name": "CASE EXISTS",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "case",
+        "limit": 1,
+        "options": {},
+        "filters": {
+          "tags": "={{ $('ALERT').item.json.tags[0] }}"
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        640,
+        -20
+      ],
+      "id": "03fcace6-f076-4080-93eb-4664b78e3da9",
+      "name": "GET CASE",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1202999965455097866",
+          "mode": "list",
+          "cachedResultName": "Serveur de Otter Tech",
+          "cachedResultUrl": "https://discord.com/channels/1202999965455097866"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1331219141662871582",
+          "mode": "list",
+          "cachedResultName": "soc",
+          "cachedResultUrl": "https://discord.com/channels/1202999965455097866/1331219141662871582"
+        },
+        "content": "=/!\\ ALERTE DE NIVEAU 3\n-----------------------------\nTitre: {{ $json.body.content[0].title }}\nDesc: {{ $json.body.content[0].description }}\nIP source: {{ $json.body.content[0].fields[0].source }}\n------------------------------",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        2900,
+        -40
+      ],
+      "id": "5584ad2e-0678-4846-a4ec-e459df955ffa",
+      "name": "Discord",
+      "credentials": {
+        "discordBotApi": {
+          "id": "VirD6HFASOvs3lmL",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# creates a uuid for each alert\nimport uuid\n\ndata = _input.first().json.body\ndata.sourceRef = str(uuid.uuid4())\nreturn data"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -140
+      ],
+      "id": "9e2e8920-fc57-466c-bfe0-93ea67a42be2",
+      "name": "uuid"
+    },
+    {
+      "parameters": {
+        "title": "={{ $json.rule.description }}",
+        "description": "=Alert from - {{ $json.agent.name }}",
+        "severity": "={{ $json.rule.level }}",
+        "date": "={{ $json.timestamp }}",
+        "tags": "={{ $json.rule.groups.join(',') }}",
+        "tlp": "={{ $json.rule.level }}",
+        "type": "={{ $json.rule.id }}",
+        "source": "={{ $json.agent.ip }}",
+        "sourceRef": "=alert-{{ $json.sourceRef }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        140,
+        -140
+      ],
+      "id": "d413f438-102c-4923-8987-07cea1f4aab4",
+      "name": "ALERT",
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "observable",
+        "operation": "create",
+        "caseId": "={{ $('COUNTER IPs').item.json.id }}",
+        "dataType": "ip",
+        "data": "={{ $('COUNTER IPs').item.json.next_ip }}",
+        "message": "ip",
+        "startDate": "={{ $('COUNTER IPs').item.json.date }}",
+        "status": "Ok",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        2100,
+        -480
+      ],
+      "id": "229da112-fe3a-462e-9346-eb5faea1b4b3",
+      "name": "ADD OBSERVABLES",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\ndata.body.agent.ip = \"34.35.36.37\"\ndata.body.malicious_ip = \"62.63.230.241\"\ndata.body.malicious_domain1 = \"http://hecker.io\"\ndata.body.malicious_domain2 = \"http://hecker2222.io\"\n\nreturn data"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -500,
+        80
+      ],
+      "id": "6c8d48da-41f4-407a-bff6-8458c9af4a48",
+      "name": "TEST MALICIOUS IP"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b49a9a66-a443-493c-949b-a946ef155513",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        -140
+      ],
+      "id": "e7231258-da1c-46f6-ba17-54bc5a79f450",
+      "name": "IF CASE DO NOT EXISTS"
+    },
+    {
+      "parameters": {
+        "resource": "observable",
+        "operation": "executeAnalyzer",
+        "id": "={{ $json.id }}",
+        "dataType": "ip",
+        "analyzers": [
+          "0264c5f6f3d1d841605bedcefe9f31d8::Cortex"
+        ]
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        2260,
+        -480
+      ],
+      "id": "a57b80ce-c366-4b73-a610-ba2a966d8981",
+      "name": "EXEC ANALYZER",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "75a55d45-25b0-4581-b969-297436b1588f",
+              "leftValue": "={{ $json.artifacts.ips }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "array",
+                "operation": "lengthGt",
+                "rightType": "number"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        -320
+      ],
+      "id": "6e382a70-3f8a-45d5-b17f-314cd82fca62",
+      "name": "Filter IPs"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "75a55d45-25b0-4581-b969-297436b1588f",
+              "leftValue": "={{ $json.artifacts.urls }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "array",
+                "operation": "lengthGt",
+                "rightType": "number"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        100
+      ],
+      "id": "aad3aae2-0556-44f8-86db-9cce2a27837d",
+      "name": "Filter URLs"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "75a55d45-25b0-4581-b969-297436b1588f",
+              "leftValue": "={{ $json.artifacts.domains }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "array",
+                "operation": "lengthGt",
+                "rightType": "number"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        500
+      ],
+      "id": "8e1b1dbe-a95c-4c05-a7c1-2c31f7cf9a84",
+      "name": "Filter DOMAINs"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check if it's an external IP\nfunction isExternalIP(ip) {\n    const privateRanges = [\n        /^10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/,        // 10.0.0.0 - 10.255.255.255\n        /^172\\.(1[6-9]|2[0-9]|3[0-1])\\.\\d{1,3}\\.\\d{1,3}$/, // 172.16.0.0 - 172.31.255.255\n        /^192\\.168\\.\\d{1,3}\\.\\d{1,3}$/,           // 192.168.0.0 - 192.168.255.255\n        /^127\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/,       // 127.0.0.0 - 127.255.255.255 (loopback)\n        /^169\\.254\\.\\d{1,3}\\.\\d{1,3}$/,           // 169.254.0.0 - 169.254.255.255 (link-local)\n        /^0\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/,         // 0.0.0.0/8 (reserved)\n        /^255\\.255\\.255\\.255$/                    // Broadcast address\n    ];\n\n    return !privateRanges.some(range => range.test(ip));\n}\n\nfunction extractArtifacts() {\n    const ipRegex = /\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b/g;\n    const urlRegex = /https?:\\/\\/(?:[-\\w@:%._\\+~#=]{1,256}\\.[\\w()]{1,6}\\b(?:[-\\w()@:%_\\+.~#?&\\/=]*))/g\n  \n    // Get the items array from n8n input\n    const inputArray = $input.first().json.body;\n    let artifactsDict = {};\n    artifactsDict.artifacts = {}\n  \n    // Convert item to string if it's not already\n    const formatAlt = JSON.stringify(inputArray, null, 2);\n  \n    const allIps = formatAlt.match(ipRegex) || [];\n    artifactsDict.artifacts.ips = allIps.filter(isExternalIP); // Get only external IPs\n    artifactsDict.artifacts.urls = formatAlt.match(urlRegex) || [];\n    \n    // Extract domains from URLs using simple string manipulation\n    artifactsDict.artifacts.domains = artifactsDict.artifacts.urls.map(url => {\n      // Remove protocol (http:// or https://)\n      let domain = url.split('//')[1];\n      // Get the domain part (everything before the first slash)\n      domain = domain.split('/')[0];\n      // Remove port if present\n      domain = domain.split(':')[0];\n      return domain;\n    });\n  \n  return artifactsDict;\n}\n\n\n// Input data\nconst data = $input.first().json;\n\n// Ajouter le dictionnaire des artefacts aux données\nconst dict = extractArtifacts();\ndata.body = dict;\ndata.body.counter_ips = dict.artifacts.ips.length;\ndata.body.counter_urls = dict.artifacts.urls.length;\ndata.body.counter_domains = dict.artifacts.domains.length;\n\n// Retourner les données modifiées\nreturn { json: data.body };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        120,
+        120
+      ],
+      "id": "83d5f7df-4cbd-424e-bbc2-375fa69d0a98",
+      "name": "Artifacts detection"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        100
+      ],
+      "id": "ac33705e-5d4b-4ef3-b444-f186e82b540e",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "return {\n  'id': _input.first().json.id,\n  'date': _input.first().json.createdAt\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        -20
+      ],
+      "id": "3bd5fc92-5d2f-4b0b-ae1c-7c20e64f86fd",
+      "name": "CASE ID"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "counter = _input.first().json.counter_urls - 1\n_input.first().json.counter_urls = counter\nnext_url = _input.first().json.artifacts.urls[counter]\n\nreturn dict(_input.first().json) | {'next_url': next_url}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1640,
+        100
+      ],
+      "id": "27a86b3f-b8e9-4951-b211-76c88aac8717",
+      "name": "COUNTER URLs"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "counter = _input.first().json.counter_ips - 1\n_input.first().json.counter_ips = counter\nnext_ip = _input.first().json.artifacts.ips[counter]\n\nreturn dict(_input.first().json) | {'next_ip': next_ip}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1660,
+        -320
+      ],
+      "id": "13eaea25-86ce-4480-b30d-723ed2414c10",
+      "name": "COUNTER IPs"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "counter = _input.first().json.counter_domains - 1\n_input.first().json.counter_domains = counter\nnext_domain = _input.first().json.artifacts.domains[counter]\n\nreturn dict(_input.first().json) | {'next_domain': next_domain}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1620,
+        500
+      ],
+      "id": "593c4d22-a649-44c0-85f0-0ce75d1d4bb7",
+      "name": "COUNTER DOMAINs"
+    },
+    {
+      "parameters": {
+        "resource": "observable",
+        "operation": "count",
+        "filters": {
+          "data": "={{ $json.next_ip }}"
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        -480
+      ],
+      "id": "1c24962d-0553-48df-89e8-61e8253dfe0b",
+      "name": "OBSERVABLE EXISTS",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "564ff8c5-fd5d-4a58-a8c6-388eddd34b74",
+              "leftValue": "={{ $json.counter_ips }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2580,
+        -320
+      ],
+      "id": "83d19a1a-1308-4ba3-b182-2b32ff4d7528",
+      "name": "loop condition"
+    },
+    {
+      "parameters": {
+        "resource": "observable",
+        "operation": "create",
+        "caseId": "={{ $('COUNTER URLs').item.json.id }}",
+        "dataType": "ip",
+        "data": "={{ $('COUNTER URLs').item.json.next_url }}",
+        "message": "ip",
+        "startDate": "={{ $('COUNTER URLs').item.json.date }}",
+        "status": "Ok",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        2100,
+        -20
+      ],
+      "id": "b2a7c11a-dc72-46e1-9f44-ae5e192374ce",
+      "name": "ADD OBSERVABLES1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "observable",
+        "operation": "executeAnalyzer",
+        "id": "={{ $json.id }}",
+        "dataType": "url",
+        "analyzers": [
+          "0264c5f6f3d1d841605bedcefe9f31d8::Cortex"
+        ]
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        2260,
+        -20
+      ],
+      "id": "ca3f6308-26cd-4567-899e-a6cbd02678e4",
+      "name": "EXEC ANALYZER1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "observable",
+        "operation": "count",
+        "filters": {
+          "data": "={{ $json.next_url }}"
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        -20
+      ],
+      "id": "8a44e746-c687-4115-b781-7711b6570d2e",
+      "name": "OBSERVABLE EXISTS1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "564ff8c5-fd5d-4a58-a8c6-388eddd34b74",
+              "leftValue": "={{ $json.counter_urls }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2560,
+        100
+      ],
+      "id": "79353bc5-1fbd-44e8-b561-39564da2c04d",
+      "name": "loop condition1"
+    },
+    {
+      "parameters": {
+        "resource": "observable",
+        "operation": "create",
+        "caseId": "={{ $('COUNTER DOMAINs').item.json.id }}",
+        "dataType": "ip",
+        "data": "={{ $('COUNTER DOMAINs').item.json.next_domain }}",
+        "message": "ip",
+        "startDate": "={{ $('COUNTER DOMAINs').item.json.date }}",
+        "status": "Ok",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        2120,
+        360
+      ],
+      "id": "dbda4ba8-4ede-4600-b30b-950cad024b30",
+      "name": "ADD OBSERVABLES2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "observable",
+        "operation": "executeAnalyzer",
+        "id": "={{ $json.id }}",
+        "dataType": "domain",
+        "analyzers": [
+          "0264c5f6f3d1d841605bedcefe9f31d8::Cortex"
+        ]
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        2280,
+        360
+      ],
+      "id": "50964131-008b-4adc-abe3-a19ac847f7fe",
+      "name": "EXEC ANALYZER2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "observable",
+        "operation": "count",
+        "filters": {
+          "data": "={{ $json.next_domain }}"
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        1800,
+        360
+      ],
+      "id": "f275e53f-900c-45db-abf0-dab4aa6df240",
+      "name": "OBSERVABLE EXISTS2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "JlWNveB3sauZe9oS",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "564ff8c5-fd5d-4a58-a8c6-388eddd34b74",
+              "leftValue": "={{ $json.counter_domains }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2560,
+        500
+      ],
+      "id": "a0bfbc60-1897-49fe-9f3f-5312c2a5a799",
+      "name": "loop condition2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5b092e62-cde5-4e65-b612-1d88c03fc8ff",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1960,
+        -480
+      ],
+      "id": "f6474fef-276f-4933-8d31-d3e18f54ff51",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5b092e62-cde5-4e65-b612-1d88c03fc8ff",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1960,
+        -20
+      ],
+      "id": "a01d4b58-d8b6-427b-85db-297a7ad44751",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5b092e62-cde5-4e65-b612-1d88c03fc8ff",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1960,
+        360
+      ],
+      "id": "0bae5089-3096-456b-a679-ee7e743578e6",
+      "name": "Filter2"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "192.168.1.42:5678",
+            "user-agent": "python-requests/2.32.2",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "content-length": "5388"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "timestamp": "2025-01-21T19:35:06.328+0000",
+            "rule": {
+              "level": 1,
+              "description": "Windows Logon Success",
+              "id": "60106",
+              "mitre": {
+                "id": [
+                  "T1078"
+                ],
+                "tactic": [
+                  "Defense Evasion",
+                  "Persistence",
+                  "Privilege Escalation",
+                  "Initial Access"
+                ],
+                "technique": [
+                  "Valid Accounts"
+                ]
+              },
+              "firedtimes": 2,
+              "mail": false,
+              "groups": [
+                "windows",
+                "windows_security",
+                "authentication_success"
+              ],
+              "pci_dss": [
+                "10.2.5"
+              ],
+              "gpg13": [
+                "7.1",
+                "7.2"
+              ],
+              "gdpr": [
+                "IV_32.2"
+              ],
+              "hipaa": [
+                "164.312.b"
+              ],
+              "nist_800_53": [
+                "AU.14",
+                "AC.9"
+              ],
+              "tsc": [
+                "CC6.8",
+                "CC7.2",
+                "CC7.3"
+              ]
+            },
+            "agent": {
+              "id": "001",
+              "name": "LAPTOP-OD44SO50",
+              "ip": "192.168.1.42"
+            },
+            "manager": {
+              "name": "wazuh"
+            },
+            "id": "1737488106.15794540",
+            "decoder": {
+              "name": "windows_eventchannel"
+            },
+            "data": {
+              "win": {
+                "system": {
+                  "providerName": "Microsoft-Windows-Security-Auditing",
+                  "providerGuid": "{54849625-5478-4994-a5ba-3e3b0328c30d}",
+                  "eventID": "4624",
+                  "version": "3",
+                  "level": "0",
+                  "task": "12544",
+                  "opcode": "0",
+                  "keywords": "0x8020000000000000",
+                  "systemTime": "2025-01-21T19:35:05.2035092Z",
+                  "eventRecordID": "2080406",
+                  "processID": "1140",
+                  "threadID": "12972",
+                  "channel": "Security",
+                  "computer": "LAPTOP-OD44SO50",
+                  "severityValue": "AUDIT_SUCCESS",
+                  "message": "\"L'ouverture de session d'un compte s'est correctement déroulée.\r\n\r\nObjet :\r\n\tID de sécurité :\t\tS-1-5-18\r\n\tNom du compte :\t\tLAPTOP-OD44SO50$\r\n\tDomaine du compte :\t\tWORKGROUP\r\n\tID d'ouverture de session :\t\t0x3E7\r\n\r\nInformations d'ouverture de session :\r\n\tType d'ouverture de session :\t\t5\r\n\tMode administrateur restreint :\t-\r\n\tCredential Guard à distance :\t-\r\n\tCompte virtuel :\t\tNon\r\n\tJeton élevé :\t\tOui\r\n\r\nNiveau d'emprunt d'identité :\t\tEmprunt d’identité\r\n\r\nNouvelle ouverture de session :\r\n\tID de sécurité :\t\tS-1-5-18\r\n\tNom du compte :\t\tSystème\r\n\tDomaine du compte :\t\tAUTORITE NT\r\n\tID d'ouverture de session :\t\t0x3E7\r\n\tID d'ouverture de session liée :\t\t0x0\r\n\tNom du compte réseau :\t-\r\n\tDomaine du compte réseau :\t-\r\n\tGUID d'ouverture de session :\t\t{00000000-0000-0000-0000-000000000000}\r\n\r\nInformations sur le processus :\r\n\tID du processus :\t\t0x410\r\n\tNom du processus :\t\tC:\\Windows\\System32\\services.exe\r\n\r\nInformations sur le réseau :\r\n\tNom de la station de travail :\t-\r\n\tAdresse du réseau source :\t-\r\n\tPort source :\t\t-\r\n\r\nInformations détaillées sur l'authentification :\r\n\tProcessus d'ouverture de session :\t\tAdvapi  \r\n\tPackage d'authentification :\tNegotiate\r\n\tServices en transit :\t-\r\n\tNom du package (NTLM uniquement) :\t-\r\n\tLongueur de la clé :\t\t0\r\n\r\nCet événement est généré lors de la création d'une ouverture de session. Il est généré sur l'ordinateur sur lequel l'ouverture de session a été effectuée.\r\n\r\nLe champ Objet indique le compte sur le système local qui a demandé l'ouverture de session. Il s'agit le plus souvent d'un service, comme le service Serveur, ou un processus local tel que Winlogon.exe ou Services.exe.\r\n\r\nLe champ Type d'ouverture de session indique le type d'ouverture de session qui s'est produit. Les types les plus courants sont 2 (interactif) et 3 (réseau).\r\n\r\nLe champ Nouvelle ouverture de session indique le compte pour lequel la nouvelle ouverture de session a été créée, par exemple, le compte qui s'est connecté.\r\n\r\nLes champs relatifs au réseau indiquent la provenance d'une demande d'ouverture de session à distance. Le nom de la station de travail n'étant pas toujours disponible, peut être laissé vide dans certains cas.\r\n\r\nLe champ du niveau d'emprunt d'identité indique la portée de l'emprunt d'identité que peut prendre un processus dans la session d'ouverture de session.\r\n\r\nLes champs relatifs aux informations d'authentification fournissent des détails sur cette demande d'ouverture de session spécifique.\r\n\t- Le GUID d'ouverture de session est un identificateur unique pouvant servir à associer cet événement à un événement KDC .\r\n\t- Les services en transit indiquent les services intermédiaires qui ont participé à cette demande d'ouverture de session.\r\n\t- Nom du package indique quel est le sous-protocole qui a été utilisé parmi les protocoles NTLM.\r\n\t- La longueur de la clé indique la longueur de la clé de session générée. Elle a la valeur 0 si aucune clé de session n'a été demandée.\""
+                },
+                "eventdata": {
+                  "subjectUserSid": "S-1-5-18",
+                  "subjectUserName": "LAPTOP-OD44SO50$",
+                  "subjectDomainName": "WORKGROUP",
+                  "subjectLogonId": "0x3e7",
+                  "targetUserSid": "S-1-5-18",
+                  "targetUserName": "Système",
+                  "targetDomainName": "AUTORITE NT",
+                  "targetLogonId": "0x3e7",
+                  "logonType": "5",
+                  "logonProcessName": "Advapi",
+                  "authenticationPackageName": "Negotiate",
+                  "logonGuid": "{00000000-0000-0000-0000-000000000000}",
+                  "keyLength": "0",
+                  "processId": "0x410",
+                  "processName": "C:\\\\Windows\\\\System32\\\\services.exe",
+                  "impersonationLevel": "%%1833",
+                  "virtualAccount": "%%1843",
+                  "targetLinkedLogonId": "0x0",
+                  "elevatedToken": "%%1842"
+                }
+              }
+            },
+            "location": "EventChannel"
+          },
+          "webhookUrl": "http://192.168.1.42:5678/webhook-test/7ceae612-e110-4adf-8191-95557ec9b251",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "TEST MALICIOUS IP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    ">=MEDIUM alerts filter": {
+      "main": [
+        [
+          {
+            "node": "uuid",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Artifacts detection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CASE EXISTS": {
+      "main": [
+        [
+          {
+            "node": "IF CASE DO NOT EXISTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET CASE": {
+      "main": [
+        [
+          {
+            "node": "MERGE TO CASE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CREATE CASE": {
+      "main": [
+        [
+          {
+            "node": "CASE ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "uuid": {
+      "main": [
+        [
+          {
+            "node": "ALERT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ALERT": {
+      "main": [
+        [
+          {
+            "node": "CASE EXISTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TEST MALICIOUS IP": {
+      "main": [
+        [
+          {
+            "node": ">=MEDIUM alerts filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MERGE TO CASE": {
+      "main": [
+        [
+          {
+            "node": "CASE ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ADD OBSERVABLES": {
+      "main": [
+        [
+          {
+            "node": "EXEC ANALYZER",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF CASE DO NOT EXISTS": {
+      "main": [
+        [
+          {
+            "node": "CREATE CASE",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GET CASE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter IPs": {
+      "main": [
+        [
+          {
+            "node": "COUNTER IPs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter URLs": {
+      "main": [
+        [
+          {
+            "node": "COUNTER URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter DOMAINs": {
+      "main": [
+        [
+          {
+            "node": "COUNTER DOMAINs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Artifacts detection": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "EXEC ANALYZER": {
+      "main": [
+        []
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Filter IPs",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Filter URLs",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Filter DOMAINs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CASE ID": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "COUNTER IPs": {
+      "main": [
+        [
+          {
+            "node": "OBSERVABLE EXISTS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "loop condition",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OBSERVABLE EXISTS": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loop condition": {
+      "main": [
+        [],
+        [
+          {
+            "node": "COUNTER IPs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ADD OBSERVABLES1": {
+      "main": [
+        [
+          {
+            "node": "EXEC ANALYZER1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EXEC ANALYZER1": {
+      "main": [
+        []
+      ]
+    },
+    "OBSERVABLE EXISTS1": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loop condition1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "COUNTER URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ADD OBSERVABLES2": {
+      "main": [
+        [
+          {
+            "node": "EXEC ANALYZER2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EXEC ANALYZER2": {
+      "main": [
+        []
+      ]
+    },
+    "OBSERVABLE EXISTS2": {
+      "main": [
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loop condition2": {
+      "main": [
+        [],
+        [
+          {
+            "node": "COUNTER DOMAINs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "COUNTER URLs": {
+      "main": [
+        [
+          {
+            "node": "OBSERVABLE EXISTS1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "loop condition1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "COUNTER DOMAINs": {
+      "main": [
+        [
+          {
+            "node": "OBSERVABLE EXISTS2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "loop condition2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "ADD OBSERVABLES",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "ADD OBSERVABLES1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter2": {
+      "main": [
+        [
+          {
+            "node": "ADD OBSERVABLES2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "06b9875b-5932-4dad-b5ae-1c346e19cc6a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "41d9b554ea391b880896f080828e9004666f86abf047a7f866028a56d859634d"
+  },
+  "id": "HH9TkZ9aPaVejFrK",
+  "tags": []
+}
