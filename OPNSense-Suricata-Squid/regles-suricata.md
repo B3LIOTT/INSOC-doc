@@ -16,7 +16,7 @@ alert http any any -> any any (msg:"Possible XSS attack, js protocol"; content:"
 Les règles suivantes essayent de détecter les tentatives de bufferoverflow. Habituellement lorsqu'un bufferoverflow tente d'être exploité le caratère 'A' est utilisé pour remplir le buffer. Aussi drôle que cela puisse paraître, c'est une habitude très courante. Ainsi, s'il on détècte une requête comportant au moins 16 fois 'A' nous pouvons nous demander si c'est une tentative d'exploit de bufferoverflow:
 ```bash
 alert tcp $EXTERNAL_NET any -> $HOME_NET any (content:"AAAAAAAAAAAAAAAA", msg:"Buffer overflow exploit detected.")
-``` 
+```
 
 
 
