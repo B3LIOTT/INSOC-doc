@@ -6,7 +6,8 @@
 
 ## Active Response
 ### Windows
-Sur l'endpoint, déposer les script dans `C:\Program Files (x86)\ossec-agent\active-response\bin`
+Sur l'endpoint, déposer les script dans `C:\Program Files (x86)\ossec-agent\active-response\bin`. Vous trouverez sur le répo Github d'@B3LIOTT les [scripts d'active response](https://github.com/B3LIOTT/wazuh-active-response).
+
 
 ### Linux
 Dans `/var/ossec/active-response/bin`, déposer les scripts puis:
