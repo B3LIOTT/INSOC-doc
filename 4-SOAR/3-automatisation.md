@@ -48,6 +48,22 @@ Finalement, en ajoutant cette clé api avec l'url de TheHive la connexion est fa
 
 - **/!\ Important**: le noeud TEST MALICOUS  à pour but de modifier l'ip de l'alerte afin de tester le workflow. Il faut faire click droit + Deactivate pour le bypass.
 
+- Le noeud NORMALISE permet de normaliser la valeur des alertes dans {1,2,3}, ainsi TheHive sera en capacité de leur attribuer un label:
+```python	
+data = _input.first().json
+level = data.body.rule.level
+
+new_level = 1
+if 5 < level <= 10:
+  new_level = 2
+elif 10 < level:
+  new_level = 3
+
+data.body.rule.level = new_level
+
+return data
+```
+
 - Le noeud uuid permet de génerer un uuid pour chaque alerte afin de lui donner un identifiant unique, sans quoi TheHive refusera la création de l'alerte.
 ```python
 # creates a uuid for each alert

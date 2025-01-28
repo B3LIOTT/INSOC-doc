@@ -10,7 +10,7 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -2440,
+        -2620,
         340
       ],
       "id": "603d5723-e3b9-49ab-b847-ee448feb55f3",
@@ -30,7 +30,7 @@
             {
               "id": "bead66af-9be4-4285-8dd0-fb9cdad3743c",
               "leftValue": "={{ $json.body.rule.level }}",
-              "rightValue": 0,
+              "rightValue": 1,
               "operator": {
                 "type": "number",
                 "operation": "gt"
@@ -854,6 +854,20 @@
       ],
       "id": "130f0bce-937e-4079-bdb5-f11570545b5e",
       "name": "Filter2"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "data = _input.first().json\nlevel = data.body.rule.level\n\nnew_level = 1\nif 5 < level <= 10:\n  new_level = 2\nelif 10 < level:\n  new_level = 3\n\ndata.body.rule.level = new_level\n\nreturn data"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2440,
+        340
+      ],
+      "id": "cfa31f9f-0957-4f1b-b695-e9c2f3798dcc",
+      "name": "NORMALISE ALERTS"
     }
   ],
   "pinData": {
@@ -933,7 +947,7 @@
       "main": [
         [
           {
-            "node": "TEST MALICIOUS IP",
+            "node": "NORMALISE ALERTS",
             "type": "main",
             "index": 0
           }
@@ -1309,13 +1323,24 @@
           }
         ]
       ]
+    },
+    "NORMALISE ALERTS": {
+      "main": [
+        [
+          {
+            "node": "TEST MALICIOUS IP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "21fab884-a28e-4670-816d-3364ccbaba93",
+  "versionId": "ae5481a3-9387-4daf-abdd-0f44675e14fe",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"
