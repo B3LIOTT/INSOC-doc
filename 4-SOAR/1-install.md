@@ -13,10 +13,11 @@ wget -q -O /tmp/install.sh https://archives.strangebee.com/scripts/install.sh
 Note importante:
 Ce script effectue des vérification matérielle et logicielle. Ainsi, pour forcer l'installation sur un OS non défini dans les tests et sur une machine ne respectant pas la configuration minimale il faut éditer `ìnstall.sh`:
 
-Pour notre part, nous avons installé TheHive sur une Ubuntu server 24.04 donc nous l'avons ajouté ici:
+Pour notre part, nous avons installé TheHive sur une Ubuntu server 24.04 donc nous avons modifié cette ligne:
 ```conf
-OSDEB="ubuntu20.04 ubuntu22.04 debian11 ubuntu24.04"
+OSDEB=("ubuntu ??.04" "debian 11" "debian 12")
 ```
+En remplacant les `??` par `24`.
 
 Dans le cas où la machine a moins de 16Go de RAM et 4 coeurs CPU, il faut le modifier ici:
 ```conf
@@ -24,7 +25,7 @@ MINREQRAM="16000000"
 MINREQCPU="4"
 ```
 
-(A noter que les requirements ne sont pas la au hasard, d'après nos tests il faut minimum 4Go de RAM pour faire tourner TheHive sans charge).
+(A noter que les requirements ne sont pas la au hasard, d'après nos tests il faut minimum 5Go de RAM pour faire tourner TheHive sans charge).
 
 Ensuite, il suffit d'executer ce fichier afin d'installer TheHive et/ou Cortex.
 ```bash

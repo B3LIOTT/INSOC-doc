@@ -32,7 +32,7 @@ Le workflow n8n à pour but d'automatiser certaines tâches de récupération de
 
 Le workflow réalisé est donné [ici](./INSOC.json). Ce workflow utilise des node de code personnalisés dont voici les explications:
 
-Les noeuds TheHive permettent d'interagir avec les APIs de TheHive. Or, pour se faire il est nécessaire d'ajouter les autorisations à n8n par le biais de l'ajout du compte api de TheHive dans n8n:
+- Les noeuds TheHive permettent d'interagir avec les APIs de TheHive. Or, pour se faire il est nécessaire d'ajouter les autorisations à n8n par le biais de l'ajout du compte api de TheHive dans n8n:
 
 Premièrement, dans le noeud TheHive il faut ajouter un compte:
 ![new-cred](images/new-cred.png)
@@ -44,7 +44,9 @@ Finalement, en ajoutant cette clé api avec l'url de TheHive la connexion est fa
 ![save-cred](images/save-cred.png)
 
 
-Le noeud uuid permet de génerer un uuid pour chaque alerte afin de lui donner un identifiant unique, sans quoi TheHive refusera la création de l'alerte.
+- **/!\ Important**: le noeud TEST MALICOUS  à pour but de modifier l'ip de l'alerte afin de tester le workflow. Il faut faire click droit + Deactivate pour le bypass.
+
+- Le noeud uuid permet de génerer un uuid pour chaque alerte afin de lui donner un identifiant unique, sans quoi TheHive refusera la création de l'alerte.
 ```python
 # creates a uuid for each alert
 import uuid
@@ -54,7 +56,7 @@ data.sourceRef = str(uuid.uuid4())
 return data
 ```
 
-Le noeud utilisé après la création de CASE ou merge de l'alerte dans un CASE permet de passer aux noeud suivants l'id du CASE créé ainsi que la date.
+- Le noeud utilisé après la création de CASE ou merge de l'alerte dans un CASE permet de passer aux noeud suivants l'id du CASE créé ainsi que la date.
 ```python
 return {
   'id': _input.first().json.id,
@@ -62,7 +64,7 @@ return {
 }
 ```
 
-En parallèle, un noeud est éxecuté pour tenter de détecter les potentielles données qui pourraient être une justification d'acte malvaillant (nommées artéfacts ou observables). Il cherches les adresses IP qui ne correspondent pas à des adresses du LAN, les noms de domaines et les urls.
+- En parallèle, un noeud est éxecuté pour tenter de détecter les potentielles données qui pourraient être une justification d'acte malvaillant (nommées artéfacts ou observables). Il cherches les adresses IP qui ne correspondent pas à des adresses du LAN, les noms de domaines et les urls.
 ```javascript
 // Check if it's an external IP
 function isExternalIP(ip) {
