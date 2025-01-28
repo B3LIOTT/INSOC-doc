@@ -1,5 +1,5 @@
 {
-  "name": "SOC",
+  "name": "INSOC",
   "nodes": [
     {
       "parameters": {
@@ -10,10 +10,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -620,
-        -140
+        -2440,
+        340
       ],
-      "id": "f4fc619e-692a-458a-8998-4d7dd16c9887",
+      "id": "603d5723-e3b9-49ab-b847-ee448feb55f3",
       "name": "Webhook",
       "webhookId": "7ceae612-e110-4adf-8191-95557ec9b251"
     },
@@ -44,10 +44,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -360,
-        -140
+        -2180,
+        340
       ],
-      "id": "749a120d-c1fa-4176-a5ad-30e585ae0ec9",
+      "id": "d6d84aea-2115-4de4-b80f-94a51807f1dc",
       "name": ">=MEDIUM alerts filter"
     },
     {
@@ -66,14 +66,14 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        640,
-        -240
+        -1180,
+        240
       ],
-      "id": "a4370d8a-294d-4e21-847b-1b89a65fed97",
+      "id": "ed18ad34-d593-46f4-a3bb-f0fbbdc8f628",
       "name": "CREATE CASE",
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -87,14 +87,14 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        780,
-        -20
+        -1040,
+        460
       ],
-      "id": "2e176d29-c44e-4285-a4b1-b1a40000e72d",
+      "id": "3b334b65-9355-4949-adc8-5860aea673ad",
       "name": "MERGE TO CASE",
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -111,15 +111,15 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        280,
-        -140
+        -1540,
+        340
       ],
-      "id": "879ce3c1-3687-47c5-b569-9b08b37ee8b7",
+      "id": "5f23d72d-d6a4-4355-a5b0-9580435946c1",
       "name": "CASE EXISTS",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -136,15 +136,15 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        640,
-        -20
+        -1180,
+        460
       ],
-      "id": "03fcace6-f076-4080-93eb-4664b78e3da9",
+      "id": "b6085e47-052e-43f7-92d6-dde3b50d3691",
       "name": "GET CASE",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -172,17 +172,11 @@
       "type": "n8n-nodes-base.discord",
       "typeVersion": 2,
       "position": [
-        2900,
-        -40
+        1080,
+        440
       ],
-      "id": "5584ad2e-0678-4846-a4ec-e459df955ffa",
-      "name": "Discord",
-      "credentials": {
-        "discordBotApi": {
-          "id": "VirD6HFASOvs3lmL",
-          "name": "Discord Bot account"
-        }
-      }
+      "id": "d2a0331c-b3d6-4148-b790-8134afe4f7ee",
+      "name": "Discord"
     },
     {
       "parameters": {
@@ -192,10 +186,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -80,
-        -140
+        -1900,
+        340
       ],
-      "id": "9e2e8920-fc57-466c-bfe0-93ea67a42be2",
+      "id": "57fbacec-3e57-4c27-bb79-dcb45ec05a8a",
       "name": "uuid"
     },
     {
@@ -214,14 +208,14 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        140,
-        -140
+        -1680,
+        340
       ],
-      "id": "d413f438-102c-4923-8987-07cea1f4aab4",
+      "id": "f0a16049-dbd9-4028-a859-6cb018af1b72",
       "name": "ALERT",
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -241,15 +235,15 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        2100,
-        -480
+        280,
+        0
       ],
-      "id": "229da112-fe3a-462e-9346-eb5faea1b4b3",
+      "id": "b4bbc849-bee1-4ea5-9dbc-d9334de1c57a",
       "name": "ADD OBSERVABLES",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -261,10 +255,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -500,
-        80
+        -2320,
+        560
       ],
-      "id": "6c8d48da-41f4-407a-bff6-8458c9af4a48",
+      "id": "05992c9b-b0d0-471b-9153-32ac96e0c8cb",
       "name": "TEST MALICIOUS IP"
     },
     {
@@ -294,10 +288,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        440,
-        -140
+        -1380,
+        340
       ],
-      "id": "e7231258-da1c-46f6-ba17-54bc5a79f450",
+      "id": "b446eb33-3353-499a-ab08-00fe8857dd47",
       "name": "IF CASE DO NOT EXISTS"
     },
     {
@@ -313,15 +307,15 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        2260,
-        -480
+        440,
+        0
       ],
-      "id": "a57b80ce-c366-4b73-a610-ba2a966d8981",
+      "id": "6348537c-1170-4085-af03-5de8b5f4d09c",
       "name": "EXEC ANALYZER",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -354,10 +348,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        1440,
-        -320
+        -380,
+        160
       ],
-      "id": "6e382a70-3f8a-45d5-b17f-314cd82fca62",
+      "id": "fc6f01c4-c1de-4d51-8689-e831b27ed2be",
       "name": "Filter IPs"
     },
     {
@@ -388,10 +382,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        1440,
-        100
+        -380,
+        580
       ],
-      "id": "aad3aae2-0556-44f8-86db-9cce2a27837d",
+      "id": "27043119-53ea-4250-bf91-85986f8cf43e",
       "name": "Filter URLs"
     },
     {
@@ -422,23 +416,23 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        1440,
-        500
+        -380,
+        980
       ],
-      "id": "8e1b1dbe-a95c-4c05-a7c1-2c31f7cf9a84",
+      "id": "4167d926-96c9-4cb3-83b1-e7081e4d23a0",
       "name": "Filter DOMAINs"
     },
     {
       "parameters": {
-        "jsCode": "// Check if it's an external IP\nfunction isExternalIP(ip) {\n    const privateRanges = [\n        /^10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/,        // 10.0.0.0 - 10.255.255.255\n        /^172\\.(1[6-9]|2[0-9]|3[0-1])\\.\\d{1,3}\\.\\d{1,3}$/, // 172.16.0.0 - 172.31.255.255\n        /^192\\.168\\.\\d{1,3}\\.\\d{1,3}$/,           // 192.168.0.0 - 192.168.255.255\n        /^127\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/,       // 127.0.0.0 - 127.255.255.255 (loopback)\n        /^169\\.254\\.\\d{1,3}\\.\\d{1,3}$/,           // 169.254.0.0 - 169.254.255.255 (link-local)\n        /^0\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/,         // 0.0.0.0/8 (reserved)\n        /^255\\.255\\.255\\.255$/                    // Broadcast address\n    ];\n\n    return !privateRanges.some(range => range.test(ip));\n}\n\nfunction extractArtifacts() {\n    const ipRegex = /\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b/g;\n    const urlRegex = /https?:\\/\\/(?:[-\\w@:%._\\+~#=]{1,256}\\.[\\w()]{1,6}\\b(?:[-\\w()@:%_\\+.~#?&\\/=]*))/g\n  \n    // Get the items array from n8n input\n    const inputArray = $input.first().json.body;\n    let artifactsDict = {};\n    artifactsDict.artifacts = {}\n  \n    // Convert item to string if it's not already\n    const formatAlt = JSON.stringify(inputArray, null, 2);\n  \n    const allIps = formatAlt.match(ipRegex) || [];\n    artifactsDict.artifacts.ips = allIps.filter(isExternalIP); // Get only external IPs\n    artifactsDict.artifacts.urls = formatAlt.match(urlRegex) || [];\n    \n    // Extract domains from URLs using simple string manipulation\n    artifactsDict.artifacts.domains = artifactsDict.artifacts.urls.map(url => {\n      // Remove protocol (http:// or https://)\n      let domain = url.split('//')[1];\n      // Get the domain part (everything before the first slash)\n      domain = domain.split('/')[0];\n      // Remove port if present\n      domain = domain.split(':')[0];\n      return domain;\n    });\n  \n  return artifactsDict;\n}\n\n\n// Input data\nconst data = $input.first().json;\n\n// Ajouter le dictionnaire des artefacts aux données\nconst dict = extractArtifacts();\ndata.body = dict;\ndata.body.counter_ips = dict.artifacts.ips.length;\ndata.body.counter_urls = dict.artifacts.urls.length;\ndata.body.counter_domains = dict.artifacts.domains.length;\n\n// Retourner les données modifiées\nreturn { json: data.body };"
+        "jsCode": "// Check if it's an external IP\nfunction isExternalIP(ip) {\n    const privateRanges = [\n        /^10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/,        // 10.0.0.0 - 10.255.255.255\n        /^172\\.(1[6-9]|2[0-9]|3[0-1])\\.\\d{1,3}\\.\\d{1,3}$/, // 172.16.0.0 - 172.31.255.255\n        /^192\\.168\\.\\d{1,3}\\.\\d{1,3}$/,           // 192.168.0.0 - 192.168.255.255\n        /^127\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/,       // 127.0.0.0 - 127.255.255.255 (loopback)\n        /^169\\.254\\.\\d{1,3}\\.\\d{1,3}$/,           // 169.254.0.0 - 169.254.255.255 (link-local)\n        /^0\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/,         // 0.0.0.0/8 (reserved)\n        /^255\\.255\\.255\\.255$/                    // Broadcast address\n    ];\n\n    return !privateRanges.some(range => range.test(ip));\n}\n\nfunction extractArtifacts() {\n    const ipRegex = /\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b/g;\n    const urlRegex = /https?:\\/\\/(?:[-\\w@:%._\\+~#=]{1,256}\\.[\\w()]{1,6}\\b(?:[-\\w()@:%_\\+.~#?&\\/=]*))/g\n\n    // Get the items array from n8n input\n    const inputArray = $input.first().json.body;\n    let artifactsDict = {};\n    artifactsDict.artifacts = {}\n\n    // Convert item to string if it's not already\n    const formatAlt = JSON.stringify(inputArray, null, 2);\n\n    const allIps = formatAlt.match(ipRegex) || [];\n    artifactsDict.artifacts.ips = allIps.filter(isExternalIP); // Get only external IPs\n    artifactsDict.artifacts.urls = formatAlt.match(urlRegex) || [];\n\n    // Extract domains from URLs using simple string manipulation\n    artifactsDict.artifacts.domains = artifactsDict.artifacts.urls.map(url => {\n    // Remove protocol (http:// or https://)\n    let domain = url.split('//')[1];\n    // Get the domain part (everything before the first slash)\n    domain = domain.split('/')[0];\n    // Remove port if present\n    domain = domain.split(':')[0];\n    return domain;\n    });\n\n    return artifactsDict;\n}\n\n\n// Input data\nconst data = $input.first().json;\n\nconst dict = extractArtifacts();\ndata.body = dict;\ndata.body.counter_ips = dict.artifacts.ips.length;\ndata.body.counter_urls = dict.artifacts.urls.length;\ndata.body.counter_domains = dict.artifacts.domains.length;\n\nreturn { json: data.body };"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        120,
-        120
+        -1700,
+        600
       ],
-      "id": "83d5f7df-4cbd-424e-bbc2-375fa69d0a98",
+      "id": "bb3153cb-0b32-421f-9a7b-3aca71ae1868",
       "name": "Artifacts detection"
     },
     {
@@ -450,10 +444,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        1120,
-        100
+        -700,
+        580
       ],
-      "id": "ac33705e-5d4b-4ef3-b444-f186e82b540e",
+      "id": "1a04bf3a-0b30-4abd-a864-e61ad6444d7b",
       "name": "Merge"
     },
     {
@@ -464,10 +458,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        940,
-        -20
+        -880,
+        460
       ],
-      "id": "3bd5fc92-5d2f-4b0b-ae1c-7c20e64f86fd",
+      "id": "48a10231-8bba-4b8a-a3da-9dfe7df6038c",
       "name": "CASE ID"
     },
     {
@@ -478,10 +472,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1640,
-        100
+        -180,
+        580
       ],
-      "id": "27a86b3f-b8e9-4951-b211-76c88aac8717",
+      "id": "3945dd40-66ea-4043-be53-7ad107bec418",
       "name": "COUNTER URLs"
     },
     {
@@ -492,10 +486,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1660,
-        -320
+        -160,
+        160
       ],
-      "id": "13eaea25-86ce-4480-b30d-723ed2414c10",
+      "id": "37199207-4082-4bd6-9815-dfe952033ada",
       "name": "COUNTER IPs"
     },
     {
@@ -506,10 +500,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1620,
-        500
+        -200,
+        980
       ],
-      "id": "593c4d22-a649-44c0-85f0-0ce75d1d4bb7",
+      "id": "40dfc4ef-38a3-415c-b53b-07bffa0b1322",
       "name": "COUNTER DOMAINs"
     },
     {
@@ -523,15 +517,15 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        1820,
-        -480
+        0,
+        0
       ],
-      "id": "1c24962d-0553-48df-89e8-61e8253dfe0b",
+      "id": "ff6aaed9-7899-4fbb-b599-7731842801a0",
       "name": "OBSERVABLE EXISTS",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -563,10 +557,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2580,
-        -320
+        760,
+        160
       ],
-      "id": "83d19a1a-1308-4ba3-b182-2b32ff4d7528",
+      "id": "41507e72-723d-49b8-b83b-be4bc45cc42b",
       "name": "loop condition"
     },
     {
@@ -584,15 +578,15 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        2100,
-        -20
+        280,
+        460
       ],
-      "id": "b2a7c11a-dc72-46e1-9f44-ae5e192374ce",
+      "id": "12998b35-06f3-4140-9541-c0405863c0d9",
       "name": "ADD OBSERVABLES1",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -610,15 +604,15 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        2260,
-        -20
+        440,
+        460
       ],
-      "id": "ca3f6308-26cd-4567-899e-a6cbd02678e4",
+      "id": "56182b01-35eb-456d-af2d-1797f1f1bb2d",
       "name": "EXEC ANALYZER1",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -634,15 +628,15 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        1820,
-        -20
+        0,
+        460
       ],
-      "id": "8a44e746-c687-4115-b781-7711b6570d2e",
+      "id": "e2884b57-9fe4-4a22-b3c2-2d488799550f",
       "name": "OBSERVABLE EXISTS1",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -674,10 +668,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2560,
-        100
+        740,
+        580
       ],
-      "id": "79353bc5-1fbd-44e8-b561-39564da2c04d",
+      "id": "f13dc59f-5d4f-4eae-bea5-7a30f57223b1",
       "name": "loop condition1"
     },
     {
@@ -695,15 +689,15 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        2120,
-        360
+        300,
+        840
       ],
-      "id": "dbda4ba8-4ede-4600-b30b-950cad024b30",
+      "id": "f4fd843a-094f-4c2b-96d8-7601aa7bac90",
       "name": "ADD OBSERVABLES2",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -721,15 +715,15 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        2280,
-        360
+        460,
+        840
       ],
-      "id": "50964131-008b-4adc-abe3-a19ac847f7fe",
+      "id": "186aef18-57a3-41cd-9f08-63c618e63c07",
       "name": "EXEC ANALYZER2",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -745,15 +739,15 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        1800,
-        360
+        -20,
+        840
       ],
-      "id": "f275e53f-900c-45db-abf0-dab4aa6df240",
+      "id": "3eabc2e2-819d-4346-9efa-40f80d65184b",
       "name": "OBSERVABLE EXISTS2",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "JlWNveB3sauZe9oS",
+          "id": "ZvwqrB92gWkXhSTj",
           "name": "The Hive account"
         }
       }
@@ -785,10 +779,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2560,
-        500
+        740,
+        980
       ],
-      "id": "a0bfbc60-1897-49fe-9f3f-5312c2a5a799",
+      "id": "df299698-8998-487b-a1d9-5a7efbdebe7c",
       "name": "loop condition2"
     },
     {
@@ -818,10 +812,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        1960,
-        -480
+        140,
+        0
       ],
-      "id": "f6474fef-276f-4933-8d31-d3e18f54ff51",
+      "id": "09976e85-f5b8-4b96-8c74-e8e8b26b6b78",
       "name": "Filter"
     },
     {
@@ -851,10 +845,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        1960,
-        -20
+        140,
+        460
       ],
-      "id": "a01d4b58-d8b6-427b-85db-297a7ad44751",
+      "id": "cec5ccc4-9e0a-46f8-a1ce-a6a1bbaf919b",
       "name": "Filter1"
     },
     {
@@ -884,10 +878,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        1960,
-        360
+        140,
+        840
       ],
-      "id": "0bae5089-3096-456b-a679-ee7e743578e6",
+      "id": "130f0bce-937e-4079-bdb5-f11570545b5e",
       "name": "Filter2"
     }
   ],
@@ -1197,11 +1191,6 @@
         ]
       ]
     },
-    "EXEC ANALYZER": {
-      "main": [
-        []
-      ]
-    },
     "Merge": {
       "main": [
         [
@@ -1284,11 +1273,6 @@
         ]
       ]
     },
-    "EXEC ANALYZER1": {
-      "main": [
-        []
-      ]
-    },
     "OBSERVABLE EXISTS1": {
       "main": [
         [
@@ -1321,11 +1305,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "EXEC ANALYZER2": {
-      "main": [
-        []
       ]
     },
     "OBSERVABLE EXISTS2": {
@@ -1421,11 +1400,10 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "06b9875b-5932-4dad-b5ae-1c346e19cc6a",
+  "versionId": "b002f47d-73d4-4e08-ab99-0d0df4379730",
   "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "41d9b554ea391b880896f080828e9004666f86abf047a7f866028a56d859634d"
+    "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"
   },
-  "id": "HH9TkZ9aPaVejFrK",
+  "id": "mfYmPbdgLripvxNA",
   "tags": []
 }

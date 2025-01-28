@@ -116,13 +116,11 @@ function extractArtifacts() {
 // Input data
 const data = $input.first().json;
 
-// Ajouter le dictionnaire des artefacts aux données
 const dict = extractArtifacts();
 data.body = dict;
 data.body.counter_ips = dict.artifacts.ips.length;
 data.body.counter_urls = dict.artifacts.urls.length;
 data.body.counter_domains = dict.artifacts.domains.length;
 
-// Retourner les données modifiées
 return { json: data.body };
 ```
