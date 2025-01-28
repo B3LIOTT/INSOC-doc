@@ -54,7 +54,7 @@ Password: secret
 La suite de la configuration via l'interface peut être faite en suivant la fin de cette [documentation](https://kifarunix.com/install-thehive-on-ubuntu/).
 
 ## Config Cortex
-Voir la fin de cette [doc](https://kifarunix.com/install-cortex-on-ubuntu/).
+Voir la fin de cette [doc](https://kifarunix.com/install-cortex-on-ubuntu/), à partir de `Accessing Cortex Web Interface`. Nous avons dans notre cas créé une organisation `insoc` avec un utilisateur ayant les droits admin. La suite de la configuration sera détaillée dans la partie [intégration](2-integration.md).
 
 
 # AUTRE SOLUTION - Installation de TheHive / Cortex version 4
