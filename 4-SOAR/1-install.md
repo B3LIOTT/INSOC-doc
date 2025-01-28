@@ -83,9 +83,16 @@ WEBHOOK_URL=http://<IP n8n>:5678/
 N8N_SECURE_COOKIE=false
 ```
 
-Puis, pour télécharger l'image (si ça n'a pas encore été fait) et lancer le container:
+Puis, pour télécharger l'image (si ça n'a pas encore été fait) et lancer le container (il se supprime automatiquement à l'arrêt):
 ```bash
 docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n --env-file docker-env docker.n8n.io/n8nio/n8n
 ```
+
+(avec l'option `-d` après `run` pour le lancer en arrière plan)
+
+Pour appliquer une politique de redémarrage automatique du container, sauf si il fut arrêté manuellement (et en arrière plan):
+```bash
+docker run -d -it --name n8n -p 5678:5678  --restart unless-stopped -v n8n_data:/home/node/.n8n --env-file docker-env docker.n8n.io/n8nio/n8n
+``` 
 
 En revanche, dans un environnement de production il sera nécessaire d'utiliser `N8N_PROTOCOL=https` et `N8N_SECURE_COOKIE=true`.
