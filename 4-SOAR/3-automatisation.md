@@ -35,7 +35,7 @@ Le workflow réalisé est donné [ici](./INSOC.json). Ce workflow utilise des no
 - Les noeuds TheHive permettent d'interagir avec les APIs de TheHive. Or, pour se faire il est nécessaire d'ajouter les autorisations à n8n par le biais de l'ajout du compte api de TheHive dans n8n:
 
 Premièrement, dans le noeud TheHive il faut ajouter un compte:
-!
+
 ![new-cred](images/new-cred.png)
 
 Ensuite, via l'interface de TheHive, il faut récuperer la clé API de l'utilisateur créé à cet effet:
