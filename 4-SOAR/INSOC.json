@@ -30,7 +30,7 @@
             {
               "id": "bead66af-9be4-4285-8dd0-fb9cdad3743c",
               "leftValue": "={{ $json.body.rule.level }}",
-              "rightValue": 0,
+              "rightValue": 1,
               "operator": {
                 "type": "number",
                 "operation": "gt"
@@ -44,8 +44,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -2180,
-        340
+        -2240,
+        100
       ],
       "id": "d6d84aea-2115-4de4-b80f-94a51807f1dc",
       "name": ">=MEDIUM alerts filter"
@@ -226,8 +226,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2320,
-        560
+        -2220,
+        340
       ],
       "id": "05992c9b-b0d0-471b-9153-32ac96e0c8cb",
       "name": "TEST MALICIOUS IP",
@@ -677,29 +677,6 @@
     {
       "parameters": {
         "resource": "observable",
-        "operation": "executeAnalyzer",
-        "id": "={{ $json.id }}",
-        "dataType": "domain"
-      },
-      "type": "n8n-nodes-base.theHive",
-      "typeVersion": 1,
-      "position": [
-        460,
-        900
-      ],
-      "id": "186aef18-57a3-41cd-9f08-63c618e63c07",
-      "name": "EXEC ANALYZER2",
-      "alwaysOutputData": true,
-      "credentials": {
-        "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "observable",
         "operation": "count",
         "filters": {
           "data": "={{ $json.next_domain }}"
@@ -866,80 +843,35 @@
       ],
       "id": "cfa31f9f-0957-4f1b-b695-e9c2f3798dcc",
       "name": "NORMALISE"
-    }
-  ],
-  "pinData": {
-    "Webhook": [
-      {
-        "json": {
-          "headers": {
-            "host": "192.168.7.8:5678",
-            "user-agent": "python-requests/2.32.2",
-            "accept-encoding": "gzip, deflate",
-            "accept": "*/*",
-            "connection": "keep-alive",
-            "content-type": "application/json",
-            "content-length": "1286"
-          },
-          "params": {},
-          "query": {},
-          "body": {
-            "timestamp": "2025-01-28T14:09:42.233+0000",
-            "rule": {
-              "level": 5,
-              "description": "The VSS service is shutting down due to idle timeout.",
-              "id": "60702",
-              "firedtimes": 1,
-              "mail": false,
-              "groups": [
-                "windows",
-                "windows_application"
-              ]
-            },
-            "agent": {
-              "id": "003",
-              "name": "DESKTOP-P06QK1V",
-              "ip": "192.168.7.3"
-            },
-            "manager": {
-              "name": "ubuntuwazuh"
-            },
-            "id": "1738073382.14632834",
-            "decoder": {
-              "name": "windows_eventchannel"
-            },
-            "data": {
-              "win": {
-                "system": {
-                  "providerName": "VSS",
-                  "eventID": "8224",
-                  "version": "0",
-                  "level": "4",
-                  "task": "0",
-                  "opcode": "0",
-                  "keywords": "0x80000000000000",
-                  "systemTime": "2025-01-28T14:09:49.5932468Z",
-                  "eventRecordID": "4136",
-                  "processID": "3672",
-                  "threadID": "0",
-                  "channel": "Application",
-                  "computer": "DESKTOP-P06QK1V",
-                  "severityValue": "INFORMATION",
-                  "message": "\"Le service VSS s’arrête, car le délai d’inactivité est dépassé. \""
-                },
-                "eventdata": {
-                  "binary": "2D20436F64653A2020434F525356434330303030303737322D2043616C6C3A2020434F525356434330303030303735342D205049443A202030303030333637322D205449443A202030303030313735322D20434D443A2020433A5C57696E646F77735C73797374656D33325C76737376632E6578652020202D20557365723A204E616D653A204155544F52495445204E545C53797374E86D652C205349443A532D312D352D313820"
-                }
-              }
-            },
-            "location": "EventChannel"
-          },
-          "webhookUrl": "http://192.168.7.8:5678/webhook-test/7ceae612-e110-4adf-8191-95557ec9b251",
-          "executionMode": "test"
+    },
+    {
+      "parameters": {
+        "resource": "observable",
+        "operation": "executeAnalyzer",
+        "id": "={{ $json.id }}",
+        "dataType": "url",
+        "analyzers": [
+          "d33efdda2d1f2aca7f2c06f71d9f8578::Kifarunix-demo Cortex"
+        ]
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        480,
+        900
+      ],
+      "id": "ca529252-7368-47a6-b5e1-1f0b85fc82ba",
+      "name": "EXEC ANALYZER2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "ZvwqrB92gWkXhSTj",
+          "name": "The Hive account"
         }
       }
-    ]
-  },
+    }
+  ],
+  "pinData": {},
   "connections": {
     "Webhook": {
       "main": [
@@ -954,18 +886,7 @@
     },
     ">=MEDIUM alerts filter": {
       "main": [
-        [
-          {
-            "node": "uuid",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Artifacts detection",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "CASE EXISTS": {
@@ -1027,7 +948,12 @@
       "main": [
         [
           {
-            "node": ">=MEDIUM alerts filter",
+            "node": "uuid",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Artifacts detection",
             "type": "main",
             "index": 0
           }
@@ -1329,11 +1255,11 @@
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "f230e56f-37bc-45c2-a761-0c82fb1cd886",
+  "versionId": "8d64e4ce-0146-41ef-b734-1234284a717b",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"

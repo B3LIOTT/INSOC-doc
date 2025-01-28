@@ -81,6 +81,7 @@ Ainsi que le fichier `custom-n8n.py` qui sera appelé par `custom-n8n`:
 import sys
 import requests
 import json
+import socket
 from requests.auth import HTTPBasicAuth
 
 # read configuration
@@ -92,6 +93,14 @@ hook_url = sys.argv[3]
 with open(alert_file) as f:
     alert_json = json.loads(f.read())
 
+# fix missing ip adress
+if "ip" not in alert_json["agent"]:
+    alert_json["agent"]["ip"] = str(socket.gethostbyname(socket.gethostname()))
+
+# verify rule level
+if alert_json["rule"]["level"] < 5:
+    sys.exit(0)
+
 # combine message details
 payload = json.dumps(alert_json)
 
@@ -100,4 +109,4 @@ r = requests.post(hook_url, data=payload, headers={"content-type": "application/
 sys.exit(0)
 ```
 
-NOTE: dans cet exemple nous envoyons l'alerte complète de Wazuh, mais il est possible de customiser ce que Wazuh renvoie à TheHive en modifiant le payload.
+NOTE: dans cet exemple nous envoyons l'alerte complète de Wazuh si le niveau de l'alerte est au moins 6, mais il est possible de customiser ce que Wazuh renvoie à TheHive en modifiant le payload.
