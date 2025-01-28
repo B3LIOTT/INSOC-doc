@@ -73,7 +73,7 @@ Nous avons dans un premier temps modifi√© les variables d'environnement afin d'√
 N8N_HOST=<IP n8n>
 N8N_PORT=5678
 N8N_PROTOCOL=http
-WEBHOOK_URL=http://192.168.1.42:5678/
+WEBHOOK_URL=http://<IP n8n>:5678/
 N8N_SECURE_COOKIE=false
 ```
 
