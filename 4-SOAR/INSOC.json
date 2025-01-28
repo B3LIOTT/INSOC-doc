@@ -30,7 +30,7 @@
             {
               "id": "bead66af-9be4-4285-8dd0-fb9cdad3743c",
               "leftValue": "={{ $json.body.rule.level }}",
-              "rightValue": 1,
+              "rightValue": 0,
               "operator": {
                 "type": "number",
                 "operation": "gt"
@@ -221,7 +221,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const data = $input.first().json;\ndata.body.agent.ip = \"34.35.36.37\"\ndata.body.malicious_ip = \"62.63.230.241\"\ndata.body.malicious_domain1 = \"http://hecker.io\"\ndata.body.malicious_domain2 = \"http://hecker2222.io\"\n\nreturn data"
+        "jsCode": "const data = $input.first().json;\n// data.body.agent.ip = \"34.35.36.37\"\ndata.body.malicious_ip = \"62.63.230.241\"\n// data.body.malicious_domain1 = \"http://hecker.io\"\n// data.body.malicious_domain2 = \"http://hecker2222.io\"\n\nreturn data"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -230,7 +230,8 @@
         560
       ],
       "id": "05992c9b-b0d0-471b-9153-32ac96e0c8cb",
-      "name": "TEST MALICIOUS IP"
+      "name": "TEST MALICIOUS IP",
+      "disabled": true
     },
     {
       "parameters": {
@@ -272,7 +273,7 @@
         "id": "={{ $json.id }}",
         "dataType": "ip",
         "analyzers": [
-          "0264c5f6f3d1d841605bedcefe9f31d8::Cortex"
+          "93572ea5d34d9ba2b7f9446aabf6345d::Kifarunix-demo Cortex"
         ]
       },
       "type": "n8n-nodes-base.theHive",
@@ -388,7 +389,7 @@
       "typeVersion": 2.2,
       "position": [
         -380,
-        980
+        1040
       ],
       "id": "4167d926-96c9-4cb3-83b1-e7081e4d23a0",
       "name": "Filter DOMAINs"
@@ -472,7 +473,7 @@
       "typeVersion": 2,
       "position": [
         -200,
-        980
+        1040
       ],
       "id": "40dfc4ef-38a3-415c-b53b-07bffa0b1322",
       "name": "COUNTER DOMAINs"
@@ -569,7 +570,7 @@
         "id": "={{ $json.id }}",
         "dataType": "url",
         "analyzers": [
-          "0264c5f6f3d1d841605bedcefe9f31d8::Cortex"
+          "d33efdda2d1f2aca7f2c06f71d9f8578::Kifarunix-demo Cortex"
         ]
       },
       "type": "n8n-nodes-base.theHive",
@@ -661,7 +662,7 @@
       "typeVersion": 1,
       "position": [
         300,
-        840
+        900
       ],
       "id": "f4fd843a-094f-4c2b-96d8-7601aa7bac90",
       "name": "ADD OBSERVABLES2",
@@ -678,16 +679,13 @@
         "resource": "observable",
         "operation": "executeAnalyzer",
         "id": "={{ $json.id }}",
-        "dataType": "domain",
-        "analyzers": [
-          "0264c5f6f3d1d841605bedcefe9f31d8::Cortex"
-        ]
+        "dataType": "domain"
       },
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
         460,
-        840
+        900
       ],
       "id": "186aef18-57a3-41cd-9f08-63c618e63c07",
       "name": "EXEC ANALYZER2",
@@ -711,7 +709,7 @@
       "typeVersion": 1,
       "position": [
         -20,
-        840
+        900
       ],
       "id": "3eabc2e2-819d-4346-9efa-40f80d65184b",
       "name": "OBSERVABLE EXISTS2",
@@ -751,7 +749,7 @@
       "typeVersion": 2.2,
       "position": [
         740,
-        980
+        1040
       ],
       "id": "df299698-8998-487b-a1d9-5a7efbdebe7c",
       "name": "loop condition2"
@@ -850,7 +848,7 @@
       "typeVersion": 2.2,
       "position": [
         140,
-        840
+        900
       ],
       "id": "130f0bce-937e-4079-bdb5-f11570545b5e",
       "name": "Filter2"
@@ -867,7 +865,7 @@
         340
       ],
       "id": "cfa31f9f-0957-4f1b-b695-e9c2f3798dcc",
-      "name": "NORMALISE ALERTS"
+      "name": "NORMALISE"
     }
   ],
   "pinData": {
@@ -947,7 +945,7 @@
       "main": [
         [
           {
-            "node": "NORMALISE ALERTS",
+            "node": "NORMALISE",
             "type": "main",
             "index": 0
           }
@@ -1130,11 +1128,6 @@
           },
           {
             "node": "Filter URLs",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Filter DOMAINs",
             "type": "main",
             "index": 0
           }
@@ -1324,7 +1317,7 @@
         ]
       ]
     },
-    "NORMALISE ALERTS": {
+    "NORMALISE": {
       "main": [
         [
           {
@@ -1340,7 +1333,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "ae5481a3-9387-4daf-abdd-0f44675e14fe",
+  "versionId": "f230e56f-37bc-45c2-a761-0c82fb1cd886",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"

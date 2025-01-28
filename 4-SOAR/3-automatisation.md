@@ -29,7 +29,7 @@ from vt.client import Client
 
 # Création du workflow n8n  
 
-Le workflow n8n à pour but d'automatiser certaines tâches de récupération de logs et de traitement. Cela représente généralement des tâches d'analyste N1. Le workflow créé vise à envoyer les alertes de niveau MEDIUM minium dans TheHive avec création ou merge dans un CASE adapté. Des observables sont également définies afin de lancer des analyzers tels que AbuseIPDB.
+Le workflow n8n à pour but d'automatiser certaines tâches de récupération de logs et de traitement. Cela représente généralement des tâches d'analyste N1. Le workflow créé vise à envoyer les alertes de niveau MEDIUM minium dans TheHive avec création ou merge dans un CASE adapté. Des observables sont également définies afin de lancer des analyzers tels que AbuseIPDB ou VirusTotal sur des IPs ou des URLs (nous n'avons pas mis en place d'analyzer sur le nom de domaine mais le worflow est prêt, il suffit de relier la partie sur le domaine et de configurer l'analyzer dans le noeud d'execution de l'analyzer).
 
 Le workflow réalisé est donné [ici](./INSOC.json). Ce workflow utilise des node de code personnalisés dont voici les explications:
 
