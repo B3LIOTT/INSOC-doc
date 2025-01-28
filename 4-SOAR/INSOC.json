@@ -151,35 +151,6 @@
     },
     {
       "parameters": {
-        "resource": "message",
-        "guildId": {
-          "__rl": true,
-          "value": "1202999965455097866",
-          "mode": "list",
-          "cachedResultName": "Serveur de Otter Tech",
-          "cachedResultUrl": "https://discord.com/channels/1202999965455097866"
-        },
-        "channelId": {
-          "__rl": true,
-          "value": "1331219141662871582",
-          "mode": "list",
-          "cachedResultName": "soc",
-          "cachedResultUrl": "https://discord.com/channels/1202999965455097866/1331219141662871582"
-        },
-        "content": "=/!\\ ALERTE DE NIVEAU 3\n-----------------------------\nTitre: {{ $json.body.content[0].title }}\nDesc: {{ $json.body.content[0].description }}\nIP source: {{ $json.body.content[0].fields[0].source }}\n------------------------------",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.discord",
-      "typeVersion": 2,
-      "position": [
-        1080,
-        440
-      ],
-      "id": "d2a0331c-b3d6-4148-b790-8134afe4f7ee",
-      "name": "Discord"
-    },
-    {
-      "parameters": {
         "language": "python",
         "pythonCode": "# creates a uuid for each alert\nimport uuid\n\ndata = _input.first().json.body\ndata.sourceRef = str(uuid.uuid4())\nreturn data"
       },
@@ -568,9 +539,9 @@
         "resource": "observable",
         "operation": "create",
         "caseId": "={{ $('COUNTER URLs').item.json.id }}",
-        "dataType": "ip",
+        "dataType": "url",
         "data": "={{ $('COUNTER URLs').item.json.next_url }}",
-        "message": "ip",
+        "message": "url",
         "startDate": "={{ $('COUNTER URLs').item.json.date }}",
         "status": "Ok",
         "options": {}
@@ -679,9 +650,9 @@
         "resource": "observable",
         "operation": "create",
         "caseId": "={{ $('COUNTER DOMAINs').item.json.id }}",
-        "dataType": "ip",
+        "dataType": "domain",
         "data": "={{ $('COUNTER DOMAINs').item.json.next_domain }}",
-        "message": "ip",
+        "message": "domain",
         "startDate": "={{ $('COUNTER DOMAINs').item.json.date }}",
         "status": "Ok",
         "options": {}
@@ -890,124 +861,68 @@
       {
         "json": {
           "headers": {
-            "host": "192.168.1.42:5678",
+            "host": "192.168.7.8:5678",
             "user-agent": "python-requests/2.32.2",
             "accept-encoding": "gzip, deflate",
             "accept": "*/*",
             "connection": "keep-alive",
             "content-type": "application/json",
-            "content-length": "5388"
+            "content-length": "1286"
           },
           "params": {},
           "query": {},
           "body": {
-            "timestamp": "2025-01-21T19:35:06.328+0000",
+            "timestamp": "2025-01-28T14:09:42.233+0000",
             "rule": {
-              "level": 1,
-              "description": "Windows Logon Success",
-              "id": "60106",
-              "mitre": {
-                "id": [
-                  "T1078"
-                ],
-                "tactic": [
-                  "Defense Evasion",
-                  "Persistence",
-                  "Privilege Escalation",
-                  "Initial Access"
-                ],
-                "technique": [
-                  "Valid Accounts"
-                ]
-              },
-              "firedtimes": 2,
+              "level": 5,
+              "description": "The VSS service is shutting down due to idle timeout.",
+              "id": "60702",
+              "firedtimes": 1,
               "mail": false,
               "groups": [
                 "windows",
-                "windows_security",
-                "authentication_success"
-              ],
-              "pci_dss": [
-                "10.2.5"
-              ],
-              "gpg13": [
-                "7.1",
-                "7.2"
-              ],
-              "gdpr": [
-                "IV_32.2"
-              ],
-              "hipaa": [
-                "164.312.b"
-              ],
-              "nist_800_53": [
-                "AU.14",
-                "AC.9"
-              ],
-              "tsc": [
-                "CC6.8",
-                "CC7.2",
-                "CC7.3"
+                "windows_application"
               ]
             },
             "agent": {
-              "id": "001",
-              "name": "LAPTOP-OD44SO50",
-              "ip": "192.168.1.42"
+              "id": "003",
+              "name": "DESKTOP-P06QK1V",
+              "ip": "192.168.7.3"
             },
             "manager": {
-              "name": "wazuh"
+              "name": "ubuntuwazuh"
             },
-            "id": "1737488106.15794540",
+            "id": "1738073382.14632834",
             "decoder": {
               "name": "windows_eventchannel"
             },
             "data": {
               "win": {
                 "system": {
-                  "providerName": "Microsoft-Windows-Security-Auditing",
-                  "providerGuid": "{54849625-5478-4994-a5ba-3e3b0328c30d}",
-                  "eventID": "4624",
-                  "version": "3",
-                  "level": "0",
-                  "task": "12544",
+                  "providerName": "VSS",
+                  "eventID": "8224",
+                  "version": "0",
+                  "level": "4",
+                  "task": "0",
                   "opcode": "0",
-                  "keywords": "0x8020000000000000",
-                  "systemTime": "2025-01-21T19:35:05.2035092Z",
-                  "eventRecordID": "2080406",
-                  "processID": "1140",
-                  "threadID": "12972",
-                  "channel": "Security",
-                  "computer": "LAPTOP-OD44SO50",
-                  "severityValue": "AUDIT_SUCCESS",
-                  "message": "\"L'ouverture de session d'un compte s'est correctement déroulée.\r\n\r\nObjet :\r\n\tID de sécurité :\t\tS-1-5-18\r\n\tNom du compte :\t\tLAPTOP-OD44SO50$\r\n\tDomaine du compte :\t\tWORKGROUP\r\n\tID d'ouverture de session :\t\t0x3E7\r\n\r\nInformations d'ouverture de session :\r\n\tType d'ouverture de session :\t\t5\r\n\tMode administrateur restreint :\t-\r\n\tCredential Guard à distance :\t-\r\n\tCompte virtuel :\t\tNon\r\n\tJeton élevé :\t\tOui\r\n\r\nNiveau d'emprunt d'identité :\t\tEmprunt d’identité\r\n\r\nNouvelle ouverture de session :\r\n\tID de sécurité :\t\tS-1-5-18\r\n\tNom du compte :\t\tSystème\r\n\tDomaine du compte :\t\tAUTORITE NT\r\n\tID d'ouverture de session :\t\t0x3E7\r\n\tID d'ouverture de session liée :\t\t0x0\r\n\tNom du compte réseau :\t-\r\n\tDomaine du compte réseau :\t-\r\n\tGUID d'ouverture de session :\t\t{00000000-0000-0000-0000-000000000000}\r\n\r\nInformations sur le processus :\r\n\tID du processus :\t\t0x410\r\n\tNom du processus :\t\tC:\\Windows\\System32\\services.exe\r\n\r\nInformations sur le réseau :\r\n\tNom de la station de travail :\t-\r\n\tAdresse du réseau source :\t-\r\n\tPort source :\t\t-\r\n\r\nInformations détaillées sur l'authentification :\r\n\tProcessus d'ouverture de session :\t\tAdvapi  \r\n\tPackage d'authentification :\tNegotiate\r\n\tServices en transit :\t-\r\n\tNom du package (NTLM uniquement) :\t-\r\n\tLongueur de la clé :\t\t0\r\n\r\nCet événement est généré lors de la création d'une ouverture de session. Il est généré sur l'ordinateur sur lequel l'ouverture de session a été effectuée.\r\n\r\nLe champ Objet indique le compte sur le système local qui a demandé l'ouverture de session. Il s'agit le plus souvent d'un service, comme le service Serveur, ou un processus local tel que Winlogon.exe ou Services.exe.\r\n\r\nLe champ Type d'ouverture de session indique le type d'ouverture de session qui s'est produit. Les types les plus courants sont 2 (interactif) et 3 (réseau).\r\n\r\nLe champ Nouvelle ouverture de session indique le compte pour lequel la nouvelle ouverture de session a été créée, par exemple, le compte qui s'est connecté.\r\n\r\nLes champs relatifs au réseau indiquent la provenance d'une demande d'ouverture de session à distance. Le nom de la station de travail n'étant pas toujours disponible, peut être laissé vide dans certains cas.\r\n\r\nLe champ du niveau d'emprunt d'identité indique la portée de l'emprunt d'identité que peut prendre un processus dans la session d'ouverture de session.\r\n\r\nLes champs relatifs aux informations d'authentification fournissent des détails sur cette demande d'ouverture de session spécifique.\r\n\t- Le GUID d'ouverture de session est un identificateur unique pouvant servir à associer cet événement à un événement KDC .\r\n\t- Les services en transit indiquent les services intermédiaires qui ont participé à cette demande d'ouverture de session.\r\n\t- Nom du package indique quel est le sous-protocole qui a été utilisé parmi les protocoles NTLM.\r\n\t- La longueur de la clé indique la longueur de la clé de session générée. Elle a la valeur 0 si aucune clé de session n'a été demandée.\""
+                  "keywords": "0x80000000000000",
+                  "systemTime": "2025-01-28T14:09:49.5932468Z",
+                  "eventRecordID": "4136",
+                  "processID": "3672",
+                  "threadID": "0",
+                  "channel": "Application",
+                  "computer": "DESKTOP-P06QK1V",
+                  "severityValue": "INFORMATION",
+                  "message": "\"Le service VSS s’arrête, car le délai d’inactivité est dépassé. \""
                 },
                 "eventdata": {
-                  "subjectUserSid": "S-1-5-18",
-                  "subjectUserName": "LAPTOP-OD44SO50$",
-                  "subjectDomainName": "WORKGROUP",
-                  "subjectLogonId": "0x3e7",
-                  "targetUserSid": "S-1-5-18",
-                  "targetUserName": "Système",
-                  "targetDomainName": "AUTORITE NT",
-                  "targetLogonId": "0x3e7",
-                  "logonType": "5",
-                  "logonProcessName": "Advapi",
-                  "authenticationPackageName": "Negotiate",
-                  "logonGuid": "{00000000-0000-0000-0000-000000000000}",
-                  "keyLength": "0",
-                  "processId": "0x410",
-                  "processName": "C:\\\\Windows\\\\System32\\\\services.exe",
-                  "impersonationLevel": "%%1833",
-                  "virtualAccount": "%%1843",
-                  "targetLinkedLogonId": "0x0",
-                  "elevatedToken": "%%1842"
+                  "binary": "2D20436F64653A2020434F525356434330303030303737322D2043616C6C3A2020434F525356434330303030303735342D205049443A202030303030333637322D205449443A202030303030313735322D20434D443A2020433A5C57696E646F77735C73797374656D33325C76737376632E6578652020202D20557365723A204E616D653A204155544F52495445204E545C53797374E86D652C205349443A532D312D352D313820"
                 }
               }
             },
             "location": "EventChannel"
           },
-          "webhookUrl": "http://192.168.1.42:5678/webhook-test/7ceae612-e110-4adf-8191-95557ec9b251",
+          "webhookUrl": "http://192.168.7.8:5678/webhook-test/7ceae612-e110-4adf-8191-95557ec9b251",
           "executionMode": "test"
         }
       }
@@ -1400,8 +1315,9 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "b002f47d-73d4-4e08-ab99-0d0df4379730",
+  "versionId": "21fab884-a28e-4670-816d-3364ccbaba93",
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"
   },
   "id": "mfYmPbdgLripvxNA",

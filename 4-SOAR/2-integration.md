@@ -26,7 +26,7 @@ n8n joue le rôle de chef d'orchestre, il organise toute la pipeline de gestion 
   <name>custom-n8n</name>
   <level>3</level>
   <hook_url>http://<IP SERVEUR>:5678/api/hook...</hook_url>
-  <format>json</format>
+  <alert_format>json</alert_format>
 </integration>
 ```
 
