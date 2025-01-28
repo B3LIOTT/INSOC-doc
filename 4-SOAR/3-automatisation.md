@@ -26,15 +26,21 @@ from vt.client import Client
 ```
 
 
-# Création du workflow n8n
+# Création du workflow n8n  
 
 Le workflow n8n à pour but d'automatiser certaines tâches de récupération de logs et de traitement. Cela représente généralement des tâches d'analyste N1. Le workflow créé vise à envoyer les alertes de niveau MEDIUM minium dans TheHive avec création ou merge dans un CASE adapté. Des observables sont également définies afin de lancer des analyzers tels que AbuseIPDB.
 
 Le workflow réalisé est donné [ici](./INSOC.json). Ce workflow utilise des node de code personnalisés dont voici les explications:
 
 Les noeuds TheHive permettent d'interagir avec les APIs de TheHive. Or, pour se faire il est nécessaire d'ajouter les autorisations à n8n par le biais de l'ajout du compte api de TheHive dans n8n:
+
+Premièrement, dans le noeud TheHive il faut ajouter un compte:
 ![new-cred](images/new-cred.png)
+
+Esuite, via l'interface de TheHive, il faut récuperer la clé API de l'utilisateur créé à cet effet:
 ![api-key](images/api-key.png)
+
+Finalement, en ajoutant cette clé api avec l'url de TheHive la connexion est faite:
 ![save-cred](images/save-cred.png)
 
 
