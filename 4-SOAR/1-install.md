@@ -83,6 +83,3 @@ docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n --env-fi
 ```
 
 En revanche, dans un environnement de production il sera nécessaire d'utiliser `N8N_PROTOCOL=https` et `N8N_SECURE_COOKIE=true`.
-
-## LCX Docker sur Proxmox
-L'installation de n8n dans un docker peut être faite en passant par un Linux Container dans Proxmox. Pour cela la documentation [ici](https://www.tecmint.com/proxmox-create-container/) explique le principe d'installation d'un LXC dans Proxmox, et [cette source](https://tteck.github.io/Proxmox/#docker-lxc) propose un script d'installation d'un LXC avec docker.
