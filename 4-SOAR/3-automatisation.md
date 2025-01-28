@@ -7,9 +7,10 @@ Créer un compte, et récuperer la clé API
 ## VirusTotal
 Créer un compte, et récuperer la clé API. Le script fournis de base n'est pas fonctionnel. Voici les modifications approtées pour le rendre fonctionnel:
 
-Mise à jour du package virustotal:
+Mise à jour du package virustotal et installation du package filetype:
 ```bash
-pip install --upgrade vt-py
+pip install --upgrade vt-py --break-system-packages
+pip install filetype --break-system-packages
 ```
 
 Puis modifier le code python:

@@ -30,7 +30,7 @@ n8n joue le rôle de chef d'orchestre, il organise toute la pipeline de gestion 
 </integration>
 ```
 
-Suite à cela, Wazuh cherchera le fichier portant le même nom que l'intégration (ici custom-n8n). Il faut donc ajouter dans `/vat/ossec/integrations/` les fichiers `custom-n8n`:
+Suite à cela, Wazuh cherchera le fichier portant le même nom que l'intégration (ici custom-n8n). Il faut donc ajouter dans `/var/ossec/integrations/` les fichiers `custom-n8n`:
 ```bash
 #!/bin/sh
 # Copyright (C) 2015, Wazuh Inc.
