@@ -32,6 +32,12 @@ Le workflow n8n à pour but d'automatiser certaines tâches de récupération de
 
 Le workflow réalisé est donné [ici](./INSOC.json). Ce workflow utilise des node de code personnalisés dont voici les explications:
 
+Les noeuds TheHive permettent d'interagir avec les APIs de TheHive. Or, pour se faire il est nécessaire d'ajouter les autorisations à n8n par le biais de l'ajout du compte api de TheHive dans n8n:
+![new-cred](images/new-cred.png)
+![api-key](images/api-key.png)
+![save-cred](images/save-cred.png)
+
+
 Le noeud uuid permet de génerer un uuid pour chaque alerte afin de lui donner un identifiant unique, sans quoi TheHive refusera la création de l'alerte.
 ```python
 # creates a uuid for each alert

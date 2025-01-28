@@ -32,6 +32,11 @@ chmod +x /tmp/install.sh
 bash /tmp/install.sh
 ```
 
+Erreurs possibles:
+- docker group does not exists: `sudo groupadd docker`
+- permission denied pour /usr/bin/floss: dans `install.sh`, rechercher la ligne contenant `unzip /tmp/floss.zip`, et ajoutez y `sudo`.
+
+
 ## Config The Hive
 Une fois TheHive installé, afin d'avoir un accès en dehors de localhost à l'interface il faut éditer `/etc/thehive/application.conf`:
 ```conf
