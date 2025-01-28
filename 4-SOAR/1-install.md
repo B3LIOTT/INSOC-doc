@@ -65,7 +65,8 @@ La documentation [ici](https://kifarunix.com/install-misp-on-ubuntu/) donne les 
 
 # Installation de n8n
 
-Afin d'installer n8n, nous avons utilisé docker.
+## Docker
+Afin d'installer n8n, nous avons utilisé l'image docker proposée par n8n.
 
 Nous avons dans un premier temps modifié les variables d'environnement afin d'éviter tout problèmes de certificats autosignés durant la phase de test en utilisant le protocol HTTP et des cookies non sécurisés:
 ```conf
@@ -82,3 +83,6 @@ docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n --env-fi
 ```
 
 En revanche, dans un environnement de production il sera nécessaire d'utiliser `N8N_PROTOCOL=https` et `N8N_SECURE_COOKIE=true`.
+
+## LCX Docker sur Proxmox
+L'installation de n8n dans un docker peut être faite en passant par un Linux Container dans Proxmox. Pour cela la documentation [ici](https://www.tecmint.com/proxmox-create-container/) explique le principe d'installation d'un LXC dans Proxmox, et [cette source](https://tteck.github.io/Proxmox/#docker-lxc) propose un script d'installation d'un LXC avec docker.
