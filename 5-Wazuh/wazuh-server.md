@@ -1,7 +1,7 @@
 # Documentation du serveur Wazuh
 
 ## Installation
-L'installation fut effectuée sur une machine Linux, Debian 12. L'indexer, le server et le dashboard sont sur la même machine:
+L'installation fut effectuée sur une machine Linux, Ubuntu-server-24.04. L'indexer, le server et le dashboard sont sur la même machine:
 Documentation d'[Installation](https://documentation.wazuh.com/current/installation-guide/index.html).
 
 ## Active Response
