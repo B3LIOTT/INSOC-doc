@@ -10,6 +10,7 @@ Ce document est relatif à l'installation d'OPNsense 24.7 et d'outils supplémen
 - [Accès SSH sécurisé à la console root d'OPNsense](#accès-ssh-sécurisé-à-la-console-root-dopnsense)
 - [Mise en place de règles de pare-feu](#mise-en-place-de-règles-de-pare-feu)
 - [Mise en place du proxy Squid pour la journalisation des communications HTTP](#mise-en-place-du-proxy-squid-pour-la-journalisation-des-communications-http)
+-[Mise en place d'un blocage d'IPs malveillantes](#mise-en-place-dun-blocage-dips-malveillantes)
 - [Configuration de l'IDS/IPS Suricata](#configuration-de-lidsips-suricata)
 - [Installation de l'agent Wazuh pour récupérer les logs d'OPNSense et des outils dans le SIEM](#installation-de-lagent-wazuh-pour-récupérer-les-logs-dopnsense-et-des-outils-dans-le-siem)
 - [Sources :](#sources-)
@@ -89,7 +90,7 @@ Sur la même page, nous avons décoché l'option **Block RFC1918 Private Network
 
 ![Conf2](images/OPNsense-Configuration-initiale-Etape-7.jpg)
 
-La page suivante permet de configurer l'interface LAN. Afin de s'assurer que notre réseau possède des adresses IP facilement identifiables, nous avons changé l'adresse IP de cette interface en **10.1.10.1/24**. Ainsi, chaque machine dans notre réseau local aura une adresse IP de la forme **10.1.10.x** attribuée par le serveur DHCP d'OPNsense.
+La page suivante permet de configurer l'interface LAN. Afin de s'assurer que notre réseau possède des adresses IP facilement identifiables, nous avons changé l'adresse IP de cette interface en `10.1.10.1/24`. Ainsi, chaque machine dans notre réseau local aura une adresse IP de la forme `10.1.10.X` attribuée par le serveur DHCP d'OPNsense.
 
 La page suivante permet de modifier le mot de passe de l'utilisateur **root**. Puisqu'il est déjà configuré, nous pouvons directement passer à la suite.
 
@@ -124,25 +125,25 @@ Par la suite, nous créons l'utilisateur en allant dans **System > Access > User
 Nous lui renseignons un nom d'utilisateur, un mot de passe et lui attribuons le rôle **admins** dans la section **Group Memberships** avec un accès à **/bin/sh** configuré dans la section **Login shell**.
 
 Nous nous connectons par la suite en SSH avec le compte root pour ajouter le nouvel utilisateur au groupe **wheel** en utilisant la commande suivante :
-```shell
+```bash
 pw groupmod wheel -m <nom_utilisateur>
 ```
 
 Une fois cela fait, nous modifions le fichier sudoers pour autoriser l'utilisateur à utiliser la commande sudo en utilisant la commande suivante :
-```shell
+```bash
 visudo
 ```
 et nous renseignons les lignes suivantes à la fin du fichier :
-```shell
+```bash
 <nom_utilisateur> ALL=(ALL) /usr/bin/su, /usr/bin/sh
 
 Defaults rootpw
 ```
-Ces lignes permettent d'autoriser l'utilisateur à n'utiliser que les commandes **su** et **sh** avec la commande sudo, et de demander le mot de passe root pour les commandes sudo.
+Ces lignes permettent d'autoriser l'utilisateur à n'utiliser que les commandes `su` et `sh` avec la commande sudo, et de demander le mot de passe root pour les commandes sudo.
 
 Finalement, nous désactivons l'accès en tant que root en SSH en décochant l'option **Permit root user login**.
 
-Désormais, pour nous connecter en SSH et effectuer des modifications dans les fichiers, il faudra passer par le compte intermédiaire créé précédemment et utiliser la commande **su** pour passer en root en renseignant le mot de passe root.
+Désormais, pour nous connecter en SSH et effectuer des modifications dans les fichiers, il faudra passer par le compte intermédiaire créé précédemment et utiliser la commande `su` pour passer en root en renseignant le mot de passe root.
 
 
 ## Mise en place de règles de pare-feu
@@ -226,6 +227,48 @@ Attention, la mise en place d'un proxy Squid transparent pose problème avec la 
 Comme évoqué avec le tuteur du projet, il est recommandé de passer par un serveur DRBL et d'utiliser les sources HTTPS de serveurs certifiés pour les mises à jour des paquets Linux.\
 Aucun problème n'est rencontré avec les mises à jour Windows.
 
+## Mise en place d'un blocage d'IPs malveillantes
+Dans un but de prévention, nous allons mettre en place un blocage d'IPs malveillantes. Pour cela, nous allons définir des alliases d'IPs malveillantes dans **Firewall > Aliases**. Nous avons utilisé 3 listes d'IPs malveillantes de [Spamhaus](https://www.spamhaus.org/blocklists/do-not-route-or-peer/):
+- [DROP](https://www.spamhaus.org/drop/drop.txt)
+- [EDROP](https://www.spamhaus.org/drop/edrop.txt)
+- [DROPV6](https://www.spamhaus.org/drop/dropv6.txt)
+
+Nous avons créé un alias pour chaque liste et avons ajouté les IPs malveillantes dans chaque alias.
+
+![spamhaus1](images/spamhaus1.png)
+
+Ensuite, pour appliquer ces blocages, nous avons créé des règles de pare-feu dans **Firewall > Rules > WAN** pour bloquer le trafic entrant et sortant des IPs malveillantes. Voici les détails des règles:
+
+**Règle 1: IN**
+- **Action**: Block
+- **Interface**: WAN
+-**Direction**: in
+- **TCP/IP Version**: IPv4+IPv6
+- **Protocol**: any
+- **Source**: any
+- **Destination**: `<nom de votre alias>`
+
+**Règle 2: OUT**
+- **Action**: Block
+- **Interface**: WAN
+-**Direction**: out
+- **TCP/IP Version**: IPv4+IPv6
+- **Protocol**: any
+- **Source**: `<nom de votre alias>`
+- **Destination**: any
+
+Il ne faut pas oublier d'activer le logging de ces règles. Voici les règles dans le firewall après configuration:
+
+![spamhaus2](images/spamhaus2.png)
+
+Et voici les logs de blocage d'IPs malveillantes:
+
+![spamhaus3](images/spamhaus3.png)
+
+
+**NOTE:**
+Nous voulions au départ utiliser ZenArmor qui est un outil complémentaire à Squid (et Suricata, voir partie suivante) qui permet d'ajouter du filtrage et de l'analyse du trafic réseau (DPI - Deep Packet Inspection). Il [cette documentation](https://docs.opnsense.org/vendor/sunnyvalley/zenarmor_install.html) permet de l'installer, en revanche il semble qu'il y ait un problème avec la version 25.1 d'OPNsense qui empêche l'installation de ZenArmor. Nous avons donc décidé de ne pas l'utiliser.
+
 ## Configuration de l'IDS/IPS Suricata
 
 Cette section se concentre sur la configuration de Suricata, un IDS/IPS open-source, sur OPNsense.
@@ -241,11 +284,11 @@ Dans l'onglet **Download**, il est possible de télécharger des règles de dét
 Dans l'onglet **Rules**, nous pouvons observer l'intégralité des règles de détection téléchargées et les activer ou les désactiver selon nos besoins.
 Par défaut, certaines règles sont déjà activées et nous avons décidé de les laisser activées.
 
-Il est possible de créer ses propres règles ou d'importer des règles communautaires dans un fichier nommé local.rules, situé dans le répertoire **/usr/local/etc/suricata/rules**.
-Une fois les règles ajoutées, il est recommmandé de copier ce fichier dans le répertoire **/usr/local/etc/suricata/opnsense.rules/** et de redémarrer le service Suricata pour que les règles soient prises en compte.
+Il est possible de créer ses propres règles ou d'importer des règles communautaires dans un fichier nommé local.rules, situé dans le répertoire `/usr/local/etc/suricata/rules`.
+Une fois les règles ajoutées, il est recommmandé de copier ce fichier dans le répertoire `/usr/local/etc/suricata/opnsense.rules/` et de redémarrer le service Suricata pour que les règles soient prises en compte.
 Ces nouvelles règles seront dès lors disponibles dans l'onglet **Rules** de l'interface de gestion de Suricata. Il suffira de chercher le nom du fichier de règles ajouté pour les activer.
 
-Dans notre cas, nous avons récupéré un fichier de règles communautaires sur Github se basant sur la détection de scans Nmap en tout genre, et nous avons ajouté quelques règles supplémentaires pour détecter les tentatives d'exploitation de failles XSS basées sur des injections de scripts JavaScript ou la balise **_<script_>** dans les requêtes HTTP.
+Dans notre cas, nous avons récupéré un fichier de règles communautaires sur Github se basant sur la détection de scans Nmap en tout genre, et nous avons ajouté quelques règles supplémentaires pour détecter les tentatives d'exploitation de failles XSS basées sur des injections de scripts JavaScript ou la balise `<script>` dans les requêtes HTTP.
 
 ![suri_rules](images/Suri_rules.png)
 
@@ -260,7 +303,7 @@ curl "http://example.com/?param=<script>alert(1)</script>"
 
 Cette section se concentre sur l'installation de l'agent Wazuh sur OPNsense pour récupérer les logs des différents outils intégrés à OPNSense et les envoyer au SIEM.
 
-Pour cela, il suffit de télécharger le plugin **os-wazuh-agent** dans la section **System > Firmware > Plugins**.
+Pour cela, il suffit de télécharger le plugin `os-wazuh-agent` dans la section **System > Firmware > Plugins**.
 
 En rechargeant la page, une nouvelle section **Wazuh Agent** apparaît dans la section **Services**.
 
