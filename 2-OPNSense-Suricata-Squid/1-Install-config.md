@@ -10,7 +10,7 @@ Ce document est relatif à l'installation d'OPNsense 24.7 et d'outils supplémen
 - [Accès SSH sécurisé à la console root d'OPNsense](#accès-ssh-sécurisé-à-la-console-root-dopnsense)
 - [Mise en place de règles de pare-feu](#mise-en-place-de-règles-de-pare-feu)
 - [Mise en place du proxy Squid pour la journalisation des communications HTTP](#mise-en-place-du-proxy-squid-pour-la-journalisation-des-communications-http)
--[Mise en place d'un blocage d'IPs malveillantes](#mise-en-place-dun-blocage-dips-malveillantes)
+- [Mise en place d'un blocage d'IPs malveillantes](#mise-en-place-dun-blocage-dips-malveillantes)
 - [Configuration de l'IDS/IPS Suricata](#configuration-de-lidsips-suricata)
 - [Installation de l'agent Wazuh pour récupérer les logs d'OPNSense et des outils dans le SIEM](#installation-de-lagent-wazuh-pour-récupérer-les-logs-dopnsense-et-des-outils-dans-le-siem)
 - [Sources :](#sources-)
