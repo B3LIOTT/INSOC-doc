@@ -141,3 +141,5 @@ data.body.counter_domains = dict.artifacts.domains.length;
 
 return { json: data.body };
 ```
+
+TODO: noeud qui update la liste locale des IPs malveillantes
