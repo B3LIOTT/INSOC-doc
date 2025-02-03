@@ -66,7 +66,7 @@ cortex {
     {
       name = "Cortex"
       url = "http://<IP-CORTEX>:9001"
-      auth {
+      auth {    
         type = "bearer"
         key = "API KEY"
        }
