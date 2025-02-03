@@ -10,7 +10,7 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -2620,
+        -3400,
         340
       ],
       "id": "603d5723-e3b9-49ab-b847-ee448feb55f3",
@@ -44,8 +44,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -2240,
-        100
+        -3100,
+        -180
       ],
       "id": "d6d84aea-2115-4de4-b80f-94a51807f1dc",
       "name": ">=MEDIUM alerts filter"
@@ -66,7 +66,7 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -1180,
+        -1120,
         240
       ],
       "id": "ed18ad34-d593-46f4-a3bb-f0fbbdc8f628",
@@ -87,7 +87,7 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -1040,
+        -980,
         460
       ],
       "id": "3b334b65-9355-4949-adc8-5860aea673ad",
@@ -111,7 +111,7 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -1540,
+        -1480,
         340
       ],
       "id": "5f23d72d-d6a4-4355-a5b0-9580435946c1",
@@ -136,7 +136,7 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -1180,
+        -1120,
         460
       ],
       "id": "b6085e47-052e-43f7-92d6-dde3b50d3691",
@@ -157,7 +157,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1900,
+        -1780,
         340
       ],
       "id": "57fbacec-3e57-4c27-bb79-dcb45ec05a8a",
@@ -179,7 +179,7 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -1680,
+        -1620,
         340
       ],
       "id": "f0a16049-dbd9-4028-a859-6cb018af1b72",
@@ -226,7 +226,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2220,
+        -3000,
         340
       ],
       "id": "05992c9b-b0d0-471b-9153-32ac96e0c8cb",
@@ -260,7 +260,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1380,
+        -1320,
         340
       ],
       "id": "b446eb33-3353-499a-ab08-00fe8857dd47",
@@ -401,7 +401,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1700,
+        -2760,
         600
       ],
       "id": "bb3153cb-0b32-421f-9a7b-3aca71ae1868",
@@ -416,7 +416,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        -700,
+        -640,
         580
       ],
       "id": "1a04bf3a-0b30-4abd-a864-e61ad6444d7b",
@@ -430,7 +430,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -880,
+        -820,
         460
       ],
       "id": "48a10231-8bba-4b8a-a3da-9dfe7df6038c",
@@ -838,7 +838,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2440,
+        -3220,
         340
       ],
       "id": "cfa31f9f-0957-4f1b-b695-e9c2f3798dcc",
@@ -869,9 +869,261 @@
           "name": "The Hive account"
         }
       }
+    },
+    {
+      "parameters": {
+        "title": "={{ $json.rule.description }}",
+        "description": "=Alert from - {{ $json.agent.name }}",
+        "severity": "={{ $json.rule.level }}",
+        "date": "={{ $json.timestamp }}",
+        "tags": "={{ $json.rule.groups.join(',') }}",
+        "tlp": "={{ $json.rule.level }}",
+        "type": "={{ $json.rule.id }}",
+        "source": "={{ $json.agent.ip }}",
+        "sourceRef": "=alert-{{ $json.sourceRef }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        80,
+        80
+      ],
+      "id": "e27e0ee2-418f-4a1f-8b03-64c877df3333",
+      "name": "ALERT1",
+      "credentials": {
+        "theHiveApi": {
+          "id": "ZvwqrB92gWkXhSTj",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const tma = new Date(Date.now() - 10 * 60 * 1000).toISOString()\nreturn {\"10MinAgo\": tma}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2820,
+        180
+      ],
+      "id": "a00b662c-986a-49ff-a654-6cbc169e5668",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $('NORMALISE').first()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1920,
+        340
+      ],
+      "id": "2ae10ed5-9c4f-4f23-92d3-92d21114be84",
+      "name": "REFORMAT"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b45aebd3-9c7f-493f-8066-df9909439043",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2540,
+        180
+      ],
+      "id": "62a2a32f-6c30-4213-b2fb-fb23667b92da",
+      "name": "EXISTS"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.7.6:9000/api/v1/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "theHiveApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": [\n    {\n      \"_name\": \"listAlert\"\n    }, \n    {\n      \"_name\": \"filter\", \n      \"_eq\": {\n        \"_field\": \"title\", \n        \"_value\": \"A Newly Scheduled Task has been Detected on win11\"\n      }\n    },\n    {\n      \"_name\": \"count\"\n    }\n  ]\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text",
+              "outputPropertyName": "count"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2680,
+        180
+      ],
+      "id": "6192fa8b-1163-4b29-bc25-a8307d9bd610",
+      "name": "COUNT ALERTS",
+      "alwaysOutputData": false,
+      "credentials": {
+        "theHiveApi": {
+          "id": "ZvwqrB92gWkXhSTj",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.7.6:9000/api/v1/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "theHiveApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": [{\"_name\": \"listAlert\"}, {\"_name\": \"filter\", \"_eq\": {\"_field\": \"title\", \"_value\": \"A Newly Scheduled Task has been Detected on win11\"}}]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2360,
+        100
+      ],
+      "id": "5822ab46-5798-4605-ac79-c0b96ea77844",
+      "name": "GET ALERT",
+      "alwaysOutputData": false,
+      "credentials": {
+        "theHiveApi": {
+          "id": "ZvwqrB92gWkXhSTj",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "return _input.first()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2220,
+        100
+      ],
+      "id": "99ce496c-2e02-471d-8c04-58a78d3cdb2a",
+      "name": "first"
+    },
+    {
+      "parameters": {
+        "operation": "deleteAlert",
+        "alertId": {
+          "__rl": true,
+          "value": "={{ $json._id }}",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.theHiveProject",
+      "typeVersion": 1,
+      "position": [
+        -2080,
+        100
+      ],
+      "id": "919d45ca-70d1-4bd7-b022-34a5ffd90413",
+      "name": "TheHive 5",
+      "credentials": {
+        "theHiveProjectApi": {
+          "id": "5PTWU9W34oGkig4w",
+          "name": "The Hive 5 account"
+        }
+      }
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "192.168.7.8:5678",
+            "user-agent": "python-requests/2.32.2",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "content-length": "548"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "timestamp": "2025-01-30T11:36:46.629+0000",
+            "rule": {
+              "level": 3,
+              "description": "Wazuh server started.",
+              "id": "502",
+              "firedtimes": 1,
+              "mail": false,
+              "groups": [
+                "ossec"
+              ],
+              "pci_dss": [
+                "10.6.1"
+              ],
+              "gpg13": [
+                "10.1"
+              ],
+              "gdpr": [
+                "IV_35.7.d"
+              ],
+              "hipaa": [
+                "164.312.b"
+              ],
+              "nist_800_53": [
+                "AU.6"
+              ],
+              "tsc": [
+                "CC7.2",
+                "CC7.3"
+              ]
+            },
+            "agent": {
+              "id": "000",
+              "name": "ubuntuwazuh",
+              "ip": "192.168.7.252"
+            },
+            "manager": {
+              "name": "ubuntuwazuh"
+            },
+            "id": "1738237006.21229336",
+            "full_log": "ossec: Manager started.",
+            "decoder": {
+              "name": "ossec"
+            },
+            "location": "wazuh-monitord"
+          },
+          "webhookUrl": "http://192.168.7.8:5678/webhook-test/7ceae612-e110-4adf-8191-95557ec9b251",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
   "connections": {
     "Webhook": {
       "main": [
@@ -948,12 +1200,12 @@
       "main": [
         [
           {
-            "node": "uuid",
+            "node": "Artifacts detection",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Artifacts detection",
+            "node": "Code",
             "type": "main",
             "index": 0
           }
@@ -1253,13 +1505,97 @@
           }
         ]
       ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "COUNT ALERTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "REFORMAT": {
+      "main": [
+        [
+          {
+            "node": "uuid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EXISTS": {
+      "main": [
+        [
+          {
+            "node": "GET ALERT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "REFORMAT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "COUNT ALERTS": {
+      "main": [
+        [
+          {
+            "node": "EXISTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET ALERT": {
+      "main": [
+        [
+          {
+            "node": "first",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "first": {
+      "main": [
+        [
+          {
+            "node": "TheHive 5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TheHive 5": {
+      "main": [
+        [
+          {
+            "node": "REFORMAT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": true,
+  "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "8d64e4ce-0146-41ef-b734-1234284a717b",
+  "versionId": "7cedd000-98e4-427b-ace3-4c36d9d68a26",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"

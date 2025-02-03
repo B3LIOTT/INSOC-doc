@@ -1,4 +1,94 @@
-# Installation de TheHive / Cortex version 5
+# Installation de TheHive / Cortex version 4
+
+La version 4 de TheHive ne nécéssite pas de license. Une image docker peut être trouvée [ici](https://hub.docker.com/layers/thehiveproject/thehive4/4.1.14-1/images/sha256-77bb4cca416ae4a270fe8a8cca82aaa04d0ed375baca22fc2804e315f16ad9bf?context=explore). De plus, [ce répo Github](https://github.com/TheHive-Project/TheHive) contient des exemples de déploiement de docker TheHive, mais ils ne fonctionnent pas tous (le support de StrangeBee est catastrophique).
+
+Nous avons donc créé un fichier docker compose ``docker-compose.yml`:
+```yaml 
+version: "3"
+services:
+  thehive:
+    image: thehiveproject/thehive4
+    container_name: thehive
+    restart: always
+    depends_on:
+      - elasticsearch
+      - minio
+    environment:
+      - JAVA_OPTS=-Xms512m -Xmx2g
+      - THEHIVE_ELASTICSEARCH_URL=http://elasticsearch:9200
+      - THEHIVE_STORAGE_PROVIDER=s3
+      - THEHIVE_STORAGE_S3_BUCKET=thehive
+      - THEHIVE_STORAGE_S3_ACCESS_KEY=minioadmin
+      - THEHIVE_STORAGE_S3_SECRET_KEY=minioadmin
+      - THEHIVE_STORAGE_S3_ENDPOINT=http://minio:9000
+    volumes:
+      - thehive-data:/opt/data
+    ports:
+      - "9000:9000"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx1g"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio-data:/data
+    ports:
+      - "9001:9001"
+
+volumes:
+  thehive-data:
+  elasticsearch-data:
+  minio-data:
+```
+
+Il suffit ensuite de lancer le docker-compose:
+```bash
+docker-compose up -d
+```
+
+Et l'interface est accessible avec les credentials par défaut:
+```
+Username: admin@thehive.local
+Password: secret
+```
+
+## Config The Hive
+Une fois TheHive installé, afin d'avoir un accès en dehors de localhost à l'interface il faut éditer `/etc/thehive/application.conf`:
+```conf
+application.baseUrl = "http://<IP SERVEUR>:9000"
+```
+(Avec `<IP SERVEUR>` l'ip du serveur ou bien `0.0.0.0` pour écouter sur toutes les interface).
+
+L'interface sera donc accessible à `http://<IP SERVEUR>:9000` avec les credentials suivants:
+```
+Username: admin@thehive.local
+Password: secret
+```
+
+La suite de la configuration via l'interface peut être faite en suivant la fin de cette [documentation](https://kifarunix.com/install-thehive-on-ubuntu/).
+
+## Config Cortex
+Voir la fin de cette [doc](https://kifarunix.com/install-cortex-on-ubuntu/), à partir de `Accessing Cortex Web Interface`. Nous avons dans notre cas créé une organisation `insoc` avec un utilisateur ayant les droits admin. La suite de la configuration sera détaillée dans la partie [intégration](2-integration.md).
+
+
+
+# AUTRE SOLUTION - Installation de TheHive / Cortex version 5
 
 ## Téléchargement
 /!\ Pour cette version il faut request une license auprès de StrangeBee.
@@ -36,30 +126,6 @@ bash /tmp/install.sh
 Erreurs possibles:
 - docker group does not exists: `sudo groupadd docker`
 - permission denied pour /usr/bin/floss: dans `install.sh`, rechercher la ligne contenant `unzip /tmp/floss.zip`, et ajoutez y `sudo`.
-
-
-## Config The Hive
-Une fois TheHive installé, afin d'avoir un accès en dehors de localhost à l'interface il faut éditer `/etc/thehive/application.conf`:
-```conf
-application.baseUrl = "http://<IP SERVEUR>:9000"
-```
-(Avec `<IP SERVEUR>` l'ip du serveur ou bien `0.0.0.0` pour écouter sur toutes les interface).
-
-L'interface sera donc accessible à `http://<IP SERVEUR>:9000` avec les credentials suivants:
-```
-Username: admin@thehive.local
-Password: secret
-```
-
-La suite de la configuration via l'interface peut être faite en suivant la fin de cette [documentation](https://kifarunix.com/install-thehive-on-ubuntu/).
-
-## Config Cortex
-Voir la fin de cette [doc](https://kifarunix.com/install-cortex-on-ubuntu/), à partir de `Accessing Cortex Web Interface`. Nous avons dans notre cas créé une organisation `insoc` avec un utilisateur ayant les droits admin. La suite de la configuration sera détaillée dans la partie [intégration](2-integration.md).
-
-
-# AUTRE SOLUTION - Installation de TheHive / Cortex version 4
-
-La version 4 de TheHive ne nécéssite pas de license. Une image docker peut être trouvée [ici](https://hub.docker.com/layers/thehiveproject/thehive4/4.1.14-1/images/sha256-77bb4cca416ae4a270fe8a8cca82aaa04d0ed375baca22fc2804e315f16ad9bf?context=explore)
 
 
 # Installation de MISP
