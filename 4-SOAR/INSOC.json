@@ -44,8 +44,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -3100,
-        -180
+        -3180,
+        -40
       ],
       "id": "d6d84aea-2115-4de4-b80f-94a51807f1dc",
       "name": ">=MEDIUM alerts filter"
@@ -73,8 +73,8 @@
       "name": "CREATE CASE",
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -94,8 +94,8 @@
       "name": "MERGE TO CASE",
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -119,8 +119,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -144,8 +144,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -186,8 +186,8 @@
       "name": "ALERT",
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -214,8 +214,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -287,8 +287,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -401,7 +401,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2760,
+        -2820,
         600
       ],
       "id": "bb3153cb-0b32-421f-9a7b-3aca71ae1868",
@@ -497,8 +497,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -558,8 +558,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -584,8 +584,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -608,8 +608,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -669,8 +669,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -693,8 +693,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -865,36 +865,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "title": "={{ $json.rule.description }}",
-        "description": "=Alert from - {{ $json.agent.name }}",
-        "severity": "={{ $json.rule.level }}",
-        "date": "={{ $json.timestamp }}",
-        "tags": "={{ $json.rule.groups.join(',') }}",
-        "tlp": "={{ $json.rule.level }}",
-        "type": "={{ $json.rule.id }}",
-        "source": "={{ $json.agent.ip }}",
-        "sourceRef": "=alert-{{ $json.sourceRef }}",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.theHive",
-      "typeVersion": 1,
-      "position": [
-        80,
-        80
-      ],
-      "id": "e27e0ee2-418f-4a1f-8b03-64c877df3333",
-      "name": "ALERT1",
-      "credentials": {
-        "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -960,7 +932,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://192.168.7.6:9000/api/v1/query",
+        "url": "http://192.168.7.15:9000/api/v1/query",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "theHiveApi",
         "sendBody": true,
@@ -978,23 +950,23 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -2680,
-        180
+        -2740,
+        -200
       ],
       "id": "6192fa8b-1163-4b29-bc25-a8307d9bd610",
       "name": "COUNT ALERTS",
       "alwaysOutputData": false,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "http://192.168.7.6:9000/api/v1/query",
+        "url": "http://192.168.7.15:9000/api/v1/query",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "theHiveApi",
         "sendBody": true,
@@ -1005,16 +977,16 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -2360,
-        100
+        -2380,
+        -200
       ],
       "id": "5822ab46-5798-4605-ac79-c0b96ea77844",
       "name": "GET ALERT",
       "alwaysOutputData": false,
       "credentials": {
         "theHiveApi": {
-          "id": "ZvwqrB92gWkXhSTj",
-          "name": "The Hive account"
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     },
@@ -1053,6 +1025,52 @@
         "theHiveProjectApi": {
           "id": "5PTWU9W34oGkig4w",
           "name": "The Hive 5 account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "count",
+        "filters": {
+          "title": "={{ $('TEST MALICIOUS IP').item.json.body.rule.description }}"
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        -2680,
+        180
+      ],
+      "id": "51ce2d5c-832a-4ce9-a0a2-d954495e7628",
+      "name": "COUNT",
+      "credentials": {
+        "theHiveApi": {
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 1,
+        "options": {},
+        "filters": {
+          "title": ""
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        -2360,
+        100
+      ],
+      "id": "c0ea1b77-d315-4a1d-9527-17b5480b2e37",
+      "name": "GET ALERT1",
+      "credentials": {
+        "theHiveApi": {
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
         }
       }
     }
@@ -1510,7 +1528,7 @@
       "main": [
         [
           {
-            "node": "COUNT ALERTS",
+            "node": "COUNT",
             "type": "main",
             "index": 0
           }
@@ -1532,7 +1550,7 @@
       "main": [
         [
           {
-            "node": "GET ALERT",
+            "node": "GET ALERT1",
             "type": "main",
             "index": 0
           }
@@ -1548,24 +1566,12 @@
     },
     "COUNT ALERTS": {
       "main": [
-        [
-          {
-            "node": "EXISTS",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "GET ALERT": {
       "main": [
-        [
-          {
-            "node": "first",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "first": {
@@ -1589,13 +1595,35 @@
           }
         ]
       ]
+    },
+    "COUNT": {
+      "main": [
+        [
+          {
+            "node": "EXISTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET ALERT1": {
+      "main": [
+        [
+          {
+            "node": "first",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "7cedd000-98e4-427b-ace3-4c36d9d68a26",
+  "versionId": "d0e221a5-769c-4fe6-b981-36c74df079e7",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"

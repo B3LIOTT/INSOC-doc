@@ -22,6 +22,7 @@ services:
       - THEHIVE_STORAGE_S3_SECRET_KEY=minioadmin
       - THEHIVE_STORAGE_S3_ENDPOINT=http://minio:9000
     volumes:
+      - ./application.conf:/etc/thehive/application.conf:ro
       - thehive-data:/opt/data
     ports:
       - "9000:9000"
@@ -55,6 +56,24 @@ volumes:
   thehive-data:
   elasticsearch-data:
   minio-data:
+```
+
+Dont le fichier de configuration `application.conf` est le suivant (à mettre dans le même dossier que le `docker-compose.yml`):
+```conf
+## CORTEX configuration
+cortex {
+  servers: [
+    {
+      name = "Cortex"
+      url = "http://<IP-CORTEX>:9001"
+      auth {
+        type = "bearer"
+        key = "API KEY"
+       }
+     wsConfig {}
+    }
+  ]
+}
 ```
 
 Il suffit ensuite de lancer le docker-compose:
