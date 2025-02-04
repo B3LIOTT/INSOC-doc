@@ -87,61 +87,11 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -980,
+        -1120,
         460
       ],
       "id": "3b334b65-9355-4949-adc8-5860aea673ad",
       "name": "MERGE TO CASE",
-      "credentials": {
-        "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "case",
-        "operation": "count",
-        "filters": {
-          "severity": "={{ $json.severity }}",
-          "tags": "={{ $json.tags.join(',') }}"
-        }
-      },
-      "type": "n8n-nodes-base.theHive",
-      "typeVersion": 1,
-      "position": [
-        -1480,
-        340
-      ],
-      "id": "5f23d72d-d6a4-4355-a5b0-9580435946c1",
-      "name": "CASE EXISTS",
-      "alwaysOutputData": true,
-      "credentials": {
-        "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "case",
-        "limit": 1,
-        "options": {},
-        "filters": {
-          "tags": "={{ $('ALERT').item.json.tags[0] }}"
-        }
-      },
-      "type": "n8n-nodes-base.theHive",
-      "typeVersion": 1,
-      "position": [
-        -1120,
-        460
-      ],
-      "id": "b6085e47-052e-43f7-92d6-dde3b50d3691",
-      "name": "GET CASE",
-      "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
           "id": "50EY9TDbqyZZGghU",
@@ -157,7 +107,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1780,
+        -1760,
         340
       ],
       "id": "57fbacec-3e57-4c27-bb79-dcb45ec05a8a",
@@ -221,7 +171,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const data = $input.first().json;\n// data.body.agent.ip = \"34.35.36.37\"\ndata.body.malicious_ip = \"62.63.230.241\"\n// data.body.malicious_domain1 = \"http://hecker.io\"\n// data.body.malicious_domain2 = \"http://hecker2222.io\"\n\nreturn data"
+        "jsCode": "const data = $input.first().json;\n// data.body.agent.ip = \"34.35.36.37\"\ndata.body.malicious_ip = \"62.63.230.241\"\ndata.body.malicious_domain1 = \"http://hecker.io\"\n// data.body.malicious_domain2 = \"http://hecker2222.io\"\n\nreturn data"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -230,8 +180,7 @@
         340
       ],
       "id": "05992c9b-b0d0-471b-9153-32ac96e0c8cb",
-      "name": "TEST MALICIOUS IP",
-      "disabled": true
+      "name": "TEST MALICIOUS IP"
     },
     {
       "parameters": {
@@ -245,11 +194,12 @@
           "conditions": [
             {
               "id": "b49a9a66-a443-493c-949b-a946ef155513",
-              "leftValue": "={{ $json.count }}",
+              "leftValue": "={{ $json._id }}",
               "rightValue": 0,
               "operator": {
-                "type": "number",
-                "operation": "equals"
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
               }
             }
           ],
@@ -273,7 +223,7 @@
         "id": "={{ $json.id }}",
         "dataType": "ip",
         "analyzers": [
-          "93572ea5d34d9ba2b7f9446aabf6345d::Kifarunix-demo Cortex"
+          "93572ea5d34d9ba2b7f9446aabf6345d::Cortex"
         ]
       },
       "type": "n8n-nodes-base.theHive",
@@ -570,7 +520,7 @@
         "id": "={{ $json.id }}",
         "dataType": "url",
         "analyzers": [
-          "d33efdda2d1f2aca7f2c06f71d9f8578::Kifarunix-demo Cortex"
+          "d33efdda2d1f2aca7f2c06f71d9f8578::Cortex"
         ]
       },
       "type": "n8n-nodes-base.theHive",
@@ -872,25 +822,12 @@
     },
     {
       "parameters": {
-        "jsCode": "const tma = new Date(Date.now() - 10 * 60 * 1000).toISOString()\nreturn {\"10MinAgo\": tma}"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -2820,
-        180
-      ],
-      "id": "a00b662c-986a-49ff-a654-6cbc169e5668",
-      "name": "Code"
-    },
-    {
-      "parameters": {
         "jsCode": "return $('NORMALISE').first()"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1920,
+        -1900,
         340
       ],
       "id": "2ae10ed5-9c4f-4f23-92d3-92d21114be84",
@@ -908,11 +845,12 @@
           "conditions": [
             {
               "id": "b45aebd3-9c7f-493f-8066-df9909439043",
-              "leftValue": "={{ $json.count }}",
+              "leftValue": "={{ $json._id }}",
               "rightValue": 0,
               "operator": {
-                "type": "number",
-                "operation": "notEquals"
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
               }
             }
           ],
@@ -931,67 +869,6 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "http://192.168.7.15:9000/api/v1/query",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "theHiveApi",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"query\": [\n    {\n      \"_name\": \"listAlert\"\n    }, \n    {\n      \"_name\": \"filter\", \n      \"_eq\": {\n        \"_field\": \"title\", \n        \"_value\": \"A Newly Scheduled Task has been Detected on win11\"\n      }\n    },\n    {\n      \"_name\": \"count\"\n    }\n  ]\n}",
-        "options": {
-          "response": {
-            "response": {
-              "responseFormat": "text",
-              "outputPropertyName": "count"
-            }
-          }
-        }
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -2740,
-        -200
-      ],
-      "id": "6192fa8b-1163-4b29-bc25-a8307d9bd610",
-      "name": "COUNT ALERTS",
-      "alwaysOutputData": false,
-      "credentials": {
-        "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://192.168.7.15:9000/api/v1/query",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "theHiveApi",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"query\": [{\"_name\": \"listAlert\"}, {\"_name\": \"filter\", \"_eq\": {\"_field\": \"title\", \"_value\": \"A Newly Scheduled Task has been Detected on win11\"}}]\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -2380,
-        -200
-      ],
-      "id": "5822ab46-5798-4605-ac79-c0b96ea77844",
-      "name": "GET ALERT",
-      "alwaysOutputData": false,
-      "credentials": {
-        "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
         "language": "python",
         "pythonCode": "return _input.first()"
       },
@@ -1003,52 +880,6 @@
       ],
       "id": "99ce496c-2e02-471d-8c04-58a78d3cdb2a",
       "name": "first"
-    },
-    {
-      "parameters": {
-        "operation": "deleteAlert",
-        "alertId": {
-          "__rl": true,
-          "value": "={{ $json._id }}",
-          "mode": "id"
-        }
-      },
-      "type": "n8n-nodes-base.theHiveProject",
-      "typeVersion": 1,
-      "position": [
-        -2080,
-        100
-      ],
-      "id": "919d45ca-70d1-4bd7-b022-34a5ffd90413",
-      "name": "TheHive 5",
-      "credentials": {
-        "theHiveProjectApi": {
-          "id": "5PTWU9W34oGkig4w",
-          "name": "The Hive 5 account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "count",
-        "filters": {
-          "title": "={{ $('TEST MALICIOUS IP').item.json.body.rule.description }}"
-        }
-      },
-      "type": "n8n-nodes-base.theHive",
-      "typeVersion": 1,
-      "position": [
-        -2680,
-        180
-      ],
-      "id": "51ce2d5c-832a-4ce9-a0a2-d954495e7628",
-      "name": "COUNT",
-      "credentials": {
-        "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
-        }
-      }
     },
     {
       "parameters": {
@@ -1073,6 +904,91 @@
           "name": "The Hive account 2"
         }
       }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 1,
+        "options": {},
+        "filters": {
+          "severity": 1
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        -2680,
+        180
+      ],
+      "id": "51ce2d5c-832a-4ce9-a0a2-d954495e7628",
+      "name": "GET",
+      "alwaysOutputData": true,
+      "notesInFlow": false,
+      "credentials": {
+        "theHiveApi": {
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const tma = new Date(Date.now() - 10 * 60 * 1000).toISOString()\nreturn {\"10MinAgo\": tma}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2820,
+        180
+      ],
+      "id": "a00b662c-986a-49ff-a654-6cbc169e5668",
+      "name": "Timestamp"
+    },
+    {
+      "parameters": {
+        "resource": "case",
+        "limit": 1,
+        "options": {},
+        "filters": {
+          "tags": "={{ $('ALERT').item.json.tags[0] }}"
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        -1480,
+        340
+      ],
+      "id": "64ecab56-6052-4691-ac51-ee2ba2a10af7",
+      "name": "GET CASE1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsUnread",
+        "id": "={{ $json._id }}"
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        -2060,
+        -40
+      ],
+      "id": "1cd8f65f-47cc-4186-8464-1c00b2baae68",
+      "name": "UPDATE (todo)",
+      "credentials": {
+        "theHiveApi": {
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
+        }
+      },
+      "disabled": true
     }
   ],
   "pinData": {
@@ -1159,28 +1075,6 @@
         []
       ]
     },
-    "CASE EXISTS": {
-      "main": [
-        [
-          {
-            "node": "IF CASE DO NOT EXISTS",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "GET CASE": {
-      "main": [
-        [
-          {
-            "node": "MERGE TO CASE",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "CREATE CASE": {
       "main": [
         [
@@ -1207,7 +1101,7 @@
       "main": [
         [
           {
-            "node": "CASE EXISTS",
+            "node": "GET CASE1",
             "type": "main",
             "index": 0
           }
@@ -1223,7 +1117,7 @@
             "index": 0
           },
           {
-            "node": "Code",
+            "node": "Timestamp",
             "type": "main",
             "index": 0
           }
@@ -1263,7 +1157,7 @@
         ],
         [
           {
-            "node": "GET CASE",
+            "node": "MERGE TO CASE",
             "type": "main",
             "index": 0
           }
@@ -1524,17 +1418,6 @@
         ]
       ]
     },
-    "Code": {
-      "main": [
-        [
-          {
-            "node": "COUNT",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "REFORMAT": {
       "main": [
         [
@@ -1564,43 +1447,16 @@
         ]
       ]
     },
-    "COUNT ALERTS": {
-      "main": [
-        []
-      ]
-    },
-    "GET ALERT": {
-      "main": [
-        []
-      ]
-    },
     "first": {
       "main": [
         [
           {
-            "node": "TheHive 5",
+            "node": "UPDATE (todo)",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "TheHive 5": {
-      "main": [
-        [
+          },
           {
             "node": "REFORMAT",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "COUNT": {
-      "main": [
-        [
-          {
-            "node": "EXISTS",
             "type": "main",
             "index": 0
           }
@@ -1617,13 +1473,51 @@
           }
         ]
       ]
+    },
+    "GET": {
+      "main": [
+        [
+          {
+            "node": "EXISTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Timestamp": {
+      "main": [
+        [
+          {
+            "node": "GET",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET CASE1": {
+      "main": [
+        [
+          {
+            "node": "IF CASE DO NOT EXISTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE (todo)": {
+      "main": [
+        []
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "d0e221a5-769c-4fe6-b981-36c74df079e7",
+  "versionId": "0157e522-3901-47c1-acc5-53278719fe5f",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"
