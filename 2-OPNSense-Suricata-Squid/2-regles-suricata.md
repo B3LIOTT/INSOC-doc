@@ -13,9 +13,18 @@ alert http any any -> any any (msg:"Possible XSS attack, js protocol"; content:"
 ```
 
 ## Buffer Overflow
-Les règles suivantes essayent de détecter les tentatives de bufferoverflow. Habituellement lorsqu'un bufferoverflow tente d'être exploité le caratère 'A' est utilisé pour remplir le buffer. Aussi drôle que cela puisse paraître, c'est une habitude très courante. Ainsi, s'il on détècte une requête comportant au moins 16 fois 'A' nous pouvons nous demander si c'est une tentative d'exploit de bufferoverflow:
+La règle suivante essaie de détecter les tentatives de bufferoverflow. Habituellement lorsqu'un bufferoverflow tente d'être exploité le caratère 'A' est utilisé pour remplir le buffer. Aussi drôle que cela puisse paraître, c'est une habitude très courante. Ainsi, si l'on détecte une requête comportant plusieurs 'A', au moins 5 fois en l'espace de 2 secondes, nous pouvons nous demander si c'est une tentative d'exploit de bufferoverflow:
 ```bash
-alert tcp $EXTERNAL_NET any -> $HOME_NET any (content:"AAAAAAAAAAAAAAAA", msg:"Buffer overflow exploit detected.")
+alert tcp any any -> any any (msg:"Possible Buffer Overflow Attack - Repeated Characters"; content:"AAAAAAAAAAAAAAAA"; threshold:type threshold, track by_src, count 5, seconds 2; classtype:attempted-admin; priority:7; sid:50100004; rev:1;)
+```
+
+Les règles suivantes sont plus spécifiques et visent à détecter des attaques de bufferoverflow sur des services spécifiques:
+```bash
+alert tcp any any -> any any (msg:"Possible Buffer Overflow Attack - NOP Sled"; content:"|90 90 90 90 90 90 90 90|"; classtype:attempted-admin; priority:7; sid:50100011; rev:1;)
+
+alert http any any -> any any (msg:"Possible Buffer Overflow Attack - Large Input Field"; pcre:"/(\?|&)(username|password|input|query)=.{100,}/Ui"; classtype:attempted-user; priority:7; sid:50100013; rev:1;)
+
+alert tcp any any -> any 21 (msg:"Possible FTP Buffer Overflow - Long USER command"; content:"USER "; nocase; content:"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"; distance:0; classtype:attempted-admin; priority:7; sid:50100014; rev:1;)
 ```
 
 
