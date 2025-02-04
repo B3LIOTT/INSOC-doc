@@ -61,6 +61,8 @@ volumes:
 Dont le fichier de configuration `application.conf` est le suivant (à mettre dans le même dossier que le `docker-compose.yml`):
 ```conf
 ## CORTEX configuration
+play.modules.enabled += org.thp.thehive.connector.cortex.CortexModule
+
 cortex {
   servers: [
     {
@@ -78,7 +80,7 @@ cortex {
 
 Il suffit ensuite de lancer le docker-compose:
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 Et l'interface est accessible avec les credentials par défaut:
