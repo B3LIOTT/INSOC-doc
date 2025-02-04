@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 
-Ce document est relatif à l'installation d'OPNsense 24.7 et d'outils supplémentaires sur un rack de serveur HP Proliant DL380G5 contenant 8Go de RAM DDR2, un Intel Xeon 5150 @ 2.66GHz à 4 coeurs et 2 interfaces réseau pour les réseaux WAN et LAN.
+Ce document est relatif à l'installation d'OPNsense 25.1 et d'outils supplémentaires sur un rack de serveur HP Proliant DL380G5 contenant 8Go de RAM DDR2, un Intel Xeon 5150 @ 2.66GHz à 4 coeurs et 2 interfaces réseau pour les réseaux WAN et LAN.
 
 - [Installation de l'OS OPNsense](#installation-de-los-opnsense)
 - [Configuration des interfaces réseau](#configuration-des-interfaces-réseau)
@@ -23,6 +23,7 @@ Pour l'installation, nous avons suivi les étapes suivantes :
 - Téléchargement de l'image ISO d'OPNsense 24.7.10 sur le site officiel au format dvd-amd64.
 - Création d'une clé USB bootable à partir de l'image ISO téléchargée.
 - Installation d'OPNsense sur le serveur dédié.
+- (Optionnel) Mise à jour de l'OS vers la version 25.1.
 
 Lors du premier démarrage de l'image, le système va être accessible en "live" dans la mémoire du serveur.
 
@@ -74,7 +75,7 @@ Nous pouvons désormais accéder à l'interface de gestion web d'OPNsense.
 
 ## Assistant de configuration
 
-Lors de la première connexion, un assistant de configuration nous guide pour la configuration de base de votre pare-feu:
+Lors de la première connexion, un assistant de configuration nous guide pour la configuration de base de notre pare-feu:
 
 ![conf1](images/OPNsense-Configuration-initiale-Etape-3.jpg)
 
@@ -90,7 +91,7 @@ Sur la même page, nous avons décoché l'option **Block RFC1918 Private Network
 
 ![Conf2](images/OPNsense-Configuration-initiale-Etape-7.jpg)
 
-La page suivante permet de configurer l'interface LAN. Afin de s'assurer que notre réseau possède des adresses IP facilement identifiables, nous avons changé l'adresse IP de cette interface en `10.1.10.1/24`. Ainsi, chaque machine dans notre réseau local aura une adresse IP de la forme `10.1.10.X` attribuée par le serveur DHCP d'OPNsense.
+La page suivante permet de configurer l'interface LAN. Afin de s'assurer que notre réseau possède des adresses IP facilement identifiables, nous avons changé l'adresse IP de cette interface en `192.168.7.254/24`. Ainsi, chaque machine dans notre réseau LAN aura une adresse IP de la forme `192.168.7.X` attribuée par le serveur DHCP d'OPNsense.
 
 La page suivante permet de modifier le mot de passe de l'utilisateur **root**. Puisqu'il est déjà configuré, nous pouvons directement passer à la suite.
 
@@ -118,6 +119,8 @@ Dans la grosse majorité des cas, il est fortement déconseillé de se connecter
 
 Il est nécessaire de cocher l'option **Permit root user login** pour autoriser la connexion en tant que root le temps de configurer un utilisateur pour l'accès SSH.
 
+Afin d'éviter de devoir renseigner nous même les clés SSH pour l'utilisateur créé, nous allons autoriser les connexions SSH par mot de passe en cochant l'option **Permit password login**.
+
 ![SSH_config](images/SSH_config.png)
 
 Par la suite, nous créons l'utilisateur en allant dans **System > Access > Users** et en cliquant sur **Add**.
@@ -129,7 +132,7 @@ Nous nous connectons par la suite en SSH avec le compte root pour ajouter le nou
 pw groupmod wheel -m <nom_utilisateur>
 ```
 
-Une fois cela fait, nous modifions le fichier sudoers pour autoriser l'utilisateur à utiliser la commande sudo en utilisant la commande suivante :
+Une fois cela fait, nous modifions le fichier sudoers pour autoriser l'utilisateur à utiliser uniquement la commande sudo en utilisant la commande suivante :
 ```bash
 visudo
 ```
@@ -144,7 +147,6 @@ Ces lignes permettent d'autoriser l'utilisateur à n'utiliser que les commandes 
 Finalement, nous désactivons l'accès en tant que root en SSH en décochant l'option **Permit root user login**.
 
 Désormais, pour nous connecter en SSH et effectuer des modifications dans les fichiers, il faudra passer par le compte intermédiaire créé précédemment et utiliser la commande `su` pour passer en root en renseignant le mot de passe root.
-
 
 ## Mise en place de règles de pare-feu
 
@@ -168,7 +170,7 @@ La dernière règle permet de bloquer tout le reste du trafic.
 
 ## Mise en place du proxy Squid pour la journalisation des communications HTTP
 
-Notre table de filtrage ne contient aucune règles concernant l'HTTP. Ceci s'explique par le fait que nous ayons un proxy Squid nous permettant de filtrer ce trafic. Il permet également de bloquer des sites web indésirables par le biais d'ACLs et nous permet de loguer les accès des machines à ces sites.
+Notre table de filtrage ne contient aucune règles concernant l'HTTP. Ceci s'explique par le fait que nous utilisons un proxy Squid nous permettant de filtrer ce trafic. Il permet également de bloquer des sites web indésirables par le biais d'ACLs et nous permet de loguer les accès des machines à ces sites.
 
 Pour installer ce proxy, il suffit d'aller dans **System > Firmware > Plugins** et de chercher le plugin **os-squid**.
 
@@ -213,13 +215,19 @@ Cette liste permet de bloquer l'accès à des sites web indésirables, comme des
 
 **Informations complèmentaire sur cette installation**
 
-Lors de l'installation dans notre lab, Squid n'a pas réussi à télécharger le fichier sur les serveurs de l'Université de Toulouse. Ainsi, après l'avoir téléchargé sur une des machines du réseau, un serveur Web temporaire a été mis en place pour permettre à Squid de télécharger le fichier.
+Lors de l'installation initiale dans notre lab sur la version 24.7.10 d'OPNSense, Squid n'a pas réussi à télécharger le fichier sur les serveurs de l'Université de Toulouse. Ainsi, après l'avoir téléchargé sur une des machines du réseau, un serveur Web temporaire a été mis en place pour permettre à Squid de télécharger le fichier.
 Une fois cela fait, en redémarrant le service Squid, un message d'erreur apparaît en nous indiquant qu'un sous-domaine entre en conflit avec un autre sous-domaine :
 
 ![proxy_error](images/proxy_error.png)
 
 En naviguant dans le fichier */usr/local/etc/squid/acl/UT1.Blacklist*, on peut trouver la source du conflit et la retirer.
 Cependant, après avoir rechargé le service, bien que l'erreur auparavant affichée disparaisse, il nous est impossible de sélectionner les catégories de blocage que nous souhaitons mettre en place et, de ce fait, de bloquer les sites web indésirables...
+
+Après le passage sur la version 25.1 d'OPNSense, le problème de sélection des catégories de blocage a été résolu et nous avons pu sélectionner l'intégralité des catégories pour activer le blocage des sites web indésirables.
+
+Par exemple, l'IP `167.216.142.116` renseignée dans la liste est bien bloquée par Squid si on tente d'y accèder :
+
+![squidBlock](images/squidBlock.png)
 
 **<span style="font-size: 3em;">/!\\</span>Point important à évoquer**
 
@@ -299,6 +307,9 @@ Pour cela, nous pouvons lancer la requête suivante depuis une machine dans le L
 ```shell
 curl "http://example.com/?param=<script>alert(1)</script>"
 ```
+
+![suricata_log](images/suricata_log.png)
+
 ## Installation de l'agent Wazuh pour récupérer les logs d'OPNSense et des outils dans le SIEM
 
 Cette section se concentre sur l'installation de l'agent Wazuh sur OPNsense pour récupérer les logs des différents outils intégrés à OPNSense et les envoyer au SIEM.
