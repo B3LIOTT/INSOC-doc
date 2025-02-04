@@ -84,6 +84,11 @@ import json
 import socket
 from requests.auth import HTTPBasicAuth
 
+
+IDS_AGENT_NAME = "OPNsense.insoc.local"
+WAZUH_ALERT_THRESHOLD = 7
+SURICATA_ALERT_THRESHOLD = 3
+
 # read configuration
 alert_file = sys.argv[1]
 user = sys.argv[2].split(":")[0]
@@ -93,20 +98,49 @@ hook_url = sys.argv[3]
 with open(alert_file) as f:
     alert_json = json.loads(f.read())
 
-# fix missing ip adress
-if "ip" not in alert_json["agent"]:
-    alert_json["agent"]["ip"] = str(socket.gethostbyname(socket.gethostname()))
 
-# verify rule level
-if alert_json["rule"]["level"] < 5:
+formated_alert = {
+    "title": str(alert_json["rule"]["description"]),
+    "description": "Alert from : " + str(alert_json["agent"]["name"]),
+    "severity": "",
+    "date": str(alert_json["timestamp"]),
+    "tags": ",".join(alert_json["rule"]["groups"]),
+    "type": str(alert_json["rule"]["id"]),
+    "source": "",
+}
+
+
+# verify rule level for suricata
+if alert_json["agent"]["name"] == IDS_AGENT_NAME and (level:=int(alert_json["data"]["alert"]["severity"])) >= SURICATA_ALERT_THRESHOLD:
+    new_level = 1
+    if 3 < level <= 5:
+        new_level = 2
+    elif 5 < level:
+        new_level = 3
+    formated_alert["severity"] = new_level
+    formated_alert["source"] = str(alert_json["data"]["src_ip"])
+    
+elif (level:=int(alert_json["rule"]["level"])) >= WAZUH_ALERT_THRESHOLD:
+    new_level = 1
+    if 5 < level <= 10:
+        new_level = 2
+    elif 10 < level:
+        new_level = 3
+
+    formated_alert["severity"] = new_level
+
+    # fix missing ip adress
+    formated_alert["source"] = str(socket.gethostbyname(socket.gethostname())) if "ip" not in alert_json["agent"] else str(alert_json["agent"]["ip"])
+
+else:
     sys.exit(0)
 
 # combine message details
-payload = json.dumps(alert_json)
+payload = json.dumps(formated_alert)
 
 # send alert to n8n webhook
 r = requests.post(hook_url, data=payload, headers={"content-type": "application/json"})
 sys.exit(0)
 ```
 
-NOTE: dans cet exemple nous envoyons l'alerte complète de Wazuh si le niveau de l'alerte est au moins 6, mais il est possible de customiser ce que Wazuh renvoie à TheHive en modifiant le payload.
+NOTE: il est possible de customiser comme on le souhaite ce que Wazuh envoie à n8n.

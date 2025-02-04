@@ -115,15 +115,16 @@
     },
     {
       "parameters": {
-        "title": "={{ $json.rule.description }}",
-        "description": "=Alert from - {{ $json.agent.name }}",
-        "severity": "={{ $json.rule.level }}",
-        "date": "={{ $json.timestamp }}",
-        "tags": "={{ $json.rule.groups.join(',') }}",
-        "tlp": "={{ $json.rule.level }}",
-        "type": "={{ $json.rule.id }}",
-        "source": "={{ $json.agent.ip }}",
-        "sourceRef": "=alert-{{ $json.sourceRef }}",
+        "title": "={{ $json.description }}",
+        "description": "={{ $json.description }}",
+        "severity": "={{ $json.severity }}",
+        "date": "={{ $json.date }}",
+        "tags": "={{ $json.tags }}",
+        "tlp": "={{ $json.severity }}",
+        "status": "=New",
+        "type": "={{ $json.type }}",
+        "source": "={{ $json.source }}",
+        "sourceRef": "={{ $json.sourceRef }}",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.theHive",
@@ -790,7 +791,7 @@
       "typeVersion": 2,
       "position": [
         -3220,
-        340
+        540
       ],
       "id": "cfa31f9f-0957-4f1b-b695-e9c2f3798dcc",
       "name": "NORMALISE"
@@ -823,7 +824,7 @@
     },
     {
       "parameters": {
-        "jsCode": "return $('NORMALISE').first()"
+        "jsCode": "return $('TEST MALICIOUS IP').first()"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -972,7 +973,7 @@
         "nodeCredentialType": "theHiveApi",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ {\n    query: [\n      {\n        _name: \"listAlert\"\n      },\n      {\n        _name: \"filter\",\n        _and: [\n          {\n            _field: \"title\",\n            _value: $(\"TEST MALICIOUS IP\").item.json.body.rule.description\n          }\n        ]\n      },\n      {\n        _name: \"page\",\n        from: 0,\n        to: 1\n      }\n    ]\n  } }}",
+        "jsonBody": "={{ {\n    query: [\n      {\n        _name: \"listAlert\"\n      },\n      {\n        _name: \"filter\",\n        _and: [\n          {\n            _field: \"title\",\n            _value: $(\"TEST MALICIOUS IP\").item.json.body.description\n          }\n        ]\n      },\n      {\n        _name: \"page\",\n        from: 0,\n        to: 1\n      }\n    ]\n  } }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -1003,68 +1004,18 @@
             "accept": "*/*",
             "connection": "keep-alive",
             "content-type": "application/json",
-            "content-length": "791"
+            "content-length": "257"
           },
           "params": {},
           "query": {},
           "body": {
-            "timestamp": "2025-02-04T13:08:17.656+0000",
-            "rule": {
-              "level": 3,
-              "description": "PAM: Login session closed.",
-              "id": "5502",
-              "firedtimes": 1,
-              "mail": false,
-              "groups": [
-                "pam",
-                "syslog"
-              ],
-              "pci_dss": [
-                "10.2.5"
-              ],
-              "gpg13": [
-                "7.8",
-                "7.9"
-              ],
-              "gdpr": [
-                "IV_32.2"
-              ],
-              "hipaa": [
-                "164.312.b"
-              ],
-              "nist_800_53": [
-                "AU.14",
-                "AC.7"
-              ],
-              "tsc": [
-                "CC6.8",
-                "CC7.2",
-                "CC7.3"
-              ]
-            },
-            "agent": {
-              "id": "000",
-              "name": "ubuntuwazuh",
-              "ip": "192.168.7.252"
-            },
-            "manager": {
-              "name": "ubuntuwazuh"
-            },
-            "id": "1738674497.39555906",
-            "full_log": "Feb 04 13:08:16 ubuntuwazuh sudo[53766]: pam_unix(sudo:session): session closed for user root",
-            "predecoder": {
-              "program_name": "sudo",
-              "timestamp": "Feb 04 13:08:16",
-              "hostname": "ubuntuwazuh"
-            },
-            "decoder": {
-              "parent": "pam",
-              "name": "pam"
-            },
-            "data": {
-              "dstuser": "root"
-            },
-            "location": "journald"
+            "title": "Suricata: Alert - Possible Buffer Overflow Attack - Repeated Characters",
+            "description": "Alert from : OPNsense.insoc.local",
+            "severity": 3,
+            "date": "2025-02-04T14:56:11.791+0000",
+            "tags": "ids,suricata",
+            "type": "86601",
+            "source": "192.168.7.1"
           },
           "webhookUrl": "http://192.168.7.8:5678/webhook-test/7ceae612-e110-4adf-8191-95557ec9b251",
           "executionMode": "test"
@@ -1077,7 +1028,7 @@
       "main": [
         [
           {
-            "node": "NORMALISE",
+            "node": "TEST MALICIOUS IP",
             "type": "main",
             "index": 0
           }
@@ -1423,13 +1374,7 @@
     },
     "NORMALISE": {
       "main": [
-        [
-          {
-            "node": "TEST MALICIOUS IP",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "REFORMAT": {
@@ -1526,7 +1471,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "932754ca-5f99-464a-a182-53ad2c4f31ce",
+  "versionId": "8b46aa39-ae24-4e5b-bc61-7ed8016ea3a9",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"
