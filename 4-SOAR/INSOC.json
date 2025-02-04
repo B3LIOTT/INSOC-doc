@@ -908,32 +908,6 @@
     },
     {
       "parameters": {
-        "operation": "getAll",
-        "limit": 1,
-        "options": {},
-        "filters": {
-          "severity": 1
-        }
-      },
-      "type": "n8n-nodes-base.theHive",
-      "typeVersion": 1,
-      "position": [
-        -2680,
-        180
-      ],
-      "id": "51ce2d5c-832a-4ce9-a0a2-d954495e7628",
-      "name": "GET",
-      "alwaysOutputData": true,
-      "notesInFlow": false,
-      "credentials": {
-        "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
         "jsCode": "const tma = new Date(Date.now() - 10 * 60 * 1000).toISOString()\nreturn {\"10MinAgo\": tma}"
       },
       "type": "n8n-nodes-base.code",
@@ -989,9 +963,115 @@
           "name": "The Hive account 2"
         }
       }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.7.15:9000/api/v1/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "theHiveApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n    query: [\n      {\n        _name: \"listAlert\"\n      },\n      {\n        _name: \"filter\",\n        _and: [\n          {\n            _field: \"title\",\n            _value: $(\"TEST MALICIOUS IP\").item.json.body.rule.description\n          }\n        ]\n      },\n      {\n        _name: \"page\",\n        from: 0,\n        to: 1\n      }\n    ]\n  } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2680,
+        180
+      ],
+      "id": "3e63b8b9-c7f3-4b0d-b30f-427bbb5106b4",
+      "name": "GET BY TITLE",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
+        }
+      }
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "192.168.7.8:5678",
+            "user-agent": "python-requests/2.32.2",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "content-length": "791"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "timestamp": "2025-02-04T13:08:17.656+0000",
+            "rule": {
+              "level": 3,
+              "description": "PAM: Login session closed.",
+              "id": "5502",
+              "firedtimes": 1,
+              "mail": false,
+              "groups": [
+                "pam",
+                "syslog"
+              ],
+              "pci_dss": [
+                "10.2.5"
+              ],
+              "gpg13": [
+                "7.8",
+                "7.9"
+              ],
+              "gdpr": [
+                "IV_32.2"
+              ],
+              "hipaa": [
+                "164.312.b"
+              ],
+              "nist_800_53": [
+                "AU.14",
+                "AC.7"
+              ],
+              "tsc": [
+                "CC6.8",
+                "CC7.2",
+                "CC7.3"
+              ]
+            },
+            "agent": {
+              "id": "000",
+              "name": "ubuntuwazuh",
+              "ip": "192.168.7.252"
+            },
+            "manager": {
+              "name": "ubuntuwazuh"
+            },
+            "id": "1738674497.39555906",
+            "full_log": "Feb 04 13:08:16 ubuntuwazuh sudo[53766]: pam_unix(sudo:session): session closed for user root",
+            "predecoder": {
+              "program_name": "sudo",
+              "timestamp": "Feb 04 13:08:16",
+              "hostname": "ubuntuwazuh"
+            },
+            "decoder": {
+              "parent": "pam",
+              "name": "pam"
+            },
+            "data": {
+              "dstuser": "root"
+            },
+            "location": "journald"
+          },
+          "webhookUrl": "http://192.168.7.8:5678/webhook-test/7ceae612-e110-4adf-8191-95557ec9b251",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
   "connections": {
     "Webhook": {
       "main": [
@@ -1403,22 +1483,11 @@
         ]
       ]
     },
-    "GET": {
-      "main": [
-        [
-          {
-            "node": "EXISTS",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Timestamp": {
       "main": [
         [
           {
-            "node": "GET",
+            "node": "GET BY TITLE",
             "type": "main",
             "index": 0
           }
@@ -1440,13 +1509,24 @@
       "main": [
         []
       ]
+    },
+    "GET BY TITLE": {
+      "main": [
+        [
+          {
+            "node": "EXISTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "9dd87e6f-5847-4c2b-a2f2-9ac8a583da6c",
+  "versionId": "932754ca-5f99-464a-a182-53ad2c4f31ce",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"
