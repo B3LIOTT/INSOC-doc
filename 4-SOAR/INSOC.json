@@ -807,6 +807,15 @@
                 "operation": "exists",
                 "singleValue": true
               }
+            },
+            {
+              "id": "5069a481-ed48-4eb2-951a-b0d9417e9c49",
+              "leftValue": "={{ $json.date }}",
+              "rightValue": "={{ $('Timestamp Xmin ago').item.json['XMinAgo'] }}",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
             }
           ],
           "combinator": "and"
@@ -830,8 +839,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2220,
-        100
+        -2100,
+        0
       ],
       "id": "99ce496c-2e02-471d-8c04-58a78d3cdb2a",
       "name": "first"
@@ -848,8 +857,8 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -2360,
-        100
+        -2240,
+        0
       ],
       "id": "c0ea1b77-d315-4a1d-9527-17b5480b2e37",
       "name": "GET ALERT1",
@@ -859,19 +868,6 @@
           "name": "The Hive account 2"
         }
       }
-    },
-    {
-      "parameters": {
-        "jsCode": "const tma = new Date(Date.now() - 10 * 60 * 1000).toISOString()\nreturn {\"10MinAgo\": tma}"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -2820,
-        180
-      ],
-      "id": "a00b662c-986a-49ff-a654-6cbc169e5668",
-      "name": "Timestamp"
     },
     {
       "parameters": {
@@ -906,8 +902,8 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -2060,
-        100
+        -1940,
+        0
       ],
       "id": "1cd8f65f-47cc-4186-8464-1c00b2baae68",
       "name": "UPDATE (todo)",
@@ -968,9 +964,51 @@
           "name": "The Hive account 2"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "const X = 5;  // X min ago\nconst tma = new Date(Date.now() - X * 60 * 1000)\nconst tmaTimestamp = Math.floor(tma.getTime() / 1000); // Timestamp en secondes (int)\nreturn {\"XMinAgo\": tmaTimestamp}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2820,
+        180
+      ],
+      "id": "a00b662c-986a-49ff-a654-6cbc169e5668",
+      "name": "Timestamp Xmin ago"
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "192.168.7.8:5678",
+            "user-agent": "python-requests/2.32.2",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "content-length": "311"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "title": "Suricata: Alert - ET INFO Observed Discord Domain in DNS Lookup (discord .com)",
+            "description": "Alert from : OPNsense.insoc.local",
+            "severity": 1,
+            "date": "2025-02-05T12:58:25.588+0000",
+            "tags": "src_ip=192.168.7.3,src_port=64387,dest_ip=192.168.7.254",
+            "type": "suricata",
+            "source": "Suricata IDS"
+          },
+          "webhookUrl": "http://192.168.7.8:5678/webhook-test/7ceae612-e110-4adf-8191-95557ec9b251",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
   "connections": {
     "Webhook": {
       "main": [
@@ -1025,7 +1063,7 @@
             "index": 0
           },
           {
-            "node": "Timestamp",
+            "node": "Timestamp Xmin ago",
             "type": "main",
             "index": 0
           }
@@ -1366,17 +1404,6 @@
         ]
       ]
     },
-    "Timestamp": {
-      "main": [
-        [
-          {
-            "node": "GET BY TITLE",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "GET CASE1": {
       "main": [
         [
@@ -1414,13 +1441,24 @@
           }
         ]
       ]
+    },
+    "Timestamp Xmin ago": {
+      "main": [
+        [
+          {
+            "node": "GET BY TITLE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": true,
+  "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "98d37b71-21c4-4d0c-9e9f-ea4abe732796",
+  "versionId": "24ade061-a067-4067-9765-0ef84eccbc50",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"
