@@ -33,8 +33,8 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -1120,
-        240
+        -1440,
+        180
       ],
       "id": "ed18ad34-d593-46f4-a3bb-f0fbbdc8f628",
       "name": "CREATE CASE",
@@ -54,8 +54,8 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -1120,
-        460
+        -1200,
+        360
       ],
       "id": "3b334b65-9355-4949-adc8-5860aea673ad",
       "name": "MERGE TO CASE",
@@ -74,7 +74,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1760,
+        -2100,
         340
       ],
       "id": "57fbacec-3e57-4c27-bb79-dcb45ec05a8a",
@@ -97,7 +97,7 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -1620,
+        -1960,
         340
       ],
       "id": "f0a16049-dbd9-4028-a859-6cb018af1b72",
@@ -179,7 +179,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1320,
+        -1660,
         340
       ],
       "id": "b446eb33-3353-499a-ab08-00fe8857dd47",
@@ -349,8 +349,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -820,
-        460
+        -880,
+        360
       ],
       "id": "48a10231-8bba-4b8a-a3da-9dfe7df6038c",
       "name": "CASE ID"
@@ -782,7 +782,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1900,
+        -2240,
         340
       ],
       "id": "2ae10ed5-9c4f-4f23-92d3-92d21114be84",
@@ -881,7 +881,7 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -1480,
+        -1820,
         340
       ],
       "id": "64ecab56-6052-4691-ac51-ee2ba2a10af7",
@@ -953,8 +953,8 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -980,
-        460
+        -1040,
+        360
       ],
       "id": "bb0d34c2-eb29-4ee3-bb57-98c5dce03cc7",
       "name": "TAGS",
@@ -1025,7 +1025,7 @@
       "main": [
         [
           {
-            "node": "CASE ID",
+            "node": "MERGE TO CASE",
             "type": "main",
             "index": 0
           }
@@ -1454,11 +1454,11 @@
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "24ade061-a067-4067-9765-0ef84eccbc50",
+  "versionId": "7b6937f0-f3da-4e04-8128-803b48bb3935",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"
