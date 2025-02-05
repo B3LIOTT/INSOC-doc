@@ -99,7 +99,7 @@ def isSuricata(alert_json):
 
 def getMitre(alert_json):
     if "mitre" in alert_json["rule"]:
-        return f"mitre_technique={alert_json['rule']['mitre']['technique']},mite_tactic={alert_json['rule']['mitre']['tactic']},mitre_id={alert_json['rule']['mitre']['id']}"
+        return f"mitre_techniques={';'.join(alert_json['rule']['mitre']['technique'])},mite_tactics={';'.join(alert_json['rule']['mitre']['tactic'])},mitre_id={';'.join(alert_json['rule']['mitre']['id'])}"
     
     return ""
 
@@ -108,7 +108,7 @@ def getAgent(alert_json):
     if isSuricata(alert_json):
         return f"src_ip={alert_json['data']['src_ip']},src_port={alert_json['data']['src_port']},dest_ip={alert_json['data']['dest_ip']}"
     
-    else:
+    else:   
         # fix missing ip = wazuh manager ip
         ip = str(socket.gethostbyname(socket.gethostname())) if "ip" not in alert_json["agent"] else alert_json["agent"]["ip"]
         return f"src_ip={ip},agent_id={alert_json['agent']['id']}"

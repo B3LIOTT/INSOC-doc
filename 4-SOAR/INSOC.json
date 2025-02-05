@@ -19,48 +19,15 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "bead66af-9be4-4285-8dd0-fb9cdad3743c",
-              "leftValue": "={{ $json.body.rule.level }}",
-              "rightValue": 1,
-              "operator": {
-                "type": "number",
-                "operation": "gt"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.filter",
-      "typeVersion": 2.2,
-      "position": [
-        -3180,
-        -40
-      ],
-      "id": "d6d84aea-2115-4de4-b80f-94a51807f1dc",
-      "name": ">=MEDIUM alerts filter"
-    },
-    {
-      "parameters": {
         "resource": "case",
         "operation": "create",
-        "title": "=CASE - {{ $('ALERT').item.json.tags.join(',') }}",
-        "description": "=Groups alerts with same tags: {{ $('ALERT').item.json.tags.join(',') }}",
+        "title": "=CASE - {{ $('ALERT').item.json.type }}",
+        "description": "=Groups alerts with same type: {{ $('ALERT').item.json.type }}",
         "severity": "={{ $('ALERT').item.json.severity }}",
         "startDate": "={{ $('ALERT').item.json.createdAt }}",
         "owner": "user@wazuh.fr",
         "tlp": "={{ 2 }}",
-        "tags": "={{ $('ALERT').item.json.tags.join(',') }}",
+        "tags": "={{ $('ALERT').item.json.type }}",
         "options": {}
       },
       "type": "n8n-nodes-base.theHive",
@@ -784,24 +751,10 @@
     },
     {
       "parameters": {
-        "language": "python",
-        "pythonCode": "data = _input.first().json\nlevel = data.body.rule.level\n\nnew_level = 1\nif 5 < level <= 10:\n  new_level = 2\nelif 10 < level:\n  new_level = 3\n\ndata.body.rule.level = new_level\n\nreturn data"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -3220,
-        540
-      ],
-      "id": "cfa31f9f-0957-4f1b-b695-e9c2f3798dcc",
-      "name": "NORMALISE"
-    },
-    {
-      "parameters": {
         "resource": "observable",
         "operation": "executeAnalyzer",
         "id": "={{ $json.id }}",
-        "dataType": "url",
+        "dataType": "domain",
         "analyzers": [
           "d33efdda2d1f2aca7f2c06f71d9f8578::Kifarunix-demo Cortex"
         ]
@@ -926,7 +879,7 @@
         "limit": 1,
         "options": {},
         "filters": {
-          "tags": "={{ $('ALERT').item.json.tags[0] }}"
+          "tags": "={{ $('ALERT').item.json.type }}"
         }
       },
       "type": "n8n-nodes-base.theHive",
@@ -991,15 +944,483 @@
           "name": "The Hive account 2"
         }
       }
+    },
+    {
+      "parameters": {
+        "resource": "case",
+        "operation": "update",
+        "id": "={{ $json.id }}",
+        "updateFields": {
+          "tags": "={{ $('ALERT').item.json.type }}"
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        -980,
+        460
+      ],
+      "id": "bb0d34c2-eb29-4ee3-bb57-98c5dce03cc7",
+      "name": "TAGS",
+      "credentials": {
+        "theHiveApi": {
+          "id": "50EY9TDbqyZZGghU",
+          "name": "The Hive account 2"
+        }
+      }
     }
   ],
   "pinData": {},
-  "connections": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "TEST MALICIOUS IP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CREATE CASE": {
+      "main": [
+        [
+          {
+            "node": "CASE ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "uuid": {
+      "main": [
+        [
+          {
+            "node": "ALERT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ALERT": {
+      "main": [
+        [
+          {
+            "node": "GET CASE1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TEST MALICIOUS IP": {
+      "main": [
+        [
+          {
+            "node": "Artifacts detection",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Timestamp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MERGE TO CASE": {
+      "main": [
+        [
+          {
+            "node": "TAGS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ADD OBSERVABLES": {
+      "main": [
+        [
+          {
+            "node": "EXEC ANALYZER",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF CASE DO NOT EXISTS": {
+      "main": [
+        [
+          {
+            "node": "CREATE CASE",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MERGE TO CASE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter IPs": {
+      "main": [
+        [
+          {
+            "node": "COUNTER IPs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter URLs": {
+      "main": [
+        [
+          {
+            "node": "COUNTER URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter DOMAINs": {
+      "main": [
+        [
+          {
+            "node": "COUNTER DOMAINs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Artifacts detection": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Filter IPs",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Filter URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CASE ID": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "COUNTER IPs": {
+      "main": [
+        [
+          {
+            "node": "OBSERVABLE EXISTS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "loop condition",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OBSERVABLE EXISTS": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loop condition": {
+      "main": [
+        [],
+        [
+          {
+            "node": "COUNTER IPs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ADD OBSERVABLES1": {
+      "main": [
+        [
+          {
+            "node": "EXEC ANALYZER1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OBSERVABLE EXISTS1": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loop condition1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "COUNTER URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ADD OBSERVABLES2": {
+      "main": [
+        [
+          {
+            "node": "EXEC ANALYZER2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OBSERVABLE EXISTS2": {
+      "main": [
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loop condition2": {
+      "main": [
+        [],
+        [
+          {
+            "node": "COUNTER DOMAINs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "COUNTER URLs": {
+      "main": [
+        [
+          {
+            "node": "OBSERVABLE EXISTS1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "loop condition1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "COUNTER DOMAINs": {
+      "main": [
+        [
+          {
+            "node": "OBSERVABLE EXISTS2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "loop condition2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "ADD OBSERVABLES",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "ADD OBSERVABLES1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter2": {
+      "main": [
+        [
+          {
+            "node": "ADD OBSERVABLES2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "REFORMAT": {
+      "main": [
+        [
+          {
+            "node": "uuid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EXISTS": {
+      "main": [
+        [
+          {
+            "node": "GET ALERT1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "REFORMAT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "first": {
+      "main": [
+        [
+          {
+            "node": "UPDATE (todo)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET ALERT1": {
+      "main": [
+        [
+          {
+            "node": "first",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Timestamp": {
+      "main": [
+        [
+          {
+            "node": "GET BY TITLE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET CASE1": {
+      "main": [
+        [
+          {
+            "node": "IF CASE DO NOT EXISTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE (todo)": {
+      "main": [
+        []
+      ]
+    },
+    "GET BY TITLE": {
+      "main": [
+        [
+          {
+            "node": "EXISTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TAGS": {
+      "main": [
+        [
+          {
+            "node": "CASE ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "e509cda6-50e7-4dd9-ba42-ef1067172fe4",
+  "versionId": "98d37b71-21c4-4d0c-9e9f-ea4abe732796",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"
