@@ -4,6 +4,13 @@
 L'installation fut effectuée sur une machine Linux, Ubuntu-server-24.04. L'indexer, le server et le dashboard sont sur la même machine:
 Documentation d'[Installation](https://documentation.wazuh.com/current/installation-guide/index.html).
 
+
+## Suppression d'un agent
+TODO
+
+`/var/ossec/bin/manage_agent` -> R option -> ID
+
+
 ## Active Response
 Les active response sont des scripts qui, lorsqu'une certaine règle d'un sensemble (ou d'un certain niveau d'alerte) provoque une alerte, executent des actions sur l'endpoint concerné et/ou le serveur.
 Vous trouverez sur le répo Github d'@B3LIOTT les [scripts d'active response](https://github.com/B3LIOTT/wazuh-active-response).
