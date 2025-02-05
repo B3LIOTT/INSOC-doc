@@ -86,39 +86,68 @@ from requests.auth import HTTPBasicAuth
 
 
 IDS_AGENT_NAME = "OPNsense.insoc.local"
-WAZUH_ALERT_THRESHOLD = 7
+IDS_GROUP = "suricata"
 SURICATA_ALERT_THRESHOLD = 3
+WAZUH_ALERT_THRESHOLD = 7
+
+COMMON_GROUPS = ["suricata", "sysmon", "syslog", "ossec"]
+
+
+def isSuricata(alert_json):
+    return (alert_json["agent"]["name"] == IDS_AGENT_NAME) and (IDS_GROUP in alert_json["rule"]["groups"])
+
+
+def getMitre(alert_json):
+    if "mitre" in alert_json["rule"]:
+        return f"mitre_technique={alert_json['rule']['mitre']['technique']},mite_tactic={alert_json['rule']['mitre']['tactic']},mitre_id={alert_json['rule']['mitre']['id']}"
+    
+    return ""
+
+
+def getAgent(alert_json):
+    if isSuricata(alert_json):
+        return f"src_ip={alert_json['data']['src_ip']},src_port={alert_json['data']['src_port']},dest_ip={alert_json['data']['dest_ip']}"
+    
+    else:
+        # fix missing ip = wazuh manager ip
+        ip = str(socket.gethostbyname(socket.gethostname())) if "ip" not in alert_json["agent"] else alert_json["agent"]["ip"]
+        return f"src_ip={ip},agent_id={alert_json['agent']['id']}"
+
+
+def getTags(alert_json):
+    mitre = getMitre(alert_json)
+    return f"{getAgent(alert_json)}{',' if mitre != '' else ''}{mitre}"
+
+
+# TODO: improve
+def getType(alert_json):
+    for group in COMMON_GROUPS:
+        if group in alert_json["rule"]["groups"]:
+            return group
+    
+    return alert_json["rule"]["groups"][0]
+
 
 # read configuration
 alert_file = sys.argv[1]
 user = sys.argv[2].split(":")[0]
 hook_url = sys.argv[3]
 
+
 # read alert file
 with open(alert_file) as f:
     alert_json = json.loads(f.read())
 
 
-formated_alert = {
-    "title": str(alert_json["rule"]["description"]),
-    "description": "Alert from : " + str(alert_json["agent"]["name"]),
-    "severity": "",
-    "date": str(alert_json["timestamp"]),
-    "tags": ",".join(alert_json["rule"]["groups"]),
-    "type": str(alert_json["rule"]["id"]),
-    "source": "",
-}
-
-
-# verify rule level for suricata
-if alert_json["agent"]["name"] == IDS_AGENT_NAME and (level:=int(alert_json["data"]["alert"]["severity"])) >= SURICATA_ALERT_THRESHOLD:
+if isSuricata(alert_json) and (level:=int(alert_json["data"]["alert"]["severity"])) >= SURICATA_ALERT_THRESHOLD:
     new_level = 1
     if 3 < level <= 5:
         new_level = 2
     elif 5 < level:
         new_level = 3
-    formated_alert["severity"] = new_level
-    formated_alert["source"] = str(alert_json["data"]["src_ip"])
+
+    severity = new_level
+    source = "Suricata IDS"
     
 elif (level:=int(alert_json["rule"]["level"])) >= WAZUH_ALERT_THRESHOLD:
     new_level = 1
@@ -127,13 +156,23 @@ elif (level:=int(alert_json["rule"]["level"])) >= WAZUH_ALERT_THRESHOLD:
     elif 10 < level:
         new_level = 3
 
-    formated_alert["severity"] = new_level
-
-    # fix missing ip adress
-    formated_alert["source"] = str(socket.gethostbyname(socket.gethostname())) if "ip" not in alert_json["agent"] else str(alert_json["agent"]["ip"])
+    severity = new_level
+    source = alert_json["agent"]["name"]
 
 else:
     sys.exit(0)
+
+
+formated_alert = {
+    "title": str(alert_json["rule"]["description"]),
+    "description": "Alert from : " + str(alert_json["agent"]["name"]),
+    "severity": severity,
+    "date": str(alert_json["timestamp"]),
+    "tags": getTags(alert_json),
+    "type": getType(alert_json),
+    "source": source,
+}
+
 
 # combine message details
 payload = json.dumps(formated_alert)
