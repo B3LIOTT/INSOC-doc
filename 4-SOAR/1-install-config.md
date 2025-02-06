@@ -1,6 +1,50 @@
-# Installation de TheHive / Cortex version 4
+# Cortex
+
+## Installation
+
+Cortex vient renforcer l'analyse en automatisant certaines tâches comme la recherche d'ip malveillantes. Pour l'installer nous avons utilisé le script d'installation disponnible [ici](https://archives.strangebee.com/scripts/install.sh).
+
+Récupération du fichier d'installation:
+```bash
+wget -q -O /tmp/install.sh https://archives.strangebee.com/scripts/install.sh
+```
+
+Note importante:
+Ce script effectue des vérification matérielle et logicielle. Ainsi, pour forcer l'installation sur un OS non défini dans les tests et sur une machine ne respectant pas la configuration minimale il faut éditer `ìnstall.sh`:
+
+Pour notre part, nous avons installé TheHive sur une Ubuntu server 24.04 donc nous avons modifié cette ligne:
+```conf
+OSDEB=("ubuntu ??.04" "debian 11" "debian 12")
+```
+En remplacant les `??` par `24`.
+
+Dans le cas où la machine a moins de 16Go de RAM et 4 coeurs CPU, il faut le modifier ici:
+```conf
+MINREQRAM="16000000"
+MINREQCPU="4"
+```
+
+(A noter que les requirements ne sont pas la au hasard, d'après nos tests il faut minimum 5Go de RAM pour faire tourner TheHive sans charge).
+
+Ensuite, il suffit d'executer ce fichier afin d'installer TheHive et/ou Cortex.
+```bash
+chmod +x /tmp/install.sh
+bash /tmp/install.sh
+```
+
+Erreurs possibles:
+- docker group does not exists: `sudo groupadd docker`
+- permission denied pour /usr/bin/floss: dans `install.sh`, rechercher la ligne contenant `unzip /tmp/floss.zip`, et ajoutez y `sudo`.
+
+## Configuration
+Voir la fin de cette [doc](https://kifarunix.com/install-cortex-on-ubuntu/), à partir de `Accessing Cortex Web Interface`. Nous avons dans notre cas créé une organisation `insoc` avec un utilisateur ayant les droits admin.
+
+
+# TheHive4
 
 La version 4 de TheHive ne nécéssite pas de license. Une image docker peut être trouvée [ici](https://hub.docker.com/layers/thehiveproject/thehive4/4.1.14-1/images/sha256-77bb4cca416ae4a270fe8a8cca82aaa04d0ed375baca22fc2804e315f16ad9bf?context=explore). De plus, [ce répo Github](https://github.com/TheHive-Project/TheHive) contient des exemples de déploiement de docker TheHive, mais ils ne fonctionnent pas tous (le support de StrangeBee est catastrophique).
+
+## Docker compose
 
 Nous avons donc créé un fichier docker compose ``docker-compose.yml`:
 ```yaml 
@@ -58,7 +102,13 @@ volumes:
   minio-data:
 ```
 
-Dont le fichier de configuration `application.conf` est le suivant (à mettre dans le même dossier que le `docker-compose.yml`):
+## Application.conf
+
+Le fichier de configuration `application.conf` permet de définir des paramètres supplémentaires dans TheHive. Dans notre cas il contient la connexion à Cortex. 
+
+Avant toute chose, il faut récuperer la clé api de l'utilisateur `api` dans Cortex dans **Organisation**.
+
+Une fois la clé récupérée, le fichier `application.conf` est le suivant (à mettre dans le même dossier que le `docker-compose.yml`):
 ```conf
 ## CORTEX configuration
 play.modules.enabled += org.thp.thehive.connector.cortex.CortexModule
@@ -78,7 +128,7 @@ cortex {
 }
 ```
 
-Il suffit ensuite de lancer le docker-compose:
+Ensuite, il suffit ensuite de lancer le docker-compose:
 ```bash
 docker compose up -d
 ```
@@ -88,65 +138,6 @@ Et l'interface est accessible avec les credentials par défaut:
 Username: admin@thehive.local
 Password: secret
 ```
-
-## Config The Hive
-Une fois TheHive installé, afin d'avoir un accès en dehors de localhost à l'interface il faut éditer `/etc/thehive/application.conf`:
-```conf
-application.baseUrl = "http://<IP SERVEUR>:9000"
-```
-(Avec `<IP SERVEUR>` l'ip du serveur ou bien `0.0.0.0` pour écouter sur toutes les interface).
-
-L'interface sera donc accessible à `http://<IP SERVEUR>:9000` avec les credentials suivants:
-```
-Username: admin@thehive.local
-Password: secret
-```
-
-La suite de la configuration via l'interface peut être faite en suivant la fin de cette [documentation](https://kifarunix.com/install-thehive-on-ubuntu/).
-
-## Config Cortex
-Voir la fin de cette [doc](https://kifarunix.com/install-cortex-on-ubuntu/), à partir de `Accessing Cortex Web Interface`. Nous avons dans notre cas créé une organisation `insoc` avec un utilisateur ayant les droits admin. La suite de la configuration sera détaillée dans la partie [intégration](2-integration.md).
-
-
-
-# AUTRE SOLUTION - Installation de TheHive / Cortex version 5
-
-## Téléchargement
-/!\ Pour cette version il faut request une license auprès de StrangeBee.
-
-The Hive est une plateforme basée sur Cassandra et Elasticsearch permettant d'analyser des logs, de faire du threat hunting. Cortex vient renforcer cette analyse en automatisant certaines tâches. Pour les installer nous avons utilisé le script d'installation disponnible [ici](https://archives.strangebee.com/scripts/install.sh).
-
-Récupération du fichier d'installation:
-```bash
-wget -q -O /tmp/install.sh https://archives.strangebee.com/scripts/install.sh
-```
-
-Note importante:
-Ce script effectue des vérification matérielle et logicielle. Ainsi, pour forcer l'installation sur un OS non défini dans les tests et sur une machine ne respectant pas la configuration minimale il faut éditer `ìnstall.sh`:
-
-Pour notre part, nous avons installé TheHive sur une Ubuntu server 24.04 donc nous avons modifié cette ligne:
-```conf
-OSDEB=("ubuntu ??.04" "debian 11" "debian 12")
-```
-En remplacant les `??` par `24`.
-
-Dans le cas où la machine a moins de 16Go de RAM et 4 coeurs CPU, il faut le modifier ici:
-```conf
-MINREQRAM="16000000"
-MINREQCPU="4"
-```
-
-(A noter que les requirements ne sont pas la au hasard, d'après nos tests il faut minimum 5Go de RAM pour faire tourner TheHive sans charge).
-
-Ensuite, il suffit d'executer ce fichier afin d'installer TheHive et/ou Cortex.
-```bash
-chmod +x /tmp/install.sh
-bash /tmp/install.sh
-```
-
-Erreurs possibles:
-- docker group does not exists: `sudo groupadd docker`
-- permission denied pour /usr/bin/floss: dans `install.sh`, rechercher la ligne contenant `unzip /tmp/floss.zip`, et ajoutez y `sudo`.
 
 
 # Installation de MISP
