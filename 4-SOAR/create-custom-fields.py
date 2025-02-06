@@ -1,8 +1,8 @@
 import requests
 
 # Configuration
-API_URL = "http://192.168.1.30:9000/api/customField"
-API_KEY = "Zpei963IRIQ2xiDeNFVaIUxvqy/o1kc/"
+API_URL = "http://IP:9000/api/customField"
+API_KEY = "API_KEY"
 
 HEADERS = {
     "Authorization": f"Bearer {API_KEY}",
