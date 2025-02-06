@@ -22,6 +22,8 @@ Il suffit ensuite d'utiliser l'option `R (Remove)` et d'entrer l'ID de l'agent e
 
 ![Remove Agent](images/RemoveAgent.png)
 
+Finalement, le nouvel agent parvient à se connecter au serveur Wazuh et nous récupérons à nouveau les informations de notre firewall.
+
 ## Active Response
 Les active response sont des scripts qui, lorsqu'une certaine règle d'un sensemble (ou d'un certain niveau d'alerte) provoque une alerte, executent des actions sur l'endpoint concerné et/ou le serveur.
 Vous trouverez sur le répo Github d'@B3LIOTT les [scripts d'active response](https://github.com/B3LIOTT/wazuh-active-response).
