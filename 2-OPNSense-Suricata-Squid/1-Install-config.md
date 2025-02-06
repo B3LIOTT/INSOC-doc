@@ -328,6 +328,8 @@ Nous configurons l'adresse IP du serveur Wazuh pour rediriger les logs. Dans not
 
 Le reste des paramètres est laissé par défaut, à savoir que tous les paramètres sont activés.
 
+Si il est nécessaire de supprimer l'agent car ce dernier pose probème, il suffit de se rendre à nouveau dans **System > Firmware > Plugins** et de désinstaller le plugin `os-wazuh-agent`.
+
 ## Sources :
 - [Introduction à OPNSense : Comment installer ce firewall ? - IT-Connect](https://www.it-connect.fr/tuto-installer-et-configurer-opnsense/)
 - [Settings - OPNsense Documentation](https://docs.opnsense.org/manual/settingsmenu.html)
