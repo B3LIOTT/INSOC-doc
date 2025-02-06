@@ -158,7 +158,7 @@ La documentation [ici](https://kifarunix.com/install-misp-on-ubuntu/) donne les 
 
 # Installation de n8n
 
-## Docker
+## Installation simple (tests)
 Afin d'installer n8n, nous avons utilisé l'image docker proposée par n8n.
 
 Nous avons dans un premier temps modifié les variables d'environnement afin d'éviter tout problèmes de certificats autosignés durant la phase de test en utilisant le protocol HTTP et des cookies non sécurisés:
@@ -183,3 +183,8 @@ docker run -d -it --name n8n -p 5678:5678  --restart unless-stopped -v n8n_data:
 ``` 
 
 En revanche, dans un environnement de production il sera nécessaire d'utiliser `N8N_PROTOCOL=https` et `N8N_SECURE_COOKIE=true`.
+
+## Installation en mode queue (prod & performances)
+Le mode queue permet de décomposer n8n en un middlware, une queue Redis et des workers. Cela permet d'améliorer la scalabilité et de réduire la charge et donc le potentiel bottleneck créé lorsqu'il n'existe qu'une seule instance qui gère tout en même temps.
+
+La documentation du queue mode est disponnible [ici](https://docs.n8n.io/hosting/scaling/queue-mode/#webhook-processors). Nous avons utilisé le [docker-compose.yaml](https://github.com/n8n-io/n8n-hosting/tree/main/docker-compose/withPostgresAndWorker) proposé par n8n qui permet directement de créer les instances n8n, n8n-workers, redis et postgresql.
