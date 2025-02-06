@@ -6,10 +6,21 @@ Documentation d'[Installation](https://documentation.wazuh.com/current/installat
 
 
 ## Suppression d'un agent
-TODO
+Lors du test de notre infrastructure, nous nous sommes rendus compte que l'agent Wazuh installé sur le firewall OPNSense ne transmettait plus correctement ses informations au serveur.
 
-`/var/ossec/bin/manage_agent` -> R option -> ID
+Nous avons donc décidé de le supprimer et de le réinstaller pour qu'il puisse correctement fonctionner.
 
+Cependant, il s'est avéré que ce nouvel agent ne parvenait pas à se connecter car son ancienne instance était toujours comptabilisée sur le serveur Wazuh.
+
+Ainsi, il a fallu supprimer de la liste des agents connus par le serveur cette ancienne instance.
+
+Pour cela, il suffit de se connecter en SSH au serveur Wazuh, et d'utiliser l'outil `manage_agent` en usant de la commande suivante :
+```bash
+sudo /var/ossec/bin/manage_agents
+```
+Il suffit ensuite d'utiliser l'option `R (Remove)` et d'entrer l'ID de l'agent en défaut parmi la liste des ID disponibles.
+
+![Remove Agent](images/RemoveAgent.png)
 
 ## Active Response
 Les active response sont des scripts qui, lorsqu'une certaine règle d'un sensemble (ou d'un certain niveau d'alerte) provoque une alerte, executent des actions sur l'endpoint concerné et/ou le serveur.
