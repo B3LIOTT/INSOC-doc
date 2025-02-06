@@ -310,6 +310,10 @@ curl "http://example.com/?param=<script>alert(1)</script>"
 
 ![suricata_log](images/suricata_log.png)
 
+A noter que Suricata met environ 3 minutes pour démarrer son service après avoir été activé. Ainsi les logs seront correctement collectés une fois la ligne suivante indiquée dans les logs de démarrage de Suricata :
+
+![suricata engine](images/suricata_engine.png)
+
 ## Installation de l'agent Wazuh pour récupérer les logs d'OPNSense et des outils dans le SIEM
 
 Cette section se concentre sur l'installation de l'agent Wazuh sur OPNsense pour récupérer les logs des différents outils intégrés à OPNSense et les envoyer au SIEM.
