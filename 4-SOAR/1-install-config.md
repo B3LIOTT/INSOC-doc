@@ -180,7 +180,7 @@ Le mode queue permet de décomposer n8n en un middlware, une queue Redis et des 
 
 La documentation du queue mode est disponnible [ici](https://docs.n8n.io/hosting/scaling/queue-mode/#webhook-processors). Nous avons utilisé le [docker-compose.yaml](https://github.com/n8n-io/n8n-hosting/tree/main/docker-compose/withPostgresAndWorker) proposé par n8n qui permet directement de créer les instances n8n, n8n-workers, redis et postgresql.
 
-Une fois les fichiers `.env`, `docker-compose.yml`, `init-data.sh` récupérés, il faut ajouté quelques lignes dans `docker-compose.yml` pour l'adapter à notre environnement:
+Une fois les fichiers `.env`, `docker-compose.yml`, `init-data.sh` récupérés, il faut ajouter quelques lignes dans `docker-compose.yml` pour l'adapter à notre environnement:
 ```yaml
 x-shared: ...
   ...
