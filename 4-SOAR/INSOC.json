@@ -180,7 +180,7 @@
         "id": "={{ $json.id }}",
         "dataType": "ip",
         "analyzers": [
-          "0264c5f6f3d1d841605bedcefe9f31d8::Cortex"
+          "93572ea5d34d9ba2b7f9446aabf6345d::Cortex"
         ]
       },
       "type": "n8n-nodes-base.theHive",
@@ -1397,11 +1397,11 @@
       ]
     }
   },
-  "active": true,
+  "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "f4c2259a-e4ad-4591-b34b-8fb9a9d4f832",
+  "versionId": "51fdfe31-db96-4539-9202-e6e12bf54af9",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "089593b0375f52cffd2e682594e43cdd96459883230a04bef809490471c267bb"
