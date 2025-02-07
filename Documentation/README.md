@@ -11,6 +11,7 @@ Le système d’exploitation utilisé par nos machines est Windows qu’on séle
 Ensuite on saisit la commande suivante sur Powershell en tant qu’administrateur pour installer l’agent:
 
 ![Description de l'image](./images/1.png)
+
 ![Description de l'image](./images/2.png)
 
 
