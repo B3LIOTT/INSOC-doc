@@ -2,9 +2,8 @@
 
 ## 1) Activation de Wazuh Agent
 
-Sur l’interface du serveur Wazuh, on peut accéder au déploiement d’agents via
-Endpoints > Deploy New Agent dans lequel on suivra les étapes fournies pour
-déployer l’agent Wazuh.
+Sur l’interface du serveur Wazuh, on peut accéder au déploiement d’agents via Endpoints > Deploy New Agent dans lequel on suivra les étapes fournies pour déployer l’agent Wazuh.
+
 ![Description de l'image](./images/unnamed.png)
 
 Le système d’exploitation utilisé par nos machines est Windows qu’on sélectionne,
