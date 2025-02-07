@@ -29,3 +29,13 @@ GOOS=linux GOARCH=amd64 go build -o custom-n8n
 Les détails de ce scripts sont également sur le répo mentionné plus haut.
 
 Des `customFields` ont été ajoutés aux alertes TheHive dans le but de les enrichir. Pour simplifier leur création, le script [create-custom-fields.py](create-custom-fields.py) utilise l'api de TheHive pour les créer. Si vous en voulez d'autres, c'est `CUSTOM_FIELDS` qu'il faut modifier. Pour plus de détails, voir [cette documentation](https://github.com/TheHive-Project/docs/tree/main/docs/thehive/api/custom-field).
+
+Le script s'utilise ainsi:
+```bash
+python create-custom-fields.py api_url api_key
+```
+
+Voici un exemple concret:
+```bash
+python create-custom-fields.py "http://192.168.1.30:9000/api/customField" "abcde12345"
+```
