@@ -209,6 +209,7 @@ Pour les ID de règles ci-dessus, l'événement 7 dans Sysmon signale qu'une ima
 
    _WmiPrvSE.exe_ est un processus lié à Windows Management Instrumentation (WMI), utilisé pour l'exécution de scripts et de requêtes système. Il est souvent légitime, mais il peut aussi être abusé par des attaquants 
       pour exécuter des commandes ou charger des malwares.
+      
    _powershell.exe_ est l'exécutable principal de PowerShell que les attaquant peuvent également l'utiliser pour exécuter des scripts malveillants.
 
 `106101 Sysmon Event 7: Image Loaded (cscript.exe)`
