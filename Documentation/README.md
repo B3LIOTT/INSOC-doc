@@ -15,6 +15,10 @@ pour installer l’agent:
 
 
 Ensuite, on saisit la commande suivante pour démarrer l’agent:
+
+![Description de l'image](./images/1.png)
+
+
 On peut s’assurer du démarrage de l’agent en vérifiant directement sur Services.
 
 
