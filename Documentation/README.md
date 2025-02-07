@@ -207,10 +207,10 @@ Parmi les alertes reçues correspondants aux règles ajoutées:
 
 Pour les ID de règles ci-dessus, l'événement 7 dans Sysmon signale qu'une image (un fichier exécutable ou un module) a été chargée par un processus. Dans ces exemples, l'image est chargée par _WmiPrvSE.exe_ et _powershell.exe._
 
-   _WmiPrvSE.exe_ est un processus lié à Windows Management Instrumentation (WMI), utilisé pour l'exécution de scripts et de requêtes système. Il est souvent légitime, mais il peut aussi être abusé par des attaquants 
+1. _WmiPrvSE.exe_ est un processus lié à Windows Management Instrumentation (WMI), utilisé pour l'exécution de scripts et de requêtes système. Il est souvent légitime, mais il peut aussi être abusé par des attaquants 
       pour exécuter des commandes ou charger des malwares.
       
-   _powershell.exe_ est l'exécutable principal de PowerShell que les attaquant peuvent également l'utiliser pour exécuter des scripts malveillants.
+2. _powershell.exe_ est l'exécutable principal de PowerShell que les attaquant peuvent également l'utiliser pour exécuter des scripts malveillants.
 
 `106101 Sysmon Event 7: Image Loaded (cscript.exe)`
 Cet événement enregistre le chargement de bibliothèques DLL par cscript.exe, ce qui peut être exploité par des attaquants pour exécuter du code malveillant par le biais d’une attaque par DLL hijacking. Si cscript.exe charge une bibliothèque inhabituelle ou non signée, cela pourrait indiquer un comportement suspect nécessitant une investigation approfondie.
