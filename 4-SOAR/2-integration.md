@@ -39,3 +39,5 @@ Voici un exemple concret:
 ```bash
 python create-custom-fields.py "http://192.168.1.30:9000/api/customField" "abcde12345"
 ```
+
+/!\ IMPORTANT: la clé api à utiliser est celle du superadmin de TheHive
