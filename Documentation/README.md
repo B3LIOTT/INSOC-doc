@@ -6,116 +6,145 @@ Sur l’interface du serveur Wazuh, on peut accéder au déploiement d’agents 
 
 ![Description de l'image](./images/unnamed.png)
 
-Le système d’exploitation utilisé par nos machines est Windows qu’on sélectionne,
-ensuite on saisit l’adresse ip du serveur Wazuh qui est 192.168.7.
-On a aussi la possibilité de nommer nos agents de façon à les reconnaître plus
-facilement que par les noms d’hôtes par défaut.
-Ensuite on saisit la commande suivante sur Powershell en tant qu’administrateur
-pour installer l’agent:
+Le système d’exploitation utilisé par nos machines est Windows qu’on sélectionne, ensuite on saisit l’adresse ip du serveur Wazuh qui est 192.168.7. On a aussi la possibilité de nommer nos agents de façon à les reconnaître plus facilement que par les noms d’hôtes par défaut.
+
+Ensuite on saisit la commande suivante sur Powershell en tant qu’administrateur pour installer l’agent:
+
+![Description de l'image](./images/1.png)
+![Description de l'image](./images/2.png)
 
 
 Ensuite, on saisit la commande suivante pour démarrer l’agent:
 
-![Description de l'image](./images/1.png)
+![Description de l'image](./images/3.png)
 
 
 On peut s’assurer du démarrage de l’agent en vérifiant directement sur Services.
 
+![Description de l'image](./images/4.png)
 
-Sur l’interface du serveur Wazuh, on peut voir toutes les machines agent déployées
-avec leurs statuts, adresses IP, OS correspondant etc...
+
+Sur l’interface du serveur Wazuh, on peut voir toutes les machines agent déployées avec leurs statuts, adresses IP, OS correspondant etc...
+
+![Description de l'image](./images/5.png)
+
 
 ## 2) Installation de Sysmon
 
-On suit ce guide pour activer sysmon dans Wazuh Agent, section 3.1 et 4.1.
-https://github.com/uruc/SOC-Automation-Lab?tab=readme-ov-file
-On installe d’abord sysmon et extrait son contenu dans un dossier. _/Sysmon_
-https://learn.microsoft.com/fr-fr/sysinternals/downloads/sysmon
+On suit ce guide pour activer sysmon dans Wazuh Agent, section 3.1 et 4.1. https://github.com/uruc/SOC-Automation-Lab?tab=readme-ov-file
+On installe d’abord sysmon et extrait son contenu dans un dossier. _/Sysmon_ https://learn.microsoft.com/fr-fr/sysinternals/downloads/sysmon
 
+![Description de l'image](./images/6.png)
 
-On télécharge le fichier _sysmonconfig.xml_ depuis le lien
-https://github.com/olafhartong/sysmon-modular/blob/master/sysmonconfig.xml
-Et on le place dans le dossier. _/Sysmon_
-On obtient l’arborescence suivante :
-Puisque Sysmon n'est pas installé, on procède à l'installation en utilisant la
-commande :
-.\Sysmon64.exe -i .\sysmonconfig.xml
+On télécharge le fichier _sysmonconfig.xml_ depuis le lien https://github.com/olafhartong/sysmon-modular/blob/master/sysmonconfig.xml
 
+![Description de l'image](./images/7.png)
+
+Et on le place dans le dossier. _/Sysmon_ On obtient l’arborescence suivante :
+
+![Description de l'image](./images/8.png)
+
+Puisque Sysmon n'est pas installé, on procède à l'installation en utilisant la commande : .\Sysmon64.exe -i .\sysmonconfig.xml
+
+![Description de l'image](./images/9.png)
 
 et on s’assure qu’il est bien actif dans _Services_
+
+![Description de l'image](./images/10.png)
+
 On ouvre Wazuh manager,
 
+![Description de l'image](./images/11.png)
 
-On accède à View Config pour ajouter ces lignes à ossec.conf au dessous des
-lignes localfile déjà présentes:
-<localfile>
-<location>Microsoft-Windows-Sysmon/Operational</location>
-<log_format>eventchannel</log_format>
-</localfile>
+On accède à View Config pour ajouter ces lignes à ossec.conf au dessous des lignes localfile déjà présentes:
+
+`<localfile>`
+
+`    <location>Microsoft-Windows-Sysmon/Operational</location>`
+
+`    <log_format>eventchannel</log_format>`
+
+`</localfile>`
+
+![Description de l'image](./images/12.png)
+
 On redémarre l’agent pour enregistrer les modifications:
+
+![Description de l'image](./images/13.png)
 
 ## 3) Installation de Atomic Red Team
 
-On suit ce tutoriel
-https://www.youtube.com/watch?v=_xW3fAumh1c
-On télécharge les fichiers en Zip de ces deux repository
-GitHub - redcanaryco/atomic-red-team: Small and highly portable detection tests
-based on MITRE's ATT&CK.
+On suit ce tutoriel https://www.youtube.com/watch?v=_xW3fAumh1c
 
+On télécharge les fichiers en Zip de ces deux repository https://github.com/redcanaryco/atomic-red-team?tab=readme-ov-file
 
-GitHub - redcanaryco/invoke-atomicredteam: Invoke-AtomicRedTeam is a
-PowerShell module to execute tests as defined in the [atomics
-folder](https://github.com/redcanaryco/atomic-red-team/tree/master/atomics) of Red
-Canary's Atomic Red Team project.
+https://github.com/redcanaryco/invoke-atomicredteam
+
 On crée le dossier C:\AtomicRedTeam
-On y déplace les deux après extraction. On change le nom du dossier de
-_invoke-atomicredteam-master_ à _invoke-atomicredteam_ et on déplace le dossier
-atomics de _C:\AtomicredTeam\atomic-red-team-master_ vers
-_C:\AtomicredTeam\atomic-red-team-master_
 
+![Description de l'image](./images/14.png)
+
+On y déplace les deux après extraction. On change le nom du dossier de _invoke-atomicredteam-master_ à _invoke-atomicredteam_ et on déplace le dossier atomics de _C:\AtomicredTeam\atomic-red-team-master_ vers _C:\AtomicredTeam\atomic-red-team-master_
+
+![Description de l'image](./images/15.png)
 
 On ouvre le powershell en admin et exécute ces trois commandes:
-powershell -exec bypass
-Install-Module -Name invoke-atomicredteam,powershell-yaml -Scope
-CurrentUser
-Import-Module
-“C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1”
--Force
+
+`powershell -exec bypass`
+
+`Install-Module -Name invoke-atomicredteam,powershell-yaml -Scope CurrentUser`
+
+`Import-Module “C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1” -Force`
+
+![Description de l'image](./images/16.png)
+
+![Description de l'image](./images/17.png)
+
 Si vous rencontrez des problèmes de confiance, exécutez ces commandes:
-Install-Module -Name powershell-yaml -Force -Scope CurrentUser
-Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-Nous exécutons les attaques Atomic Red Team pour les quatre catégories
-suivantes: **l’impact, la reconnaissance, la persistance et l'escalade de
-privilèges**. Ces attaques simulent des techniques utilisées pour contourner la
-sécurité, explorer des systèmes, maintenir un accès persistant et obtenir des
-privilèges élevés, dans le but de tester la résistance des systèmes face à ces
-menaces.
-Pour lancer les attaques:
-powershell -exec bypass
+
+`Install-Module -Name powershell-yaml -Force -Scope CurrentUser`
+
+`Set-PSRepository -Name PSGallery -InstallationPolicy Trusted`
+
+Nous exécutons les attaques Atomic Red Team pour les quatre catégories suivantes: **l’impact, la reconnaissance, la persistance et l'escalade de privilèges**. Ces attaques simulent des techniques utilisées pour contourner la sécurité, explorer des systèmes, maintenir un accès persistant et obtenir des privilèges élevés, dans le but de tester la résistance des systèmes face à ces menaces.
 
 
-Install-Module -Name powershell-yaml -Force -Scope CurrentUser
-Import-Module
-“C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1”
--Force
+Pour lancer les attaques: 
+
+`powershell -exec bypass`
+
+`Install-Module -Name powershell-yaml -Force -Scope CurrentUser`
+
+`Import-Module “C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1” -Force`
+
 On lance l’attaque et enregistre les détails dans un fichier json
-Invoke-AtomicTest T1016 -LoggingModule "Attire-ExecutionLogger"
--ExecutionLogPath "T1016-Windows.json"
-On peut récupérer les détails de l’attaque comme suit:
-Pour inverser l’attaque, on lance la commande suivante:
-Invoke-AtomicTest T1546.002 -Cleanup
 
+`Invoke-AtomicTest T1016 -LoggingModule "Attire-ExecutionLogger" -ExecutionLogPath "T1016-Windows.json"`
+
+![Description de l'image](./images/18.png)
+
+On peut récupérer les détails de l’attaque comme suit:
+
+![Description de l'image](./images/19.png)
+
+![Description de l'image](./images/20.png)
+
+Pour inverser l’attaque, on lance la commande suivante:
+
+`Invoke-AtomicTest T1546.002 -Cleanup`
+
+![Description de l'image](./images/21.png)
 
 ## 4) Détection par Wazuh
 
-Nous avons décidé d'organiser les informations relatives aux attaques MITRE dans
-un fichier Excel structuré, afin de faciliter le suivi et l'analyse des détections.
-Ce fichier inclut des éléments clés tels que l'indication de la détection de l'attaque,
-les règles par défaut susceptibles de l'avoir détectées, ainsi que les règles
-personnalisées que nous avons mises en place pour améliorer cette détection. Nous
-y ajouterons également le temps nécessaire pour identifier l'attaque.
-Cette organisation nous permettra d'évaluer l'efficacité de notre stratégie de
-détection et d'adapter nos réponses en conséquence.
+Nous avons décidé d'organiser les informations relatives aux attaques MITRE dans un fichier Excel structuré, afin de faciliter le suivi et l'analyse des détections.
+
+Ce fichier inclut des éléments clés tels que l'indication de la détection de l'attaque, les règles par défaut susceptibles de l'avoir détectées, ainsi que les règles personnalisées que nous avons mises en place pour améliorer cette détection. Nous y ajouterons également le temps nécessaire pour identifier l'attaque.
+
+Cette organisation nous permettra d'évaluer l'efficacité de notre stratégie de détection et d'adapter nos réponses en conséquence. 
+
+
+
 Le tableau Excel est structuré pour documenter les attaques testées dans le cadre
 de l’évaluation du SOC selon la méthodologie suivante :
 
