@@ -10,10 +10,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -3400,
+        -1080,
         340
       ],
-      "id": "603d5723-e3b9-49ab-b847-ee448feb55f3",
+      "id": "c3cdb197-ebad-40ad-b258-f183fc721815",
       "name": "Webhook",
       "webhookId": "7ceae612-e110-4adf-8191-95557ec9b251"
     },
@@ -33,15 +33,15 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -1440,
-        180
+        760,
+        220
       ],
-      "id": "ed18ad34-d593-46f4-a3bb-f0fbbdc8f628",
+      "id": "c2b7ff51-52c1-4b16-b459-99c8262004cf",
       "name": "CREATE CASE",
       "credentials": {
         "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
         }
       }
     },
@@ -54,31 +54,17 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -1200,
+        1040,
         360
       ],
-      "id": "3b334b65-9355-4949-adc8-5860aea673ad",
+      "id": "84793fff-516e-4b17-8cec-6af536e7c19d",
       "name": "MERGE TO CASE",
       "credentials": {
         "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
         }
       }
-    },
-    {
-      "parameters": {
-        "language": "python",
-        "pythonCode": "# creates a uuid for each alert\nimport uuid\n\ndata = _input.first().json.body\ndata.sourceRef = str(uuid.uuid4())\nreturn data"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -2100,
-        340
-      ],
-      "id": "57fbacec-3e57-4c27-bb79-dcb45ec05a8a",
-      "name": "uuid"
     },
     {
       "parameters": {
@@ -92,20 +78,22 @@
         "type": "={{ $json.type }}",
         "source": "={{ $json.source }}",
         "sourceRef": "={{ $json.sourceRef }}",
-        "additionalFields": {}
+        "additionalFields": {
+          "customFieldsJson": "={{ $json.customFields }}"
+        }
       },
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -1960,
+        160,
         340
       ],
-      "id": "f0a16049-dbd9-4028-a859-6cb018af1b72",
+      "id": "7062c3dc-41dd-46cb-a60e-9d4e115fb05a",
       "name": "ALERT",
       "credentials": {
         "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
         }
       }
     },
@@ -124,16 +112,16 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        280,
+        2520,
         0
       ],
-      "id": "b4bbc849-bee1-4ea5-9dbc-d9334de1c57a",
+      "id": "a9dd5a4f-5058-4100-ade7-4573384c2e92",
       "name": "ADD OBSERVABLES",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
         }
       }
     },
@@ -144,10 +132,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -3000,
+        -800,
         340
       ],
-      "id": "05992c9b-b0d0-471b-9153-32ac96e0c8cb",
+      "id": "bc070fbe-9abc-479b-809d-0a6b766959c5",
       "name": "TEST MALICIOUS IP",
       "disabled": true
     },
@@ -179,10 +167,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1660,
+        460,
         340
       ],
-      "id": "b446eb33-3353-499a-ab08-00fe8857dd47",
+      "id": "9bcb43e4-b11e-4bcd-ac04-df7710bd9996",
       "name": "IF CASE DO NOT EXISTS"
     },
     {
@@ -192,22 +180,22 @@
         "id": "={{ $json.id }}",
         "dataType": "ip",
         "analyzers": [
-          "93572ea5d34d9ba2b7f9446aabf6345d::Cortex"
+          "0264c5f6f3d1d841605bedcefe9f31d8::Cortex"
         ]
       },
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        440,
+        2680,
         0
       ],
-      "id": "6348537c-1170-4085-af03-5de8b5f4d09c",
+      "id": "dd0c6801-161d-4f6f-85dc-e48bdb0533b0",
       "name": "EXEC ANALYZER",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
         }
       }
     },
@@ -239,10 +227,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -380,
+        1860,
         160
       ],
-      "id": "fc6f01c4-c1de-4d51-8689-e831b27ed2be",
+      "id": "55da6ef7-a7bb-4fbb-858b-52edcc951e21",
       "name": "Filter IPs"
     },
     {
@@ -273,10 +261,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -380,
+        1860,
         580
       ],
-      "id": "27043119-53ea-4250-bf91-85986f8cf43e",
+      "id": "c469de34-0493-469d-ae1d-c419706d5dc6",
       "name": "Filter URLs"
     },
     {
@@ -307,10 +295,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -380,
+        1860,
         1040
       ],
-      "id": "4167d926-96c9-4cb3-83b1-e7081e4d23a0",
+      "id": "e5fb7537-5228-44d8-b94a-b1e6541a5e6c",
       "name": "Filter DOMAINs"
     },
     {
@@ -320,10 +308,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2820,
+        -540,
         600
       ],
-      "id": "bb3153cb-0b32-421f-9a7b-3aca71ae1868",
+      "id": "b9c8db55-b7fd-4863-ab16-1c2cf22a618b",
       "name": "Artifacts detection"
     },
     {
@@ -335,10 +323,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        -640,
+        1600,
         580
       ],
-      "id": "1a04bf3a-0b30-4abd-a864-e61ad6444d7b",
+      "id": "dd8795a8-fd6a-46de-a64d-7a3e6cc702f3",
       "name": "Merge"
     },
     {
@@ -349,10 +337,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -880,
+        1360,
         360
       ],
-      "id": "48a10231-8bba-4b8a-a3da-9dfe7df6038c",
+      "id": "fab0039f-c526-4d82-858c-5d5cff0fc6db",
       "name": "CASE ID"
     },
     {
@@ -363,10 +351,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -180,
+        2060,
         580
       ],
-      "id": "3945dd40-66ea-4043-be53-7ad107bec418",
+      "id": "e1fe4a6a-cd2b-4971-8f7e-bba496200d23",
       "name": "COUNTER URLs"
     },
     {
@@ -377,10 +365,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -160,
+        2080,
         160
       ],
-      "id": "37199207-4082-4bd6-9815-dfe952033ada",
+      "id": "a91abff5-0ef1-46f5-896e-04a1f4c8c35f",
       "name": "COUNTER IPs"
     },
     {
@@ -391,10 +379,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -200,
+        2040,
         1040
       ],
-      "id": "40dfc4ef-38a3-415c-b53b-07bffa0b1322",
+      "id": "d6a239eb-1308-4897-bdec-cb7958abf23b",
       "name": "COUNTER DOMAINs"
     },
     {
@@ -408,16 +396,16 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        0,
+        2240,
         0
       ],
-      "id": "ff6aaed9-7899-4fbb-b599-7731842801a0",
+      "id": "0d49b443-d9da-4dd1-8fbb-626a6d10c0d2",
       "name": "OBSERVABLE EXISTS",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
         }
       }
     },
@@ -448,10 +436,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        760,
+        3000,
         160
       ],
-      "id": "41507e72-723d-49b8-b83b-be4bc45cc42b",
+      "id": "baf52353-a3f0-4e82-9efa-d137d166934f",
       "name": "loop condition"
     },
     {
@@ -469,16 +457,16 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        280,
+        2520,
         460
       ],
-      "id": "12998b35-06f3-4140-9541-c0405863c0d9",
+      "id": "8aa71791-d18d-4c4e-b820-c6903586b339",
       "name": "ADD OBSERVABLES1",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
         }
       }
     },
@@ -495,16 +483,16 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        440,
+        2680,
         460
       ],
-      "id": "56182b01-35eb-456d-af2d-1797f1f1bb2d",
+      "id": "3d5dd300-6f33-41fe-9267-dcc87fa98d23",
       "name": "EXEC ANALYZER1",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
         }
       }
     },
@@ -519,16 +507,16 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        0,
+        2240,
         460
       ],
-      "id": "e2884b57-9fe4-4a22-b3c2-2d488799550f",
+      "id": "e513e2ff-7c62-45ad-9a7b-1311f07037ce",
       "name": "OBSERVABLE EXISTS1",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
         }
       }
     },
@@ -559,10 +547,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        740,
+        2980,
         580
       ],
-      "id": "f13dc59f-5d4f-4eae-bea5-7a30f57223b1",
+      "id": "20b00252-b4ea-4b3d-bf64-d2d8e3f7e568",
       "name": "loop condition1"
     },
     {
@@ -580,16 +568,16 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        300,
+        2540,
         900
       ],
-      "id": "f4fd843a-094f-4c2b-96d8-7601aa7bac90",
+      "id": "e320e45c-2a22-4e68-af24-2a780613dbc3",
       "name": "ADD OBSERVABLES2",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
         }
       }
     },
@@ -604,16 +592,16 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        -20,
+        2220,
         900
       ],
-      "id": "3eabc2e2-819d-4346-9efa-40f80d65184b",
+      "id": "509fd537-b728-4ff8-a39e-ed9d7ccacb06",
       "name": "OBSERVABLE EXISTS2",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
         }
       }
     },
@@ -644,10 +632,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        740,
+        2980,
         1040
       ],
-      "id": "df299698-8998-487b-a1d9-5a7efbdebe7c",
+      "id": "03edf511-a915-4c14-b73b-17d91377c191",
       "name": "loop condition2"
     },
     {
@@ -677,10 +665,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        140,
+        2380,
         0
       ],
-      "id": "09976e85-f5b8-4b96-8c74-e8e8b26b6b78",
+      "id": "26cf5364-09a1-40fb-ae87-2d6a89c9b040",
       "name": "Filter"
     },
     {
@@ -710,10 +698,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        140,
+        2380,
         460
       ],
-      "id": "cec5ccc4-9e0a-46f8-a1ce-a6a1bbaf919b",
+      "id": "c0bb31bf-f05d-41e4-988b-de94757b2baf",
       "name": "Filter1"
     },
     {
@@ -743,10 +731,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        140,
+        2380,
         900
       ],
-      "id": "130f0bce-937e-4079-bdb5-f11570545b5e",
+      "id": "3a1823e4-e7da-4cc9-b41c-6bd0d29d1c1a",
       "name": "Filter2"
     },
     {
@@ -762,31 +750,178 @@
       "type": "n8n-nodes-base.theHive",
       "typeVersion": 1,
       "position": [
-        480,
+        2720,
         900
       ],
-      "id": "ca529252-7368-47a6-b5e1-1f0b85fc82ba",
+      "id": "282f2817-e0f8-4bed-b0ac-bb39e47dc889",
       "name": "EXEC ANALYZER2",
       "alwaysOutputData": true,
       "credentials": {
         "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
         }
       }
     },
     {
       "parameters": {
-        "jsCode": "return $('TEST MALICIOUS IP').first()"
+        "jsCode": "return $('TEST MALICIOUS IP').first().json.body"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2240,
+        0,
         340
       ],
-      "id": "2ae10ed5-9c4f-4f23-92d3-92d21114be84",
+      "id": "67941e08-fe5a-4c23-b6b3-c2c74b906118",
       "name": "REFORMAT"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "return _input.first()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        140,
+        0
+      ],
+      "id": "2c45b6cb-99e9-4200-8c41-29fd58516f9b",
+      "name": "first"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 1,
+        "options": {},
+        "filters": {
+          "title": "={{ $json.body.title }}"
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9941d291-05b1-4df4-9e0e-db6d53c30fd0",
+      "name": "GET ALERT1",
+      "credentials": {
+        "theHiveApi": {
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "case",
+        "limit": 1,
+        "options": {},
+        "filters": {
+          "tags": "={{ $('ALERT').item.json.type }}"
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        300,
+        340
+      ],
+      "id": "df370276-7847-42b2-9bf7-8f63e48fffe5",
+      "name": "GET CASE1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsUnread",
+        "id": "={{ $json._id }}"
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        300,
+        0
+      ],
+      "id": "b450f5b4-182b-4f06-a363-6ed1bb4d3968",
+      "name": "UPDATE (todo)",
+      "credentials": {
+        "theHiveApi": {
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.7.15:9000/api/v1/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "theHiveApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n    query: [\n      {\n        _name: \"listAlert\"\n      },\n      {\n        _name: \"filter\",\n        _and: [\n          {\n            _field: \"customFields.hash\",\n            _value: $(\"TEST MALICIOUS IP\").item.json.body.customFields.hash\n          },\n          {\n            _field: \"title\",\n            _value: $(\"TEST MALICIOUS IP\").item.json.body.title\n          }\n        ]\n      },\n      {\n        _name: \"page\",\n        from: 0,\n        to: 1\n      }\n    ]\n  } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -400,
+        180
+      ],
+      "id": "dfaa3ea8-9661-4a71-90c8-1c75119792b8",
+      "name": "GET BY TITLE",
+      "alwaysOutputData": true,
+      "credentials": {
+        "theHiveApi": {
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "case",
+        "operation": "update",
+        "id": "={{ $json.id }}",
+        "updateFields": {
+          "tags": "={{ $('ALERT').item.json.type }}"
+        }
+      },
+      "type": "n8n-nodes-base.theHive",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        360
+      ],
+      "id": "d7107ad9-e780-4990-865d-d206f3637647",
+      "name": "TAGS",
+      "credentials": {
+        "theHiveApi": {
+          "id": "00AEKmgC9Jko6kJB",
+          "name": "The Hive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const X = 5;  // X min ago\nconst tma = new Date(Date.now() - X * 60 * 1000)\nconst tmaTimestamp = Math.floor(tma.getTime() / 1000); // Timestamp en secondes (int)\nreturn {\"XMinAgo\": tmaTimestamp}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -540,
+        180
+      ],
+      "id": "b8835a1d-3c7b-4de1-86ce-6ce3d231de83",
+      "name": "Timestamp Xmin ago"
     },
     {
       "parameters": {
@@ -825,190 +960,14 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -2540,
+        -260,
         180
       ],
-      "id": "62a2a32f-6c30-4213-b2fb-fb23667b92da",
-      "name": "EXISTS"
-    },
-    {
-      "parameters": {
-        "language": "python",
-        "pythonCode": "return _input.first()"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -2100,
-        0
-      ],
-      "id": "99ce496c-2e02-471d-8c04-58a78d3cdb2a",
-      "name": "first"
-    },
-    {
-      "parameters": {
-        "operation": "getAll",
-        "limit": 1,
-        "options": {},
-        "filters": {
-          "title": "={{ $json.body.title }}"
-        }
-      },
-      "type": "n8n-nodes-base.theHive",
-      "typeVersion": 1,
-      "position": [
-        -2240,
-        0
-      ],
-      "id": "c0ea1b77-d315-4a1d-9527-17b5480b2e37",
-      "name": "GET ALERT1",
-      "credentials": {
-        "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "case",
-        "limit": 1,
-        "options": {},
-        "filters": {
-          "tags": "={{ $('ALERT').item.json.type }}"
-        }
-      },
-      "type": "n8n-nodes-base.theHive",
-      "typeVersion": 1,
-      "position": [
-        -1820,
-        340
-      ],
-      "id": "64ecab56-6052-4691-ac51-ee2ba2a10af7",
-      "name": "GET CASE1",
-      "alwaysOutputData": true,
-      "credentials": {
-        "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "markAsUnread",
-        "id": "={{ $json._id }}"
-      },
-      "type": "n8n-nodes-base.theHive",
-      "typeVersion": 1,
-      "position": [
-        -1940,
-        0
-      ],
-      "id": "1cd8f65f-47cc-4186-8464-1c00b2baae68",
-      "name": "UPDATE (todo)",
-      "credentials": {
-        "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://192.168.7.15:9000/api/v1/query",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "theHiveApi",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ {\n    query: [\n      {\n        _name: \"listAlert\"\n      },\n      {\n        _name: \"filter\",\n        _and: [\n          {\n            _field: \"source\",\n            _value: $(\"TEST MALICIOUS IP\").item.json.body.source\n          },\n          {\n            _field: \"title\",\n            _value: $(\"TEST MALICIOUS IP\").item.json.body.title\n          }\n        ]\n      },\n      {\n        _name: \"page\",\n        from: 0,\n        to: 1\n      }\n    ]\n  } }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -2680,
-        180
-      ],
-      "id": "3e63b8b9-c7f3-4b0d-b30f-427bbb5106b4",
-      "name": "GET BY TITLE",
-      "alwaysOutputData": true,
-      "credentials": {
-        "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "case",
-        "operation": "update",
-        "id": "={{ $json.id }}",
-        "updateFields": {
-          "tags": "={{ $('ALERT').item.json.type }}"
-        }
-      },
-      "type": "n8n-nodes-base.theHive",
-      "typeVersion": 1,
-      "position": [
-        -1040,
-        360
-      ],
-      "id": "bb0d34c2-eb29-4ee3-bb57-98c5dce03cc7",
-      "name": "TAGS",
-      "credentials": {
-        "theHiveApi": {
-          "id": "50EY9TDbqyZZGghU",
-          "name": "The Hive account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "const X = 5;  // X min ago\nconst tma = new Date(Date.now() - X * 60 * 1000)\nconst tmaTimestamp = Math.floor(tma.getTime() / 1000); // Timestamp en secondes (int)\nreturn {\"XMinAgo\": tmaTimestamp}"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -2820,
-        180
-      ],
-      "id": "a00b662c-986a-49ff-a654-6cbc169e5668",
-      "name": "Timestamp Xmin ago"
+      "id": "f086c665-a891-4034-9040-7c6b18127d82",
+      "name": "EXISTS within last Xmin"
     }
   ],
-  "pinData": {
-    "Webhook": [
-      {
-        "json": {
-          "headers": {
-            "host": "192.168.7.8:5678",
-            "user-agent": "python-requests/2.32.2",
-            "accept-encoding": "gzip, deflate",
-            "accept": "*/*",
-            "connection": "keep-alive",
-            "content-type": "application/json",
-            "content-length": "311"
-          },
-          "params": {},
-          "query": {},
-          "body": {
-            "title": "Suricata: Alert - ET INFO Observed Discord Domain in DNS Lookup (discord .com)",
-            "description": "Alert from : OPNsense.insoc.local",
-            "severity": 1,
-            "date": "2025-02-05T12:58:25.588+0000",
-            "tags": "src_ip=192.168.7.3,src_port=64387,dest_ip=192.168.7.254",
-            "type": "suricata",
-            "source": "Suricata IDS"
-          },
-          "webhookUrl": "http://192.168.7.8:5678/webhook-test/7ceae612-e110-4adf-8191-95557ec9b251",
-          "executionMode": "test"
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "connections": {
     "Webhook": {
       "main": [
@@ -1026,17 +985,6 @@
         [
           {
             "node": "MERGE TO CASE",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "uuid": {
-      "main": [
-        [
-          {
-            "node": "ALERT",
             "type": "main",
             "index": 0
           }
@@ -1357,25 +1305,7 @@
       "main": [
         [
           {
-            "node": "uuid",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "EXISTS": {
-      "main": [
-        [
-          {
-            "node": "GET ALERT1",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "REFORMAT",
+            "node": "ALERT",
             "type": "main",
             "index": 0
           }
@@ -1415,16 +1345,11 @@
         ]
       ]
     },
-    "UPDATE (todo)": {
-      "main": [
-        []
-      ]
-    },
     "GET BY TITLE": {
       "main": [
         [
           {
-            "node": "EXISTS",
+            "node": "EXISTS within last Xmin",
             "type": "main",
             "index": 0
           }
@@ -1452,17 +1377,35 @@
           }
         ]
       ]
+    },
+    "EXISTS within last Xmin": {
+      "main": [
+        [
+          {
+            "node": "GET ALERT1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "REFORMAT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "7b6937f0-f3da-4e04-8128-803b48bb3935",
+  "versionId": "f4c2259a-e4ad-4591-b34b-8fb9a9d4f832",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "6baf55508b4d196099e1f2124d31a760de61089e8e377d4d375be8f05dffdd2b"
+    "instanceId": "089593b0375f52cffd2e682594e43cdd96459883230a04bef809490471c267bb"
   },
-  "id": "mfYmPbdgLripvxNA",
+  "id": "uS7ARgLZrmzu7ZLf",
   "tags": []
 }

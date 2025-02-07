@@ -3,7 +3,7 @@
 
 Dans la partie précédente (l'installation) nous avons expliqué comment installer TheHive4 et Cortex avec le plugin nécessaire pour les lier entre eux. Il reste alors la configuration des analyzers à voir dans la partie [3-automatisation](3-automatisation.md).
 
-
+wœ
 # Intégration MISP à The Hive
 
 Nous n'avons finalement pas utilisé MISP, mais la documentation [ici](https://kifarunix.com/how-to-integrate-thehive-with-misp/) explique son intégration.
