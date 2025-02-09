@@ -4,6 +4,24 @@
 L'installation fut effectuée sur une machine Linux, Ubuntu-server-24.04. L'indexer, le server et le dashboard sont sur la même machine:
 Documentation d'[Installation](https://documentation.wazuh.com/current/installation-guide/index.html).
 
+## Redémarrage du serveur en cas de plantage
+Lors de l'un de nos tests, nous nous sommes rendus compte qu'après le redémarrage du Proxmox, les services Wazuh ne redémarraient pas correctement.
+Bien que ce problème n'ait eu lieu qu'une fois, nous estimons nécessaire la documentation de ce problème.
+Pour y pallier et relancer correctement Wazuh, il est nécessaire de vérifier lequel des 3 services qui composent le serveurnest en défaut.
+Ces 3 commandes permettent d'obtenir leur statut :
+```bash
+sudo systemctl status wazuh-manager.service
+sudo systemctl status wazuh-indexer.service
+sudo systemctl status wazuh-dashboard.service
+```
+
+Si l'un de ces services est en échec, il est possible de le relancer avec la commande suivante :
+```bash
+sudo systemctl restart <nom_service>
+```
+
+Notez que si vous relancez le service du manager ou le service de l'indexer, il est **NÉCESSAIRE** de relancer le service du dashboard pour obtenir correctement les informations sur l'interface Web.
+
 
 ## Suppression d'un agent
 Lors du test de notre infrastructure, nous nous sommes rendus compte que l'agent Wazuh installé sur le firewall OPNSense ne transmettait plus correctement ses informations au serveur.
