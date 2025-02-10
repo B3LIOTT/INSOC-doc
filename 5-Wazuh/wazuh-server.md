@@ -4,6 +4,15 @@
 L'installation fut effectuée sur une machine Linux, Ubuntu-server-24.04. L'indexer, le server et le dashboard sont sur la même machine:
 Documentation d'[Installation](https://documentation.wazuh.com/current/installation-guide/index.html).
 
+## Erreurs rencontrées et leur fix
+Nous avons rencontré une erreur de timeout lors du démarrage de l'indexer Wazuh, au démarrage de la VM. Avec `sudo journalctl -xeu wazuh-indexer` on remarque que c'est une erreur de timeout, donc probablement un temps de démarrage trop long des services dont dépend l'indexer. Pour contrer ce problème nous avons simplement augmenté le timeout par défaut de l'indexer:
+```bash
+sudo mkdir /etc/systemd/system/wazuh-indexer.service.d
+echo -e "[Service]\nTimeoutStartSec=180" | sudo tee /etc/systemd/system/wazuh-indexer.service.d/startup-timeout.conf
+sudo systemctl daemon-reload
+sudo systemctl restart wazuh-indexer
+```
+
 ## Redémarrage du serveur en cas de plantage
 Lors de l'un de nos tests, nous nous sommes rendus compte qu'après le redémarrage du Proxmox, les services Wazuh ne redémarraient pas correctement.
 Bien que ce problème n'ait eu lieu qu'une fois, nous estimons nécessaire la documentation de ce problème.
