@@ -13,7 +13,7 @@ pip install --upgrade vt-py --break-system-packages
 pip install filetype --break-system-packages
 ```
 
-Puis modifier le code python:
+Puis modifier le code python situé dans `/opt/Cortex-Analyzers/analyzers/VirusTotal/virustotal.py` :
 
 Remplacer:
 ```python
