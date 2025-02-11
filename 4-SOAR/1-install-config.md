@@ -35,6 +35,11 @@ bash /tmp/install.sh
 Erreurs possibles:
 - docker group does not exists: `sudo groupadd docker`
 - permission denied pour /usr/bin/floss: dans `install.sh`, rechercher la ligne contenant `unzip /tmp/floss.zip`, et ajoutez y `sudo`.
+Si l'une de ces erreurs intervient, il sera nécessaire de commenter le `exit 1` sous la ligne suivante pour éviter que l'installeur bloque le nouveau processus de réinstallation :
+```conf
+log error "${INSTALLING} is already installed on the system. Exiting ..."
+# exit 1
+```
 
 ## Configuration
 Voir la fin de cette [doc](https://kifarunix.com/install-cortex-on-ubuntu/), à partir de `Accessing Cortex Web Interface`. Nous avons dans notre cas créé une organisation `insoc` avec un utilisateur ayant les droits admin.
