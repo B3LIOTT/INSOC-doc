@@ -74,7 +74,7 @@ La configuration s'effectue via la modification de `/var/ossec/etc/ossec.conf`:
    <active-response>
       <command>exemple</command>
       <location>local</location>
-      <rules_id>503</rules_id>
+      <rules_id>XXX</rules_id>
       <timeout>30</timeout>
   </active-response>
   ```
