@@ -22,6 +22,7 @@ proposé par Jérome Ridet
 - [6 - Visualisation](6-Visualisation)
 - [7 - Tests](7-Tests)
 
+La documentation est en markdown mais peut etre convertie en html via le script python `md-to-html.py`.
 
 # Structure du projet
 
