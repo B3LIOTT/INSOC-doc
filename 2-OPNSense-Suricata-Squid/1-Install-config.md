@@ -8,6 +8,7 @@ Ce document est relatif à l'installation d'OPNsense 25.1 et d'outils supplémen
 - [Assistant de configuration](#assistant-de-configuration)
 - [Sécurisation supplémentaire de l'interface web](#sécurisation-supplémentaire-de-linterface-web)
 - [Accès SSH sécurisé à la console root d'OPNsense](#accès-ssh-sécurisé-à-la-console-root-dopnsense)
+- [Mise en place de règles NAT pour la connexion à Internet des machines dans le VLAN 13 Clients et la machine Cortex.](#mise-en-place-de-règles-nat-pour-la-connexion-à-internet-des-machines-dans-le-vlan-13-clients-et-la-machine-cortex)
 - [Mise en place de règles de pare-feu](#mise-en-place-de-règles-de-pare-feu)
 - [Mise en place du proxy Squid pour la journalisation des communications HTTP](#mise-en-place-du-proxy-squid-pour-la-journalisation-des-communications-http)
 - [Mise en place d'un blocage d'IPs malveillantes](#mise-en-place-dun-blocage-dips-malveillantes)
@@ -148,6 +149,15 @@ Finalement, nous désactivons l'accès en tant que root en SSH en décochant l'o
 
 Désormais, pour nous connecter en SSH et effectuer des modifications dans les fichiers, il faudra passer par le compte intermédiaire créé précédemment et utiliser la commande `su` pour passer en root en renseignant le mot de passe root.
 
+## Mise en place de règles NAT pour la connexion à Internet des machines dans le VLAN 13 Clients et la machine Cortex.
+Pour permettre aux machines des 2 VLANs de communiquer avec Internet, il est nécessaire d'appliquer des règles NAT à notre infrastructure.
+
+![NAT_Rules](images/NAT.png)
+
+Sur l'image précédente, on observe que nous utilisons le mode **Hybrid**. Cela nous permet de créer des règles manuellement tout en laissant OPNSense générer automatiquement certaines d'entre elles.
+
+Dans les règles que nous avons créé, nous pouvons voir que les 2 réseaux situés dans des VLANs différents sont renseignées afin de laisser la possibilité aux machines des 2 réseaux d'utiliser l'adresse IP publique du firewall pour accèder à Internet.
+
 ## Mise en place de règles de pare-feu
 
 Afin de sécuriser notre réseau, nous avons mis en place des règles de pare-feu pour autoriser ou bloquer le trafic entrant et sortant.
@@ -158,13 +168,13 @@ Ces règles sont les suivantes et permettent uniquement le trafic HTTPS, DNS et 
 
 Les 2 premières règles permettent le trafic DNS depuis nos machines locales vers les serveurs DNS de Cloudflare uniquement.
 
-La 3ème règle permet d'obtenir la résolution DNS depuis les serveurs DNS de Cloudflare.
+La 3è règle est une règle spéciale créée par OPNSense après la configuration du proxy Squid que nous évoquerons par la suite.
 
-La 4è règle est une règle spéciale créée par OPNSense après la configuration du proxy Squid que nous évoquerons par la suite.
+Les 4è et 5è règles permettent le trafic HTTPS depuis nos machines locales vers les serveurs HTTPS ainsi que les réponses de ces serveurs.
 
-Les 5è et 6è règles permettent le trafic HTTPS depuis nos machines locales vers les serveurs HTTPS ainsi que les réponses de ces serveurs.
+La 6è règle permet les pings depuis nos machines locales vers le serveur OPNsense (notamment pour s'assurer que l'on peut communiquer avec lui. Il est possible de bloquer les pings en désactivant la règle).
 
-La 7è règle permet les pings depuis nos machines locales vers le serveur OPNsense (notamment pour s'assurer que l'on peut communiquer avec lui, dans notre objectif final, il aurait été possible de bloquer les pings).
+la 7è règle permet d'autoriser la machine Cortex à communiquer avec Internet, notamment pour effectuer des requêtes API vers AbuseIPDB et VirusTotal. (Ici, la règle laisse passer tout le trafic. Par manque de temps, nous n'avons pas pu traiter cette partie spécifique pour la sécuriser d'avantage.)
 
 La dernière règle permet de bloquer tout le reste du trafic.
 
