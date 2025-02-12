@@ -31,4 +31,4 @@ Le projet peut être présenté sous 2 angles: le workflow et l'infrastructure.
 ![workflow](./workflow.png)
 
 ## Infrastructure
-[image infra générale]
+![infra](./Schema_Infra_VLAN.png)
