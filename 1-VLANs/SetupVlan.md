@@ -1,179 +1,173 @@
-# Mise en place de VLANs pour le projet
+Pour interconnecter nos machines, nous disposons d'un Switch Cisco 3750 de 48 ports FastEthernet et 4 port GigabitEthernet.
 
-Soit l'infrastructure suivante reproduite sur Packet Tracer:
-
-![schema](pictures/infra.png)
-
-## Configuration des VLANs sur les Switches
-
-### Configuration du Switch 3650 (Switch Relais DHCP)
-1. Création des VLANs :
+Pour se connecter au switch depuis le firewall (un câble console y est connecté), on peut utiliser la commande suivante depuis la console du firewall :
+```bash
+cu -l /dev/cuau0 -s 9600
 ```
+
+Nous nous retrouvons ainsi sur la console du switch
+
+Nous renommons le switch pour le différencier des autres :
+```bash
 en
 conf t
-vlan 10
-name Outils
-vlan 20
-name Salle
+hostname Switch_PLP_INT02_24
+```
+
+Nous configurons ensuite les VLANs que nous allons utiliser
+```bash
+en
+conf t
+vlan 13
+name Clients_PLP24
+exit
+vlan 14
+name Serveurs_PLP24
 exit
 ```
-2. Assignation des interfaces aux VLANs :
-- Interface vers le Proxmox (VLAN Outils):
-```
+
+Nous configurons ensuite les ports du switch dans les 2 VLANs.
+Les ports 1 à 16 serviront pour le VLAN 14 Serveurs, et les ports 17 à 48 au VLAN 13 Clients :
+```bash
 en
 conf t
-int GigabitEthernet1/0/3
+interface range FastEthernet 1/0/1-1/0/16
 switchport mode access
-switchport access vlan 10
+switchport access vlan 14
 exit
-```
-- Interface vers le 1er Switch 2960 (trunk):
-```
-en
-conf t
-int GigabitEthernet1/0/1
-switchport mode trunk
-switchport trunk allowed vlan 10,20
-exit
-```
-- Interface vers le FOG (VLAN Salle):
-```
-en
-conf t
-int GigabitEthernet1/0/4
+interface range FastEthernet 1/0/17-1/0/48
 switchport mode access
-switchport access vlan 20
+switchport access vlan 13
 exit
 ```
 
-### Configuration des Switches 2960 constituants le réseau utilisateur
-1. Création des VLANs sur tous les Switches de la salle :
-```
+On peut observer la liste des ports attribués à chaque VLAN avec la commande suivante :
+```bash
 en
-conf t
-vlan 20
-name Salle
-exit
+show vlan brief
 ```
-2. Assignation des interfaces aux VLANs :
-- Switch 007-1:
-  - Interface vers le Switch 3650 (trunk):
-    ```
-    en
-    conf t
-    int FastEthernet0/1
-    switchport mode trunk
-    switchport trunk allowed vlan 10,20
-    exit
-    ```
-  - Interface vers les PCs (VLAN Salle):
-    ```
-    en
-    conf t
-    int range FastEthernet0/2-3
-    switchport mode access
-    switchport access vlan 20
-    exit
-    ```
-  - Interface vers le Switch 007-2 (trunk):
-    ```
-    en
-    conf t
-    int FastEthernet0/4
-    switchport mode trunk
-    switchport trunk allowed vlan 10,20
-    exit
-    ```
-  - Interface vers le Switch 007-3 (trunk):
-    ```
-    en
-    conf t
-    int FastEthernet0/5
-    switchport mode trunk
-    switchport trunk allowed vlan 10,20
-    exit
-    ```
-- Switch 007-2:
-  - Interface vers le Switch 007-1 (trunk):
-    ```
-    en
-    conf t
-    int FastEthernet0/1
-    switchport mode trunk
-    switchport trunk allowed vlan 10,20
-    exit
-    ```
-  - Interface vers les PCs (VLAN Salle):
-    ```
-    en
-    conf t
-    int range FastEthernet0/2-3
-    switchport mode access
-    switchport access vlan 20
-    exit
-    ```
-- Switch 007-3:
-  - Interface vers le Switch 007-1 (trunk):
-    ```
-    en
-    conf t
-    int FastEthernet0/1
-    switchport mode trunk
-    switchport trunk allowed vlan 10,20
-    exit
-    ```
-  - Interface vers les PCs (VLAN Salle):
-    ```
-    en
-    conf t
-    int range FastEthernet0/2-3
-    switchport mode access
-    switchport access vlan 20
-    exit
-    ```
+![show_vlan](pictures/show_vlan.png)
 
-## Configuration du Relais DHCP sur le Switch 3650
-```
+Puisque ce switch peut fonctionner en niveau 3 et que l'on souhaite qu'il soit responsable du routage inter-vlan, on utilise la commande suivante pour activer le niveau 3 :
+```bash
 en
 conf t
-interface Vlan 10
-ip address 10.0.1.1 255.255.255.0
-no shutdown
-exit
-interface Vlan 20
-ip address 10.0.2.1 255.255.255.0
-ip helper-address 10.0.2.2
-no shutdown
-exit
-ip dhcp relay information trust-all
 ip routing
-show ip route
 exit
 ```
 
-## Configuration du serveur DHCP sur le FOG
-On attribue l'adresse  IP 10.0.2.2 au serveur DHCP et on lui spécifie que la passerelle est 10.0.2.1.
-Par la suite, on configure le serveur DHCP de la façon suivante. Dans le cas réel, il faudra configurer le serveur FOG pour qu'il fasse office de serveur DHCP :
-![conf dhcp](<pictures/conf_servDHCP.png>)
+On configure ensuite les interfaces VLAN (SVI) pour qu'elles agissent comme des passerelles pour chacune des VLANs :
+```bash
+en
+conf t
+interface vlan13
+interface Vlan13
+ip address 192.168.7.254 255.255.255.0
+no shutdown
+exit
+interface Vlan14
+ip address 192.168.5.254 255.255.255.0
+no shutdown
+exit
+```
 
-## Configuration de la machine Proxmox
-On attribue à cette machine une adresse IP statique dans le VLAN Outils.
-Dans notre cas, son IP est 10.0.1.2 et sa passerelle est 10.0.1.1
+On peut vérifier que les routes sont bien créées avec la commande suivante :
+```bash
+en
+show ip route
+```
 
-## Configuration de la machine d'administration dans le VLAN 10
-On attribue à cette machine une adresse IP statique dans le VLAN Outils.
-Dans notre cas, son IP est 10.0.1.3 et sa passerelle est 10.0.1.1
+![ip_route](pictures/ip_route.png)
 
-## Configuration des machines dans le VLAN 20
-Les machines situées dans le VLAN 20 obtiennent une adresse IP via le serveur DHCP configuré sur le FOG.
+Désormais, chaque machines dans l'un des 2 VLANs devra se voir attribuer comme passerelle l'adresse de l'interface du VLAN correspondant
 
-## Test de la configuration
-Pour tester la configuration, on peut vérifier que les machines dans le VLAN 20 obtiennent bien une adresse IP via le serveur DHCP configuré sur le FOG.
-Pour cela, on peut exécuter la commande `ipconfig /renew` sur les machines du VLAN 20.
-Nous obtenons ainsi une adresse IP attribuée par le serveur DHCP configuré sur le FOG :
-![recupIP](<pictures/recupIP.png>)
+Evidemment, nous souhaitons que les machines du VLAN 13 Clients puissent accéder à Internet.
 
-## Test de la communication entre les machines
-Pour tester la communication entre les machines, on peut exécuter la commande `ping` entre les machines.
-On va ainsi pouvoir tester un ping entre la machine Proxmox (VLAN 10) et une machine du VLAN 20 :
-![testPing](<pictures/testPing.png>)
+Pour cela, nous ajoutons une route par défaut sur le switch pour rediriger les flux vers l'adresse LAN de l'OPNSense :
+```bash
+en
+conf t
+ip route 0.0.0.0 0.0.0.0 192.168.7.253
+```
+
+Nous allons créer des ACLs au sein du switch afin de laisser passer les flux suivants :
+- Prise en compte que seule la machine Cortex située dans le VLAN 14 Serveurs peut communiquer avec Internet,
+- Couper tout trafic entre le VLAN 13 Clients et le VLAN 14 Serveurs A L'EXCEPTION du port 1514, 1515 et 1516 nécessaires à la communication des agents Wazuh des machines situées dans le VLAN 13 Clients vers le serveur situé dans le VLAN 14 Serveurs.
+
+Pour cela, on exécute les commandes suivantes :
+```bash
+en
+conf t
+ip access-list extended VLAN13_TO_VLAN14
+permit tcp 192.168.7.0 0.0.0.255 192.168.5.0 0.0.0.255 eq 1514
+permit tcp 192.168.7.0 0.0.0.255 192.168.5.0 0.0.0.255 eq 1515
+permit tcp 192.168.7.0 0.0.0.255 192.168.5.0 0.0.0.255 eq 1516
+deny ip 192.168.7.0 0.0.0.255 192.168.5.0 0.0.0.255
+permit ip any any
+```
+
+Détail de cette ACL :
+- Lignes 1-3 : Autorisent les communications TCP depuis les machines du VLAN 13 (192.168.7.0/24) vers les machines du VLAN 14 (192.168.5.0/24) sur les ports 1514, 1515 et 1516. Ces ports sont utilisés par Wazuh pour la communication entre les agents et le serveur.
+- Ligne 4 : Bloque tout autre trafic entre VLAN 13 et VLAN 14.
+- Ligne 5 : Permet à tout autre trafic de circuler librement vers l'extérieur (Internet, autres VLANs, etc.). On utilise cette règle pour l'accès à Internet notamment, et puisqu'il n'existe pas d'autre VLAN sur le switch on peut la laisser comme cela.
+
+On l'attribue au VLAN 13 Clients :
+```bash
+en
+conf t
+interface vlan 13
+ip access-group VLAN13_TO_VLAN14 in
+exit
+```
+On crée une autre ACL avec les commandes suivantes :
+```bash
+en
+conf t
+ip access-list extended VLAN14_TO_VLAN13
+permit tcp 192.168.5.0 0.0.0.255 192.168.7.0 0.0.0.255 eq 1514
+permit tcp 192.168.5.0 0.0.0.255 192.168.7.0 0.0.0.255 eq 1515
+permit tcp 192.168.5.0 0.0.0.255 192.168.7.0 0.0.0.255 eq 1516
+permit tcp host 192.168.5.250 any eq 80
+permit tcp host 192.168.5.250 any eq 443
+permit tcp host 192.168.5.250 any eq 53
+permit udp host 192.168.5.250 any eq 53
+permit tcp any any established
+deny ip 192.168.5.0 0.0.0.255 192.168.7.0 0.0.0.255
+permit ip any any
+exit
+```
+
+Détail de cette ACL :
+- Lignes 1-3 : Autorisent les réponses des communications Wazuh vers les machines VLAN 13.
+- Ligne 4-5 : Autorisent la machine 192.168.5.250 (Cortex) à effectuer des requêtes HTTP (80) et HTTPS (443).
+- Lignes 6-7 : Autorisent Cortex à résoudre des noms de domaines (TCP et UDP sur le port 53).
+- Ligne 8 : Autorise les connexions déjà établies (established permet de laisser passer les réponses aux requêtes initiées depuis VLAN 14).
+- Ligne 9 : Bloque tout autre trafic entre VLAN 14 et VLAN 13.
+- Ligne 10 : Permet tout autre trafic vers l'extérieur.
+
+On l'attribue au VLAN 14 Serveurs :
+```bash
+en
+conf t
+interface vlan 14
+ip access-group VLAN14_TO_VLAN13 in
+exit
+```
+
+On peut finalement vérifier la liste des ACLs avec la commande suivante :
+```bash
+en
+show access-lists
+```
+
+![access-list](pictures/show_access-list.png)
+
+Et on peut également vérifier que les interfaces utilisent bien les ACLs :
+```bash
+en
+show ip interface vlan 13 #(ou 14)
+```
+
+![vlan13](pictures/vlan13.png)
+
+![vlan14](pictures/vlan14.png)
