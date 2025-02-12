@@ -5,7 +5,7 @@ Pour se connecter au switch depuis le firewall (un câble console y est connect�
 cu -l /dev/cuau0 -s 9600
 ```
 
-Nous nous retrouvons ainsi sur la console du switch
+Nous nous retrouvons ainsi sur la console du switch.
 
 Nous renommons le switch pour le différencier des autres :
 ```bash
@@ -14,7 +14,7 @@ conf t
 hostname Switch_PLP_INT02_24
 ```
 
-Nous configurons ensuite les VLANs que nous allons utiliser
+Nous configurons ensuite les VLANs que nous allons utiliser :
 ```bash
 en
 conf t
@@ -27,7 +27,7 @@ exit
 ```
 
 Nous configurons ensuite les ports du switch dans les 2 VLANs.
-Les ports 1 à 16 serviront pour le VLAN 14 Serveurs, et les ports 17 à 48 au VLAN 13 Clients :
+Les ports **1 à 16** serviront pour le **VLAN 14 Serveurs**, et les ports **17 à 48** au **VLAN 13 Clients** :
 ```bash
 en
 conf t
@@ -144,6 +144,9 @@ Détail de cette ACL :
 - Ligne 8 : Autorise les connexions déjà établies (established permet de laisser passer les réponses aux requêtes initiées depuis VLAN 14).
 - Ligne 9 : Bloque tout autre trafic entre VLAN 14 et VLAN 13.
 - Ligne 10 : Permet tout autre trafic vers l'extérieur.
+
+Attention ici, il se peut que les autres machines du VLAN 14 puissent avoir accès à Internet.
+Pour s'assurer que ce n'est pas le cas, nous configurerons une règle dans le firewall OPNSense pour n'autoriser les flux que de la machine Cortex.
 
 On l'attribue au VLAN 14 Serveurs :
 ```bash
