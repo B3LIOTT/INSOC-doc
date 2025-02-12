@@ -6,7 +6,7 @@
 
 ## Notre installation de l'agent avec Sysmon
 
-### 1) Activation de Wazuh Agent
+### Activation de Wazuh Agent
 
 Sur l’interface du serveur Wazuh, on peut accéder au déploiement d’agents via Endpoints > Deploy New Agent dans lequel on suivra les étapes fournies pour déployer l’agent Wazuh.
 
