@@ -19,6 +19,8 @@ proposé par Jérome Ridet
 - [3 - Proxmox](3-Proxmox)
 - [4 - SOAR](4-SOAR)
 - [5 - Wazuh](5-Wazuh)
+- [6 - Visualisation](6-Visualisation)
+- [7 - Tests](7-Tests)
 
 
 # Structure du projet

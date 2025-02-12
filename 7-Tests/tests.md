@@ -1,79 +1,6 @@
 # Configuration de l’environnement de test
 
-## 1) Activation de Wazuh Agent
-
-Sur l’interface du serveur Wazuh, on peut accéder au déploiement d’agents via Endpoints > Deploy New Agent dans lequel on suivra les étapes fournies pour déployer l’agent Wazuh.
-
-![Description de l'image](./images/unnamed.png)
-
-Le système d’exploitation utilisé par nos machines est Windows qu’on sélectionne, ensuite on saisit l’adresse ip du serveur Wazuh qui est 192.168.7. On a aussi la possibilité de nommer nos agents de façon à les reconnaître plus facilement que par les noms d’hôtes par défaut.
-
-Ensuite on saisit la commande suivante sur Powershell en tant qu’administrateur pour installer l’agent:
-
-![Description de l'image](./images/1.png)
-
-![Description de l'image](./images/2.png)
-
-
-Ensuite, on saisit la commande suivante pour démarrer l’agent:
-
-![Description de l'image](./images/3.png)
-
-
-On peut s’assurer du démarrage de l’agent en vérifiant directement sur Services.
-
-![Description de l'image](./images/4.png)
-
-
-Sur l’interface du serveur Wazuh, on peut voir toutes les machines agent déployées avec leurs statuts, adresses IP, OS correspondant etc...
-
-![Description de l'image](./images/5.png)
-
-
-## 2) Installation de Sysmon
-
-On suit ce guide pour activer sysmon dans Wazuh Agent, section 3.1 et 4.1. https://github.com/uruc/SOC-Automation-Lab?tab=readme-ov-file
-On installe d’abord sysmon et extrait son contenu dans un dossier. _/Sysmon_ https://learn.microsoft.com/fr-fr/sysinternals/downloads/sysmon
-
-![Description de l'image](./images/6.png)
-
-On télécharge le fichier _sysmonconfig.xml_ depuis le lien https://github.com/olafhartong/sysmon-modular/blob/master/sysmonconfig.xml
-
-![Description de l'image](./images/7.png)
-
-Et on le place dans le dossier. _/Sysmon_ On obtient l’arborescence suivante :
-
-![Description de l'image](./images/8.png)
-
-Puisque Sysmon n'est pas installé, on procède à l'installation en utilisant la commande : .\Sysmon64.exe -i .\sysmonconfig.xml
-
-![Description de l'image](./images/9.png)
-
-et on s’assure qu’il est bien actif dans _Services_
-
-![Description de l'image](./images/10.png)
-
-On ouvre Wazuh manager,
-
-![Description de l'image](./images/11.png)
-
-On accède à View Config pour ajouter ces lignes à ossec.conf au dessous des lignes localfile déjà présentes:
-
-`<localfile>`
-
-`    <location>Microsoft-Windows-Sysmon/Operational</location>`
-
-`    <log_format>eventchannel</log_format>`
-
-`</localfile>`
-
-![Description de l'image](./images/12.png)
-
-On redémarre l’agent pour enregistrer les modifications:
-
-![Description de l'image](./images/13.png)
-
-## 3) Installation de Atomic Red Team
+## Installation de Atomic Red Team
 
 On suit ce tutoriel https://www.youtube.com/watch?v=_xW3fAumh1c
 
@@ -136,7 +63,7 @@ Pour inverser l’attaque, on lance la commande suivante:
 
 ![Description de l'image](./images/21.png)
 
-## 4) Détection par Wazuh
+## Détection par Wazuh
 
 Nous avons décidé d'organiser les informations relatives aux attaques MITRE dans un fichier Excel structuré, afin de faciliter le suivi et l'analyse des détections.
 
@@ -167,7 +94,7 @@ Ce processus permet de centraliser et d’analyser précisément les performance
 
 ![Description de l'image](./images/23.png)
 
-## 5) Règles personnalisées
+## Règles personnalisées
 
 Les règles personnalisées ajoutées sont regroupées en 13 types d'événements Sysmon :
 
