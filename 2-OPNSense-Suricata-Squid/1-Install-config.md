@@ -175,6 +175,7 @@ Les 4è et 5è règles permettent le trafic HTTPS depuis nos machines locales ve
 La 6è règle permet les pings depuis nos machines locales vers le serveur OPNsense (notamment pour s'assurer que l'on peut communiquer avec lui. Il est possible de bloquer les pings en désactivant la règle).
 
 la 7è règle permet d'autoriser la machine Cortex à communiquer avec Internet, notamment pour effectuer des requêtes API vers AbuseIPDB et VirusTotal. (Ici, la règle laisse passer tout le trafic. Par manque de temps, nous n'avons pas pu traiter cette partie spécifique pour la sécuriser d'avantage.)
+A noter que cette règle nous permet d'avantage de sécuriser la connexion Internet de notre VLAN 14 Serveurs à la seule machine qu'est Cortex.
 
 La dernière règle permet de bloquer tout le reste du trafic.
 
