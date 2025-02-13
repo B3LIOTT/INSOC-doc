@@ -30,8 +30,9 @@ La documentation est en markdown mais peut etre convertie en html via le script 
 
 Ensuite, pour profiter de la mise en forme du code avec le css vous devez lancer la doc sur un server http local:
 ```bash
-python -m http server 8080
+python -m http.server 8080
 ```
+Et aller à `http://localhost:8080`
 
 # Structure du projet
 Le projet peut être présenté sous 2 angles: le workflow et l'infrastructure.
