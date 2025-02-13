@@ -17,37 +17,36 @@ On y déplace les deux après extraction. On change le nom du dossier de _invoke
 ![Description de l'image](./images/15.png)
 
 On ouvre le powershell en admin et exécute ces trois commandes:
-
-`powershell -exec bypass`
-
-`Install-Module -Name invoke-atomicredteam,powershell-yaml -Scope CurrentUser`
-
-`Import-Module “C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1” -Force`
+```powershell
+powershell -exec bypass
+Install-Module -Name invoke-atomicredteam,powershell-yaml -Scope CurrentUser
+Import-Module “C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1” -Force
+```
 
 ![Description de l'image](./images/16.png)
 
 ![Description de l'image](./images/17.png)
 
 Si vous rencontrez des problèmes de confiance, exécutez ces commandes:
-
-`Install-Module -Name powershell-yaml -Force -Scope CurrentUser`
-
-`Set-PSRepository -Name PSGallery -InstallationPolicy Trusted`
+```powershell
+Install-Module -Name powershell-yaml -Force -Scope CurrentUser
+Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+```
 
 Nous exécutons les attaques Atomic Red Team pour les quatre catégories suivantes: **l’impact, la reconnaissance, la persistance et l'escalade de privilèges**. Ces attaques simulent des techniques utilisées pour contourner la sécurité, explorer des systèmes, maintenir un accès persistant et obtenir des privilèges élevés, dans le but de tester la résistance des systèmes face à ces menaces.
 
 
 Pour lancer les attaques: 
-
-`powershell -exec bypass`
-
-`Install-Module -Name powershell-yaml -Force -Scope CurrentUser`
-
-`Import-Module “C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1” -Force`
+```powershell
+powershell -exec bypass
+Install-Module -Name powershell-yaml -Force -Scope CurrentUser
+Import-Module “C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1” -Force
+```
 
 On lance l’attaque et enregistre les détails dans un fichier json
-
-`Invoke-AtomicTest T1016 -LoggingModule "Attire-ExecutionLogger" -ExecutionLogPath "T1016-Windows.json"`
+```powershell
+Invoke-AtomicTest T1016 -LoggingModule "Attire-ExecutionLogger" -ExecutionLogPath "T1016-Windows.json"
+```
 
 ![Description de l'image](./images/18.png)
 
@@ -58,8 +57,9 @@ On peut récupérer les détails de l’attaque comme suit:
 ![Description de l'image](./images/20.png)
 
 Pour inverser l’attaque, on lance la commande suivante:
-
-`Invoke-AtomicTest T1546.002 -Cleanup`
+```powershell
+Invoke-AtomicTest T1546.002 -Cleanup
+```
 
 ![Description de l'image](./images/21.png)
 
