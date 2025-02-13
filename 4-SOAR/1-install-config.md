@@ -49,7 +49,7 @@ Voir la fin de cette [doc](https://kifarunix.com/install-cortex-on-ubuntu/), à 
 
 La version 4 de TheHive ne nécéssite pas de license. Une image docker peut être trouvée [ici](https://hub.docker.com/layers/thehiveproject/thehive4/4.1.14-1/images/sha256-77bb4cca416ae4a270fe8a8cca82aaa04d0ed375baca22fc2804e315f16ad9bf?context=explore). De plus, [ce répo Github](https://github.com/TheHive-Project/TheHive) contient des exemples de déploiement de docker TheHive, mais ils ne fonctionnent pas tous (le support de StrangeBee est catastrophique).
 
-## Docker compose
+## Docker compose
 
 Nous avons donc créé un fichier docker compose ``docker-compose.yml`:
 ```yaml 
