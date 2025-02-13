@@ -7,7 +7,17 @@ cu -l /dev/cuau0 -s 9600
 
 Nous nous retrouvons ainsi sur la console du switch.
 
-Nous renommons le switch pour le différencier des autres :
+Nous allons dès lors réinitialiser la configuration du switch pour repartir de zéro :
+```bash
+en
+delete flash:vlan.dat
+write erase
+reload
+```
+
+Nous laissons le switch redémarrer et nous nous reconnectons à la console.
+
+Nous renommons ensuite le switch pour le différencier des autres :
 ```bash
 en
 conf t
@@ -174,3 +184,9 @@ show ip interface vlan 13 #(ou 14)
 ![vlan13](pictures/vlan13.png)
 
 ![vlan14](pictures/vlan14.png)
+
+Finalement, on enregistre la configuration avec la commande suivante pour que, lors d'un redémarrage du switch, notre configuration soit toujours en place :
+```bash
+en
+write memory
+```
